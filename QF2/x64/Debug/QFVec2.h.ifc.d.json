@@ -1,0 +1,38 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\survi\\source\\repos\\qf2\\qf2\\qf\\utils\\qfvec2.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "c:\\users\\survi\\source\\repos\\qf2\\qf2\\qf\\qf.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\gl\\glew.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\gl\\glu.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\shared\\winapifamily.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\shared\\winpackagefamily.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\gl\\gl.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\glfw\\glfw3.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\stddef.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\corecrt.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\vcruntime.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\sal.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\concurrencysal.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\vadefs.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\stdint.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\imgui.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\imconfig.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\float.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\stdarg.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\string.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\corecrt_memory.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\corecrt_memcpy_s.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\errno.h",
+            "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.36.32532\\include\\vcruntime_string.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\corecrt_wstring.h",
+            "c:\\program files (x86)\\windows kits\\10\\include\\10.0.22000.0\\ucrt\\assert.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\imgui_impl_glfw.h",
+            "c:\\vcpkg-master\\installed\\x64-windows\\include\\imgui_impl_opengl3.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

@@ -1,0 +1,10 @@
+^C:\QUANTUMFLOW\CMAKEFILES\12E10E8DB421EC8B5B9E9A81DD9CAA13\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/QuantumFlow -BC:/QuantumFlow --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/QuantumFlow/QF2.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

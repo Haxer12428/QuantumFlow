@@ -1,0 +1,55 @@
+# Minimum required version of CMake
+cmake_minimum_required(VERSION 3.10)
+
+set(BUILD_SHARED_LIBS OFF)
+# Specify the vcpkg toolchain file
+set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg-master/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+
+# Project name and version
+project("QF2" VERSION 1.0)
+
+# Specify C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Set the project source directory to QF
+set(QF_DIR ${PROJECT_SOURCE_DIR}/QF2)
+
+# Collect all source files from the QF/src directory
+file(GLOB_RECURSE SOURCES ${QF_DIR}/*.cpp)
+
+# Collect all header files (for reference or IDE integration)
+file(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/QF2/*.h)
+
+# Add the executable using all source files
+add_executable(MyProject ${SOURCES} ${HEADERS})
+
+# Force static linking of MSVC runtime libraries (Windows-specific)
+if (MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+# Link static versions of libraries where possible
+set(BUILD_SHARED_LIBS OFF)
+
+# Find and link GLEW (and other libraries if necessary)
+find_package(GLEW CONFIG REQUIRED)
+target_link_libraries(MyProject PRIVATE GLEW::GLEW)
+
+find_package(imgui CONFIG REQUIRED)
+target_link_libraries(MyProject PRIVATE imgui::imgui)
+
+find_package(gl3w CONFIG REQUIRED)
+target_link_libraries(MyProject PRIVATE unofficial::gl3w::gl3w)
+
+find_package(soil CONFIG REQUIRED)
+target_link_libraries(MyProject PRIVATE soil)
+
+# Additional configurations
+# Ensure that vcpkg links static libraries by using the static triplet:
+# Set this environment variable before running CMake or include it here:
+# set(VCPKG_TARGET_TRIPLET "x64-windows-static")
+
+# Additional flags for ensuring static linkage (optional, if needed)
+# target_compile_options(MyProject PRIVATE -static)
+# target_link_options(MyProject PRIVATE -static)
