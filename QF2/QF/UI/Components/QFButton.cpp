@@ -2,7 +2,7 @@
 
 /* Component : Button */
 	QF::UI::Components::Button::Button(Hints _Hints)
-		: m_Hints{ _Hints }, Panel(_Hints.m_Parent, _Hints.m_Position, _Hints.m_Size)
+		: m_Hints{ _Hints }, Panel(_Hints.m_Parent, _Hints.m_Position, _Hints.m_Size, _Hints.m_Special)
 	{
 		g_EventHandler()->Subscribe<EventSystem::RenderEvent>(this, &Button::hk_Render);
 		g_EventHandler()->Subscribe<EventSystem::MouseClickedEvent>(this, &Button::hk_OnMouseClick);
@@ -17,7 +17,6 @@
 	void QF::UI::Components::Button::hk_Render(EventSystem::RenderEvent& _Event)
 	{
 		/* Get background color */
-
 		bool _MouseOnPanel = is_InBounds(g_AbsoluteParent()->g_MousePosition());
 
 		ImU32 _BGColor = (_MouseOnPanel ? m_Hints.m_ColorActivated : m_Hints.m_ColorDefault);

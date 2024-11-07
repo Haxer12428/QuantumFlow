@@ -191,9 +191,6 @@ namespace QF
 			
 			const float g_X() const;
 			const float g_Y() const;
-
-			float& x = m_x;
-			float& y = m_y;
 		/* Mathematical operations */
 			/* Addition */
 				QF::Utils::Vec2 operator+(const QF::Utils::Vec2& _Other) const; 
@@ -583,7 +580,7 @@ namespace QF
 			Element* m_Parent; 
 
 			bool m_Special;
-			bool m_Visible;
+			bool m_Visible = true;
 			bool m_Assigned = false; 
 			std::vector<Panel*> m_Children;
 			/* Event handler */
@@ -609,6 +606,7 @@ namespace QF
 					QF::Utils::Image* m_Image = nullptr;
 					ImU32 m_ImageColor = ImColor(255, 255, 255, 255);
 					float m_ImageSizeFactor = 1.0;
+					bool m_Special = false; 
 				};
 
 				Button(Hints _Hints);

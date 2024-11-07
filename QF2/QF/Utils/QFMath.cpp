@@ -27,11 +27,11 @@ const bool QF::Utils::Math::is_InBounds(const Vec2& _Position, const Vec2& _Star
 {
 	const Vec2& _Final = (_Starting + _Size);
 	/* x axis */
-	if (_Position.x < _Starting.x 
-		|| _Position.x > _Final.x)
+	if (_Position.g_X() < _Starting.g_X() 
+		|| _Position.g_X() > _Final.g_X())
 		return false; 
-	if (_Position.y < _Starting.y
-		|| _Position.y > _Final.y)
+	if (_Position.g_Y() < _Starting.g_Y()
+		|| _Position.g_Y() > _Final.g_Y())
 		return false; 
 	/* Good */
 	return true; 

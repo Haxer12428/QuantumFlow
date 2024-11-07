@@ -9,12 +9,21 @@ public:
  {
     g_EventHandler()->Subscribe<QF::UI::EventSystem::RenderEvent>(this,&Calculator::hk_Render);
    
-    func_CreateSlots();
-    m_Timer->Link(this->g_AbsoluteParent());
-    m_Timer->Subscribe(this, &Calculator::hk_Timer);
-    m_Timer->func_Start(std::chrono::milliseconds(250));
+    QF::UI::Components::Button::Hints _Hints;
+    _Hints.m_Parent = this; 
+    _Hints.m_ColorActivated = ImColor(255,255,255);
+    _Hints.m_ColorDefault = ImColor(20, 20, 20);
+    _Hints.m_Size = {20.0f, 20.0f};
 
-    printf("LINKED to window \n");
+    for (int y = 0; y < 2; y++)
+    {
+        for (int x = 0; x < 1; x++)
+        {   
+            _Hints.m_Position = QF::Utils::Vec2(y * (_Hints.m_Size.g_Y() + 2), x * (_Hints.m_Size.g_X() + 2));
+            
+            auto _but = new QF::UI::Components::Button(_Hints);
+        }
+    }
  }
 
  void func_CreateSlots()

@@ -16,12 +16,12 @@ void QF::UI::Panel::func_Assign()
 		m_Parent->g_Panel()->im_Children(this);
 	}
 
-	/* Assign id */
-	m_ID = g_AbsoluteParent()->g_GeneratedID();
 	/* Tell that its assigne already */
 	m_Assigned = true; 
 	/* Assign position & size offsets & visibility */
 	func_UpdateAllDependent();
+
+
 }
 
 QF::UI::Panel::Panel(Element* _Parent,
@@ -42,7 +42,13 @@ QF::UI::Panel::Panel(Element* _Parent,
 		QF::Utils::Debug().Insert(QF::Utils::Debug::LogHint::IMPORTANT, __FUNCTION__,
 		"Panel is waiting for stack assigment.");
 	/* Assign render event to menager */
+
+		/* Assign id */
+	m_ID = g_AbsoluteParent()->g_GeneratedID();
+
 	m_EventHandler->Subscribe<QF::UI::EventSystem::RenderEvent>(this, &QF::UI::Panel::hk_PreRenderUpdateOffsets);
+
+
 }
 
 void QF::UI::Panel::Destroy()
@@ -116,8 +122,8 @@ void QF::UI::Panel::func_UpdateSizeOffset()
 	m_SizeOffset = _ParentingPanel->g_SizeOffset();
 	/* Limit axis */
 	m_SizeOffset = QF::Utils::Vec2(
-		std::min(m_Size.g_ImVec2().x, std::max(0.0f, (m_SizeOffset.x - m_Position.x))),
-		std::min(m_Size.g_ImVec2().y, std::max(0.0f, (m_SizeOffset.y - m_Position.y)))
+		std::min(m_Size.g_ImVec2().x, std::max(0.0f, (m_SizeOffset.g_X() - m_Position.g_X()))),
+		std::min(m_Size.g_ImVec2().y, std::max(0.0f, (m_SizeOffset.g_Y() - m_Position.g_Y())))
 	);
 }
 

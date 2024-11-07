@@ -4,6 +4,13 @@
 	QF::UI::Window::Window(QF::UI::App* _App, const std::string& _Name, const QF::Utils::Vec2& _Size) : 
 		Element{}, m_Size{_Size}, m_Name{_Name}, m_EventHandler{ new EventSystem::EventHandler() }
 	{
+		if (std::filesystem::is_regular_file(
+			QF::Utils::Filesystem::Helpers::g_InCurrentPath("imgui.ini")
+		))
+		{
+		
+		}
+
 		/* Declare that im window */
 		im_Window(this);
 		/* Declare that im children of app */
@@ -71,7 +78,7 @@
 
 	void QF::UI::Window::s_Position(const QF::Utils::Vec2& _New)
 	{
-		glfwSetWindowPos(m_Window, static_cast<int>(_New.x), static_cast<int>(_New.y));
+		glfwSetWindowPos(m_Window, static_cast<int>(_New.g_X()), static_cast<int>(_New.g_Y()));
 	}
 
 	QF::UI::Window::TitleBar* QF::UI::Window::g_TitleBarInstance() 
@@ -175,7 +182,7 @@
 
 		/* Create object */
 		m_Window = glfwCreateWindow(
-			m_Size.x, m_Size.y, m_Name.c_str(), NULL, NULL
+			m_Size.g_X(), m_Size.g_Y(), m_Name.c_str(), NULL, NULL
 		);
 		/* Check if creation succeed */
 		if (!m_Window)
@@ -327,12 +334,12 @@
 		/* Propagate from bottom to top */
 		for (Panel* _Child : m_Children)
 		{
-			try {
-				if (_Child != nullptr)
-				{
-					if (_Child->g_Visibility()) { _Child->g_EventHandler()->Dispatch(EventSystem::RenderEvent{}); }
-				}
-			} catch (...) {};
+
+					if (_Child->g_Visibility()) 
+						{
+							_Child->g_EventHandler()->Dispatch(EventSystem::RenderEvent{}); 
+						}
+				
 			/* Dispatch only if visible*/
 		}
 		/* Call resize icon rendering hook */

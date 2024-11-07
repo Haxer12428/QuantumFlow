@@ -19,12 +19,20 @@
 		_DefaultButtonsHints.m_Size = {40, 40};
 		_DefaultButtonsHints.m_ColorActivated = ImColor(255,255,255);
 		_DefaultButtonsHints.m_ImageColor = ImColor(190,190,190,255);
+		_DefaultButtonsHints.m_Special = true; 
 
 		/* Register buttons */
 		m_Buttons[0] = new ButtonExit(this, _DefaultButtonsHints);
 			m_Buttons[1] = new ButtonMax(this, _DefaultButtonsHints);
 				m_Buttons[2] = new ButtonMin(this, _DefaultButtonsHints);
 				
+		int _iterator =0 ;
+		for (QF::UI::Components::Button* _Button : m_Buttons)
+		{
+			std::cout << "it: " << _iterator << " -> ID: " << _Button->g_Id() << "\n";
+			_iterator++;
+		}
+		std::cout << "niga\n";
 	}
 
 	QF::UI::Window::TitleBar::~TitleBar()
@@ -38,7 +46,7 @@
 		/* Set size: full width, custom height based on the title font */
 		this->s_Size(QF::Utils::Vec2(
 			m_Window->g_Size().g_X(),
-			QF::Utils::Math::g_TextSize(m_Window->g_Name(), m_Hints.m_TitleFont).y + 12.0f
+			QF::Utils::Math::g_TextSize(m_Window->g_Name(), m_Hints.m_TitleFont).g_Y() + 12.0f
 		));
 
 		/* Update for buttons */
