@@ -60,8 +60,6 @@ public:
     for (auto _Button : m_Buttons)
     {
         
-
-        std::cout << "assigned cllback\n";
         _Button->func_SetCallback([&](QF::UI::Components::Button* _panel) {
             if (m_GameOver) return; 
 
@@ -77,7 +75,18 @@ public:
             {
                 if (_Bomb == _At)
                 {
-                    /* BOOM FUCKER */ m_GameOver = true; return;
+                    /* BOOM FUCKER */ m_GameOver = true;
+                    _panel->m_Hints.m_ColorActivated = ImColor(255,0,0);
+                    _panel->m_Hints.m_ColorDefault = ImColor(255,0,0);
+
+                    for (auto _Bd : m_Buttons)
+                    {
+                        _Bd->m_Hints.m_ColorActivated = ImColor(255,0,0);
+                        _Bd->m_Hints.m_ColorDefault = ImColor(255,0,0);
+                        _Bd->m_Hints.m_DrawText = true; 
+                        _Bd->m_Hints.m_Text = "BOOM!";
+                    }
+                     return;
                 }
             }
             /* Im good 0-0 */
@@ -178,12 +187,12 @@ private:
 
    QF::UI::SimpleDC _Canvas{this};
 
-    std::string _Display = (m_GameOver ? "Game over! Restart to play again!" : "Score: "+  std::to_string(m_Score) + " || Bombs left: " + std::to_string(m_Bombs.size() - m_BombsUnrevealed));
+    std::string _Display = (m_GameOver ? "BOOM FUCKER! Restart to play again!" : "Score: "+  std::to_string(m_Score) + " || Bombs left: " + std::to_string(m_Bombs.size() - m_BombsUnrevealed));
 
    _Canvas.draw_Text(QF::Utils::Math::g_TextCenteredPosition(
     {0, 0}, {g_Size().g_X(), m_TopSpaceY}, _Display
    ), ImColor(255,255,255,255), _Display);
- } 
+ }
  
  const float m_TopSpaceY = 20.0f; 
  std::array<int, 2> m_ButtonGrid = {20, 20};
@@ -203,7 +212,7 @@ public:
 
 	bool on_Init() override
 	{
-		new Calculator(new QF::UI::Window(this, "QF testing: Calculator", {900.0f, 800.0f}));
+		new Calculator(new QF::UI::Window(this, "QF testing: Minenigger", {900.0f, 800.0f}));
 	
 		return true; 
 	}
