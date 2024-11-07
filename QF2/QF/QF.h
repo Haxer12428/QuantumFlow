@@ -29,6 +29,7 @@
 #include <typeindex>
 #include <type_traits>
 
+
 /*========================= QF =========================*/
 const std::string __QF_EMPTY_STRING = "";
 
@@ -188,7 +189,7 @@ namespace QF
 			Vec2(const float _singular);
 			Vec2(const float _x, const float _y);
 			Vec2(const ImVec2& _Vec);
-			
+		
 			const float g_X() const;
 			const float g_Y() const;
 		/* Mathematical operations */
@@ -607,16 +608,23 @@ namespace QF
 					ImU32 m_ImageColor = ImColor(255, 255, 255, 255);
 					float m_ImageSizeFactor = 1.0;
 					bool m_Special = false; 
+					ImFont* m_Font = nullptr; 
+					bool m_DrawText = false; 
+					std::string m_Text = __QF_EMPTY_STRING;
+					ImU32 m_TextColor = ImColor(255,255,255, 255);
 				};
 
 				Button(Hints _Hints);
 				~Button();
 
 				Hints m_Hints; 
+ 
+				void func_SetCallback(std::function<void(QF::UI::Components::Button*)> _Func);
 			private:
 				void hk_Render(QF::UI::EventSystem::RenderEvent& _Event);
 				void hk_OnMouseClick(QF::UI::EventSystem::MouseClickedEvent& _Event);
 
+				std::function<void(QF::UI::Components::Button*)> m_Callback = nullptr;
 				QF::Utils::Animation* m_BackgroundAnimations = new QF::Utils::Animation();
 			};
 		};
@@ -773,6 +781,7 @@ namespace QF
 			void s_MaximalSize(const QF::Utils::Vec2& _Min);
 			QF::UI::Window::TitleBar* g_TitleBarInstance();
 			QF::UI::EventSystem::EventHandler* g_EventHandler();
+			QF::Utils::Vec2 g_FixedSize(); 
 		/* Children handling */
 		public:
 			void im_NoLongerAChildren(Panel* _Panel);

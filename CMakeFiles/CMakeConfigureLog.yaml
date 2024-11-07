@@ -5,7 +5,7 @@ events:
     kind: "message-v1"
     backtrace:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineSystem.cmake:205 (message)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       The system is: Windows - 10.0.19045 - AMD64
   -
@@ -14,7 +14,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
       Compiler:  
@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.6.3+07e294721 for .NET Framework
-      Kompilacja rozpoczęła się 07.11.2024 17:53:33.
+      Kompilacja rozpoczęła się 07.11.2024 20:59:37.
       
       Projekt "C:\\QuantumFlow\\CMakeFiles\\3.31.0-rc3\\CompilerIdC\\CompilerIdC.vcxproj" w węźle 1 (domyślne elementy docelowe).
       PrepareForBuild:
@@ -60,7 +60,7 @@ events:
           Ostrzeżenia: 0
           Liczba błędów: 0
       
-      Czas, który upłynął: 00:00:01.07
+      Czas, który upłynął: 00:00:01.10
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -76,7 +76,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
       Compiler:  
@@ -86,7 +86,7 @@ events:
       The output was:
       0
       MSBuild version 17.6.3+07e294721 for .NET Framework
-      Kompilacja rozpoczęła się 07.11.2024 17:53:34.
+      Kompilacja rozpoczęła się 07.11.2024 20:59:38.
       
       Projekt "C:\\QuantumFlow\\CMakeFiles\\3.31.0-rc3\\CompilerIdCXX\\CompilerIdCXX.vcxproj" w węźle 1 (domyślne elementy docelowe).
       PrepareForBuild:
@@ -122,7 +122,7 @@ events:
           Ostrzeżenia: 0
           Liczba błędów: 0
       
-      Czas, który upłynął: 00:00:00.89
+      Czas, który upłynął: 00:00:00.93
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -137,12 +137,12 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fvpk2m"
-      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fvpk2m"
+      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-4sbx5s"
+      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-4sbx5s"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -155,38 +155,38 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fvpk2m'
+        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-4sbx5s'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_fe775.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_6f96f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Kompilacja rozpoczęła się 07.11.2024 17:53:35.
+        Kompilacja rozpoczęła się 07.11.2024 20:59:39.
         
-        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fvpk2m\\cmTC_fe775.vcxproj" w węźle 1 (domyślne elementy docelowe).
+        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-4sbx5s\\cmTC_6f96f.vcxproj" w węźle 1 (domyślne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu "cmTC_fe775.dir\\Debug\\".
-          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fvpk2m\\Debug\\".
-          Tworzenie katalogu "cmTC_fe775.dir\\Debug\\cmTC_fe775.tlog\\".
+          Tworzenie katalogu "cmTC_6f96f.dir\\Debug\\".
+          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-4sbx5s\\Debug\\".
+          Tworzenie katalogu "cmTC_6f96f.dir\\Debug\\cmTC_6f96f.tlog\\".
         InitializeBuildStatus:
-          Trwa tworzenie "cmTC_fe775.dir\\Debug\\cmTC_fe775.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
+          Trwa tworzenie "cmTC_6f96f.dir\\Debug\\cmTC_6f96f.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_fe775.dir\\Debug\\\\" /Fd"cmTC_fe775.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_6f96f.dir\\Debug\\\\" /Fd"cmTC_6f96f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.36.32535 dla x64
           CMakeCCompilerABI.c
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_fe775.dir\\Debug\\\\" /Fd"cmTC_fe775.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_6f96f.dir\\Debug\\\\" /Fd"cmTC_6f96f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fvpk2m\\Debug\\cmTC_fe775.exe" /INCREMENTAL /ILK:"cmTC_fe775.dir\\Debug\\cmTC_fe775.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fvpk2m/Debug/cmTC_fe775.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fvpk2m/Debug/cmTC_fe775.lib" /MACHINE:X64  /machine:x64 cmTC_fe775.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_fe775.vcxproj -> C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fvpk2m\\Debug\\cmTC_fe775.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-4sbx5s\\Debug\\cmTC_6f96f.exe" /INCREMENTAL /ILK:"cmTC_6f96f.dir\\Debug\\cmTC_6f96f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-4sbx5s/Debug/cmTC_6f96f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-4sbx5s/Debug/cmTC_6f96f.lib" /MACHINE:X64  /machine:x64 cmTC_6f96f.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_6f96f.vcxproj -> C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-4sbx5s\\Debug\\cmTC_6f96f.exe
         FinalizeBuildStatus:
-          Usuwanie pliku "cmTC_fe775.dir\\Debug\\cmTC_fe775.tlog\\unsuccessfulbuild".
-          Modyfikowanie "cmTC_fe775.dir\\Debug\\cmTC_fe775.tlog\\cmTC_fe775.lastbuildstate".
-        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fvpk2m\\cmTC_fe775.vcxproj" wykonane (domyślne elementy docelowe).
+          Usuwanie pliku "cmTC_6f96f.dir\\Debug\\cmTC_6f96f.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_6f96f.dir\\Debug\\cmTC_6f96f.tlog\\cmTC_6f96f.lastbuildstate".
+        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-4sbx5s\\cmTC_6f96f.vcxproj" wykonane (domyślne elementy docelowe).
         
         Kompilacja powiodła się.
             Ostrzeżenia: 0
             Liczba błędów: 0
         
-        Czas, który upłynął: 00:00:00.45
+        Czas, który upłynął: 00:00:00.60
         
       exitCode: 0
   -
@@ -194,7 +194,7 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
@@ -212,7 +212,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Running the C compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe" "-v"
       Microsoft (R) Incremental Linker Version 14.36.32535.0
@@ -222,12 +222,12 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fkhay3"
-      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fkhay3"
+      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fwwqdb"
+      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fwwqdb"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -241,38 +241,38 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fkhay3'
+        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fwwqdb'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_37be9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_85c39.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Kompilacja rozpoczęła się 07.11.2024 17:53:36.
+        Kompilacja rozpoczęła się 07.11.2024 20:59:40.
         
-        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fkhay3\\cmTC_37be9.vcxproj" w węźle 1 (domyślne elementy docelowe).
+        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fwwqdb\\cmTC_85c39.vcxproj" w węźle 1 (domyślne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu "cmTC_37be9.dir\\Debug\\".
-          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fkhay3\\Debug\\".
-          Tworzenie katalogu "cmTC_37be9.dir\\Debug\\cmTC_37be9.tlog\\".
+          Tworzenie katalogu "cmTC_85c39.dir\\Debug\\".
+          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fwwqdb\\Debug\\".
+          Tworzenie katalogu "cmTC_85c39.dir\\Debug\\cmTC_85c39.tlog\\".
         InitializeBuildStatus:
-          Trwa tworzenie "cmTC_37be9.dir\\Debug\\cmTC_37be9.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
+          Trwa tworzenie "cmTC_85c39.dir\\Debug\\cmTC_85c39.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_37be9.dir\\Debug\\\\" /Fd"cmTC_37be9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_85c39.dir\\Debug\\\\" /Fd"cmTC_85c39.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.36.32535 dla x64
           CMakeCXXCompilerABI.cpp
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_37be9.dir\\Debug\\\\" /Fd"cmTC_37be9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_85c39.dir\\Debug\\\\" /Fd"cmTC_85c39.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fkhay3\\Debug\\cmTC_37be9.exe" /INCREMENTAL /ILK:"cmTC_37be9.dir\\Debug\\cmTC_37be9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fkhay3/Debug/cmTC_37be9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fkhay3/Debug/cmTC_37be9.lib" /MACHINE:X64  /machine:x64 cmTC_37be9.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_37be9.vcxproj -> C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fkhay3\\Debug\\cmTC_37be9.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fwwqdb\\Debug\\cmTC_85c39.exe" /INCREMENTAL /ILK:"cmTC_85c39.dir\\Debug\\cmTC_85c39.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fwwqdb/Debug/cmTC_85c39.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-fwwqdb/Debug/cmTC_85c39.lib" /MACHINE:X64  /machine:x64 cmTC_85c39.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_85c39.vcxproj -> C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fwwqdb\\Debug\\cmTC_85c39.exe
         FinalizeBuildStatus:
-          Usuwanie pliku "cmTC_37be9.dir\\Debug\\cmTC_37be9.tlog\\unsuccessfulbuild".
-          Modyfikowanie "cmTC_37be9.dir\\Debug\\cmTC_37be9.tlog\\cmTC_37be9.lastbuildstate".
-        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fkhay3\\cmTC_37be9.vcxproj" wykonane (domyślne elementy docelowe).
+          Usuwanie pliku "cmTC_85c39.dir\\Debug\\cmTC_85c39.tlog\\unsuccessfulbuild".
+          Modyfikowanie "cmTC_85c39.dir\\Debug\\cmTC_85c39.tlog\\cmTC_85c39.lastbuildstate".
+        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-fwwqdb\\cmTC_85c39.vcxproj" wykonane (domyślne elementy docelowe).
         
         Kompilacja powiodła się.
             Ostrzeżenia: 0
             Liczba błędów: 0
         
-        Czas, który upłynął: 00:00:00.47
+        Czas, który upłynął: 00:00:00.49
         
       exitCode: 0
   -
@@ -280,7 +280,7 @@ events:
     backtrace:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:218 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(\\.[a-z]+)?|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
@@ -298,7 +298,7 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/Internal/CMakeDetermineLinkerId.cmake:40 (message)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeDetermineCompilerABI.cmake:255 (cmake_determine_linker_id)"
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
-      - "CMakeLists.txt:9 (project)"
+      - "CMakeLists.txt:22 (project)"
     message: |
       Running the CXX compiler's linker: "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.36.32532/bin/HostX64/x64/link.exe" "-v"
       Microsoft (R) Incremental Linker Version 14.36.32535.0
@@ -317,12 +317,12 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "C:/vcpkg-master/installed/x64-windows/share/imgui/imgui-config.cmake:33 (find_dependency)"
       - "C:/vcpkg-master/scripts/buildsystems/vcpkg.cmake:859 (_find_package)"
-      - "CMakeLists.txt:39 (find_package)"
+      - "CMakeLists.txt:52 (find_package)"
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-9dfjpf"
-      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-9dfjpf"
+      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-8km9ai"
+      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-8km9ai"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -336,38 +336,38 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-9dfjpf'
+        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-8km9ai'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_14f61.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_bb115.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Kompilacja rozpoczęła się 07.11.2024 17:53:37.
+        Kompilacja rozpoczęła się 07.11.2024 20:59:41.
         
-        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\cmTC_14f61.vcxproj" w węźle 1 (domyślne elementy docelowe).
+        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\cmTC_bb115.vcxproj" w węźle 1 (domyślne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu "cmTC_14f61.dir\\Debug\\".
-          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\Debug\\".
-          Tworzenie katalogu "cmTC_14f61.dir\\Debug\\cmTC_14f61.tlog\\".
+          Tworzenie katalogu "cmTC_bb115.dir\\Debug\\".
+          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\Debug\\".
+          Tworzenie katalogu "cmTC_bb115.dir\\Debug\\cmTC_bb115.tlog\\".
         InitializeBuildStatus:
-          Trwa tworzenie "cmTC_14f61.dir\\Debug\\cmTC_14f61.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
+          Trwa tworzenie "cmTC_bb115.dir\\Debug\\cmTC_bb115.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_14f61.dir\\Debug\\\\" /Fd"cmTC_14f61.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\src.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_bb115.dir\\Debug\\\\" /Fd"cmTC_bb115.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\src.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.36.32535 dla x64
           src.c
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_14f61.dir\\Debug\\\\" /Fd"cmTC_14f61.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\src.c"
-        C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\src.c(1,10): fatal  error C1083: Nie można otworzyć pliku dołącz: 'pthread.h': No such file or directory [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\cmTC_14f61.vcxproj]
-        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\cmTC_14f61.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CMAKE_HAVE_LIBC_PTHREAD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_bb115.dir\\Debug\\\\" /Fd"cmTC_bb115.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\src.c"
+        C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\src.c(1,10): fatal  error C1083: Nie można otworzyć pliku dołącz: 'pthread.h': No such file or directory [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\cmTC_bb115.vcxproj]
+        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\cmTC_bb115.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
         
         Kompilacja NIE POWIODŁA SIĘ.
         
-        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\cmTC_14f61.vcxproj" (domyślny element docelowy) (1)->
+        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\cmTC_bb115.vcxproj" (domyślny element docelowy) (1)->
         (element docelowy ClCompile) -> 
-          C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\src.c(1,10): fatal  error C1083: Nie można otworzyć pliku dołącz: 'pthread.h': No such file or directory [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-9dfjpf\\cmTC_14f61.vcxproj]
+          C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\src.c(1,10): fatal  error C1083: Nie można otworzyć pliku dołącz: 'pthread.h': No such file or directory [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-8km9ai\\cmTC_bb115.vcxproj]
         
             Ostrzeżenia: 0
             Liczba błędów: 1
         
-        Czas, który upłynął: 00:00:00.32
+        Czas, który upłynął: 00:00:00.33
         
       exitCode: 1
   -
@@ -383,12 +383,12 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "C:/vcpkg-master/installed/x64-windows/share/imgui/imgui-config.cmake:33 (find_dependency)"
       - "C:/vcpkg-master/scripts/buildsystems/vcpkg.cmake:859 (_find_package)"
-      - "CMakeLists.txt:39 (find_package)"
+      - "CMakeLists.txt:52 (find_package)"
     checks:
       - "Looking for pthread_create in pthreads"
     directories:
-      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-hshiap"
-      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-hshiap"
+      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-wgkoap"
+      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-wgkoap"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -402,40 +402,40 @@ events:
       variable: "CMAKE_HAVE_PTHREADS_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-hshiap'
+        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-wgkoap'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_28d16.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a5ae2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Kompilacja rozpoczęła się 07.11.2024 17:53:37.
+        Kompilacja rozpoczęła się 07.11.2024 20:59:41.
         
-        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\cmTC_28d16.vcxproj" w węźle 1 (domyślne elementy docelowe).
+        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\cmTC_a5ae2.vcxproj" w węźle 1 (domyślne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu "cmTC_28d16.dir\\Debug\\".
-          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\Debug\\".
-          Tworzenie katalogu "cmTC_28d16.dir\\Debug\\cmTC_28d16.tlog\\".
+          Tworzenie katalogu "cmTC_a5ae2.dir\\Debug\\".
+          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\Debug\\".
+          Tworzenie katalogu "cmTC_a5ae2.dir\\Debug\\cmTC_a5ae2.tlog\\".
         InitializeBuildStatus:
-          Trwa tworzenie "cmTC_28d16.dir\\Debug\\cmTC_28d16.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
+          Trwa tworzenie "cmTC_a5ae2.dir\\Debug\\cmTC_a5ae2.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_28d16.dir\\Debug\\\\" /Fd"cmTC_28d16.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a5ae2.dir\\Debug\\\\" /Fd"cmTC_a5ae2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\CheckFunctionExists.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.36.32535 dla x64
           CheckFunctionExists.c
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_28d16.dir\\Debug\\\\" /Fd"cmTC_28d16.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\CheckFunctionExists.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a5ae2.dir\\Debug\\\\" /Fd"cmTC_a5ae2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\CheckFunctionExists.c"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\Debug\\cmTC_28d16.exe" /INCREMENTAL /ILK:"cmTC_28d16.dir\\Debug\\cmTC_28d16.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-hshiap/Debug/cmTC_28d16.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-hshiap/Debug/cmTC_28d16.lib" /MACHINE:X64  /machine:x64 cmTC_28d16.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: nie można otworzyć pliku "pthreads.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\cmTC_28d16.vcxproj]
-        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\cmTC_28d16.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\Debug\\cmTC_a5ae2.exe" /INCREMENTAL /ILK:"cmTC_a5ae2.dir\\Debug\\cmTC_a5ae2.ilk" /NOLOGO pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-wgkoap/Debug/cmTC_a5ae2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-wgkoap/Debug/cmTC_a5ae2.lib" /MACHINE:X64  /machine:x64 cmTC_a5ae2.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: nie można otworzyć pliku "pthreads.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\cmTC_a5ae2.vcxproj]
+        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\cmTC_a5ae2.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
         
         Kompilacja NIE POWIODŁA SIĘ.
         
-        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\cmTC_28d16.vcxproj" (domyślny element docelowy) (1)->
+        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\cmTC_a5ae2.vcxproj" (domyślny element docelowy) (1)->
         (element docelowy Link) -> 
-          LINK : fatal error LNK1104: nie można otworzyć pliku "pthreads.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-hshiap\\cmTC_28d16.vcxproj]
+          LINK : fatal error LNK1104: nie można otworzyć pliku "pthreads.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-wgkoap\\cmTC_a5ae2.vcxproj]
         
             Ostrzeżenia: 0
             Liczba błędów: 1
         
-        Czas, który upłynął: 00:00:00.37
+        Czas, który upłynął: 00:00:00.42
         
       exitCode: 1
   -
@@ -451,12 +451,12 @@ events:
       - "C:/Program Files/CMake/share/cmake-3.31/Modules/CMakeFindDependencyMacro.cmake:76 (find_package)"
       - "C:/vcpkg-master/installed/x64-windows/share/imgui/imgui-config.cmake:33 (find_dependency)"
       - "C:/vcpkg-master/scripts/buildsystems/vcpkg.cmake:859 (_find_package)"
-      - "CMakeLists.txt:39 (find_package)"
+      - "CMakeLists.txt:52 (find_package)"
     checks:
       - "Looking for pthread_create in pthread"
     directories:
-      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-q21vy7"
-      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-q21vy7"
+      source: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-5n6aqh"
+      binary: "C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-5n6aqh"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
@@ -470,40 +470,40 @@ events:
       variable: "CMAKE_HAVE_PTHREAD_CREATE"
       cached: true
       stdout: |
-        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-q21vy7'
+        Change Dir: 'C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-5n6aqh'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_c363a.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_08224.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.6.3+07e294721 for .NET Framework
-        Kompilacja rozpoczęła się 07.11.2024 17:53:38.
+        Kompilacja rozpoczęła się 07.11.2024 20:59:42.
         
-        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\cmTC_c363a.vcxproj" w węźle 1 (domyślne elementy docelowe).
+        Projekt "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\cmTC_08224.vcxproj" w węźle 1 (domyślne elementy docelowe).
         PrepareForBuild:
-          Tworzenie katalogu "cmTC_c363a.dir\\Debug\\".
-          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\Debug\\".
-          Tworzenie katalogu "cmTC_c363a.dir\\Debug\\cmTC_c363a.tlog\\".
+          Tworzenie katalogu "cmTC_08224.dir\\Debug\\".
+          Tworzenie katalogu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\Debug\\".
+          Tworzenie katalogu "cmTC_08224.dir\\Debug\\cmTC_08224.tlog\\".
         InitializeBuildStatus:
-          Trwa tworzenie "cmTC_c363a.dir\\Debug\\cmTC_c363a.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
+          Trwa tworzenie "cmTC_08224.dir\\Debug\\cmTC_08224.tlog\\unsuccessfulbuild", ponieważ określono "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c363a.dir\\Debug\\\\" /Fd"cmTC_c363a.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\CheckFunctionExists.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_08224.dir\\Debug\\\\" /Fd"cmTC_08224.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\CheckFunctionExists.c"
           Microsoft (R) C/C++ wersja kompilatora optymalizującego 19.36.32535 dla x64
           CheckFunctionExists.c
           Copyright (C) Microsoft Corporation. Wszystkie prawa zastrzeżone.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c363a.dir\\Debug\\\\" /Fd"cmTC_c363a.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\CheckFunctionExists.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D CHECK_FUNCTION_EXISTS=pthread_create /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_08224.dir\\Debug\\\\" /Fd"cmTC_08224.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\CheckFunctionExists.c"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\Debug\\cmTC_c363a.exe" /INCREMENTAL /ILK:"cmTC_c363a.dir\\Debug\\cmTC_c363a.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-q21vy7/Debug/cmTC_c363a.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-q21vy7/Debug/cmTC_c363a.lib" /MACHINE:X64  /machine:x64 cmTC_c363a.dir\\Debug\\CheckFunctionExists.obj
-        LINK : fatal error LNK1104: nie można otworzyć pliku "pthread.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\cmTC_c363a.vcxproj]
-        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\cmTC_c363a.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.36.32532\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\Debug\\cmTC_08224.exe" /INCREMENTAL /ILK:"cmTC_08224.dir\\Debug\\cmTC_08224.ilk" /NOLOGO pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-5n6aqh/Debug/cmTC_08224.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/QuantumFlow/CMakeFiles/CMakeScratch/TryCompile-5n6aqh/Debug/cmTC_08224.lib" /MACHINE:X64  /machine:x64 cmTC_08224.dir\\Debug\\CheckFunctionExists.obj
+        LINK : fatal error LNK1104: nie można otworzyć pliku "pthread.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\cmTC_08224.vcxproj]
+        Kompilowanie projektu "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\cmTC_08224.vcxproj" wykonane (domyślne elementy docelowe) - NIEPOWODZENIE.
         
         Kompilacja NIE POWIODŁA SIĘ.
         
-        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\cmTC_c363a.vcxproj" (domyślny element docelowy) (1)->
+        "C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\cmTC_08224.vcxproj" (domyślny element docelowy) (1)->
         (element docelowy Link) -> 
-          LINK : fatal error LNK1104: nie można otworzyć pliku "pthread.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-q21vy7\\cmTC_c363a.vcxproj]
+          LINK : fatal error LNK1104: nie można otworzyć pliku "pthread.lib" [C:\\QuantumFlow\\CMakeFiles\\CMakeScratch\\TryCompile-5n6aqh\\cmTC_08224.vcxproj]
         
             Ostrzeżenia: 0
             Liczba błędów: 1
         
-        Czas, który upłynął: 00:00:00.37
+        Czas, który upłynął: 00:00:00.41
         
       exitCode: 1
 ...

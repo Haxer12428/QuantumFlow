@@ -35,16 +35,38 @@
 		_Canvas.draw_RectFilled({0,0},g_Size(), _BGColor);
 
 		/* Draw image if available */
-		if (m_Hints.m_Image == nullptr) return; 
-
+		if (m_Hints.m_Image != nullptr) 
+		{
 		const QF::Utils::Vec2 _ImageSize = (g_Size() * m_Hints.m_ImageSizeFactor);
 		const QF::Utils::Vec2 _ImagePosition = ((g_Size() - _ImageSize) / 2.0f);
 
 		_Canvas.draw_Image(m_Hints.m_Image, _ImagePosition, _ImageSize, m_Hints.m_ImageColor);
+		}
+
+		/* Draw text if available */
+		if (m_Hints.m_DrawText)
+		{
+			_Canvas.draw_Text(QF::Utils::Math::g_TextCenteredPosition(
+				{0, 0}, g_Size(), m_Hints.m_Text, m_Hints.m_Font
+			), m_Hints.m_TextColor, m_Hints.m_Text, m_Hints.m_Font);
+
+			
+		}
+	}
+
+	void QF::UI::Components::Button::func_SetCallback(std::function<void(QF::UI::Components::Button*)> _Function)
+	{
+		m_Callback = _Function;
 	}
 
 	void QF::UI::Components::Button::hk_OnMouseClick(EventSystem::MouseClickedEvent& _Event)
 	{
+		/* Propagate callback */
+		if (m_Callback != nullptr)
+		{
+			m_Callback(this);
+		}
+
 		/* Propagate event further */
 		EventSystem::MouseButtonClickEvent _ToPropagate{this};
 		g_EventHandler()->Dispatch( _ToPropagate );

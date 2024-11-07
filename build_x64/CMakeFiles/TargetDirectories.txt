@@ -1,0 +1,3 @@
+C:/QuantumFlow/build_x64/CMakeFiles/MyProject.dir
+C:/QuantumFlow/build_x64/CMakeFiles/ALL_BUILD.dir
+C:/QuantumFlow/build_x64/CMakeFiles/ZERO_CHECK.dir

@@ -1,0 +1,40 @@
+﻿  Building Custom Rule C:/QuantumFlow/CMakeLists.txt
+  QFInit.cpp
+  QFButton.cpp
+  QFApp.cpp
+  QFElement.cpp
+  QFEventSystem.cpp
+  QFHelpers.cpp
+  QFPanel.cpp
+  SimpleDC.cpp
+  QFWindow.cpp
+C:\QuantumFlow\QF2\QF\UI\Window\QFWindow.cpp(190,28): warning C4244: "argument": konwersja z "float" do "int", możliwa utrata danych
+C:\QuantumFlow\QF2\QF\UI\Window\QFWindow.cpp(190,14): warning C4244: "argument": konwersja z "float" do "int", możliwa utrata danych
+C:\QuantumFlow\QF2\QF\UI\Window\QFWindow.cpp(394,40): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+C:\QuantumFlow\QF2\QF\UI\Window\QFWindow.cpp(394,35): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  QFWindowResize.cpp
+  QFWindowTitlebar.cpp
+  QFAnimation.cpp
+C:\QuantumFlow\QF2\QF\Utils\QFAnimation.cpp(34,95): warning C4244: "argument": konwersja z "const double" do "const float", możliwa utrata danych
+C:\QuantumFlow\QF2\QF\Utils\QFAnimation.cpp(61,96): warning C4244: "argument": konwersja z "const double" do "const float", możliwa utrata danych
+  QFDebug.cpp
+  QFFilesystem.cpp
+C:\QuantumFlow\QF2\QF\Utils\QFFilesystem.cpp(142,16): warning C4267: "inicjowanie": konwersja z "size_t" do "long", możliwa utrata danych
+C:\QuantumFlow\QF2\QF\Utils\QFFilesystem.cpp(148,30): warning C4267: "+=": konwersja z "size_t" do "long", możliwa utrata danych
+  QFImage.cpp
+C:\QuantumFlow\QF2\QF\Utils\QFImage.cpp(34,9): warning C4312: "reinterpret_cast": konwersja z "const GLuint" na "ImTextureID" jest większej wielkości
+  QFMath.cpp
+  QFSystem.cpp
+  QFTime.cpp
+  QFTransform.cpp
+  QFVec2.cpp
+  Generowanie kodu...
+C:\QuantumFlow\QF2\QF\UI\QFEventSystem.cpp(32): warning C4172: zwracanie adresu lokalnej zmiennej lub tymczasowej
+  Trwa kompilowanie...
+  main.cpp
+C:\QuantumFlow\QF2\main.cpp(170,35): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+C:\QuantumFlow\QF2\main.cpp(170,22): warning C4267: "inicjowanie": konwersja z "size_t" do "const int", możliwa utrata danych
+C:\QuantumFlow\QF2\main.cpp(171,35): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+C:\QuantumFlow\QF2\main.cpp(171,22): warning C4267: "inicjowanie": konwersja z "size_t" do "const int", możliwa utrata danych
+  Generowanie kodu...
+  MyProject.vcxproj -> C:\QuantumFlow\build_x64\Release\MyProject.exe

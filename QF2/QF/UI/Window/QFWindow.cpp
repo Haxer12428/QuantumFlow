@@ -90,6 +90,11 @@
 		return m_EventHandler;
 	}
 
+	QF::Utils::Vec2 QF::UI::Window::g_FixedSize() 
+	{
+		return (g_Size() - QF::Utils::Vec2{0.0f, g_TitleBarInstance()->g_Size().g_Y()});
+	}
+
 	/* Pass values lower than 0 to get NO_RESTRICT mode */
 	void QF::UI::Window::s_MaximalSize(const QF::Utils::Vec2& _New)
 	{
