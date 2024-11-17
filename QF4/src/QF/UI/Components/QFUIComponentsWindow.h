@@ -3,6 +3,80 @@
 #include "../App/QFUIApp.h"
 #define NOMINMAX
 #include <windows.h>
+#include <unordered_map>
+#include <typeindex>
+
+#pragma region EventSystem_H
+namespace QF
+{
+	namespace UI
+	{
+		namespace Components
+		{
+			class EventSystem
+			{
+			public:
+				class Event {
+				public:
+					virtual ~Event() = default; // Ensure proper cleanup for derived classes
+				};
+
+				class EventHandler {
+				private:
+					/* Event handler funcion */
+
+					using EventHandlerFunc = std::function<void(Event&)>;
+
+					/* Liseners */
+					std::unordered_map<std::type_index,
+						std::vector<EventHandlerFunc>
+					> m_Listeners;
+
+				public:
+					~EventHandler() {};
+					EventHandler() {};
+
+					/* Subscibe event, _EventType, class instance,& class function definition */
+					template <typename __EventType, typename __ClassType>
+					void Subscribe(__ClassType* _Instance,
+						void (__ClassType::* _MemberFunction)(__EventType&)
+					)
+					{
+						m_Listeners[typeid(__EventType)].emplace_back(
+							/* Add to liseners */
+							[_Instance, _MemberFunction](Event& _Evt)
+							{
+								/* Cast event */
+								(_Instance->*_MemberFunction)(
+									static_cast<__EventType&>(_Evt)
+									);
+							}
+
+						);
+					}
+
+					/* Dispatch event (call event), _EventType */
+					template <typename __EventType>
+					void Dispatch(__EventType _Evt)
+					{
+						auto _It = m_Listeners.find(typeid(__EventType));
+
+						/* Check for existance */
+						if (_It == m_Listeners.end())
+							return;
+						for (const auto& handler : _It->second)
+						{ /* Dispatch for a listener */
+							handler(_Evt);
+						}
+					}
+				};
+			};
+		}
+	}
+}
+#pragma endregion
+
+#pragma region Element_H
 
 namespace QF
 {
@@ -13,11 +87,8 @@ namespace QF
 			class Element
 			{
 			public:
-				Element() {
-
-				};
-
-				~Element() {}
+				Element() = default;
+				virtual ~Element() = default; 
 
 				/* Declarations */
 				void im_Panel(QF::UI::Components::Panel* _Panel);
@@ -46,6 +117,10 @@ namespace QF
 	}
 }
 
+
+#pragma endregion
+
+#pragma region Panel_H
 namespace QF
 {
 	namespace UI
@@ -61,9 +136,10 @@ namespace QF
 				Element* g_Parent() const;
 				const long long g_ImmutableId() const; 
 
+				std::unique_ptr<EventSystem::EventHandler>& g_EventHandler(); 
 
-				void renderloop() {
-					//printf("rendering\n");
+				void renderer(QF::UI::Components::EventSystem::Event& _Event) {
+					printf("renderer called\n");
 				}
 			private:
 				void assignAsChildrenToAbsoluteParent();
@@ -74,33 +150,17 @@ namespace QF
 
 				/* Immutable id: for more explanation go to widnow header */
 				long long m_ImmutableId = static_cast<long long>(__QF_UNDEFINED);
+
+				/* Event handler */
+				std::unique_ptr<QF::UI::Components::EventSystem::EventHandler> m_EventHandler;
 			};
 		}
 	}
 }
 
+#pragma endregion 
 
-namespace QF
-{
-	namespace UI
-	{
-		namespace Components
-		{
-			class EventSystem
-			{
-			public:
-				class Event
-				{
-				public:
-					Event() = default; 
-
-					
-				};
-			};
-		}
-	}
-}
-
+#pragma region Window_H
 namespace QF
 {
 
@@ -109,7 +169,7 @@ namespace QF
 		
 		namespace Components
 		{
-
+#pragma region Window_H -> Start
 			class Window : public QF::UI::Components::Element {
 			public:
 				Window(App* Application, 
@@ -126,125 +186,36 @@ namespace QF
 				void im_Child(std::unique_ptr<Panel> _Child);
 				void i_WantToBeAssigned(Panel* _Child);
 			public:
-				void hook_MainLoop() {
-					/* Push all children from asignment stack */
-					assignChildrenFromStack();
-
-					/* Override main loop flag */
-					m_InMainLoop = true;
-
-					/* Initialize context's */
-					glfwMakeContextCurrent(g_GLFWobject()->g_Object());
-					ImGui::SetCurrentContext(g_GLFWobject()->g_ImGuiContext());
-
-					glfwSwapInterval(1);
-
-					ImGuiIO& io1 = ImGui::GetIO();
-					io1.WantCaptureMouse = false; /* true if ImGui needs to capture mouse for this window */
-					io1.WantCaptureKeyboard = false;
-
-					glfwPollEvents();
-					/* Call GLFWobject mainloop's handler first */
-					m_GLFWobject->hook_MainLoop();
-
-					/* Initalize context and glclear current buffer */
-					glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-					glClear(GL_COLOR_BUFFER_BIT);
-
-					/* Create imgui frame */
-					ImGui_ImplOpenGL3_NewFrame();
-					ImGui_ImplGlfw_NewFrame();
-					ImGui::NewFrame();
-
-					/* Get window size */
-					int _sx = 0;
-					int _sy = 0;
-
-					glfwGetWindowSize(g_GLFWobject()->g_Object(), &_sx, &_sy);
-
-					/* Create main panel for rendering at given window */
-						/* Set panel  size */
-					ImGui::SetNextWindowSize(ImVec2(static_cast<float>(_sx), static_cast<float>(_sy)),
-						ImGuiCond_Always
-					);
-					/* Set panel postion: default 0, 0*/
-					ImGui::SetNextWindowPos(ImVec2(0.0f, 0.0f),
-						ImGuiCond_Always
-					);
-
-
-					/* Set panel params */
-					
-
-					ImGui::Begin(std::to_string(g_ImmutableID()).c_str(), nullptr,
-						/* Flags */
-						ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | (g_GLFWobject()->is_Animating() ? ImGuiWindowFlags_NoInputs : 0)
-					);
-					//glfwPollEvents();
-
-
-
-					/* @hook */
-					for (std::unique_ptr<Panel>& _Child : m_Children) {
-						_Child->renderloop();
-					}
-					
-					ImDrawList* drawList = ImGui::GetWindowDrawList();
-					const QF::Utils::Vec2 Position = { 0.0f, 0.0f };
-					const QF::Utils::Vec2 Size = { 5.0f * static_cast<float>(g_ImmutableID()) };
-
-					drawList->AddRectFilled(Position, (Position + Size), ImColor(0, 128, 255));
-
-
-					if (ImGui::Button("Maximize"))
-					{
-						// This code will be executed when the button is clicked
-						// Bind your action here
-						g_GLFWobject()->maximalize();
-
-						// You can call any action, function, or event here
-						// For example, toggle a boolean, change state, etc.
-					}
-
-					if (ImGui::Button("Restore"))
-					{
-						// This code will be executed when the button is clicked
-						// Bind your action here
-						g_GLFWobject()->restore();
-
-						// You can call any action, function, or event here
-						// For example, toggle a boolean, change state, etc.
-					}
-
-					if (ImGui::Button("Minimalize"))
-					{
-						// This code will be executed when the button is clicked
-						// Bind your action here
-						g_GLFWobject()->minimalize();
-
-						// You can call any action, function, or event here
-						// For example, toggle a boolean, change state, etc.
-					}
-
-					/* @endof hook */
-					glfwPollEvents();
-					//glfwPollEvents();
-					/* Finalize draw list*/
-					ImGui::End();
-					ImGui::EndFrame();
-					//ImGui::UpdatePlatformWindows();
-					ImGui::UpdatePlatformWindows();
-					/* Get render and pass data to open gl */
-					ImGui::Render();
-
-					ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-					/* Swap buffers to finalize */
-					glfwSwapBuffers(g_GLFWobject()->g_Object());
-
-					/* Override mainloop flag back to regular */
-					m_InMainLoop = false; 
-				}
+				void hook_MainLoop();
 			private:
+				void mainloopEarly();
+				void mainloopPrepareForRender();
+				void mainloopFinalizeRender();
+
+				/* Event handlers */
+				template<typename __EventType>
+				void childrenEventPropagationBottomToTop(
+					const std::function<bool(std::unique_ptr<Panel>&)>& _Condition, const std::function<__EventType(std::unique_ptr<Panel>&)>& _Event, bool _AbortOnPropagation = false
+				) {
+					/* Iterate throught children from bottom to top */
+					for (int _Iterator = 0; _Iterator < m_Children.size(); 
+						_Iterator++) {
+						std::unique_ptr<Panel>& childObj = m_Children[_Iterator];
+
+						/* If condition returns true propagate event */
+						if (_Condition(childObj)) {
+							(childObj->g_EventHandler())->Dispatch(_Event(childObj));
+
+							/* Check for abortion flag */
+							if (_AbortOnPropagation) return; 
+						}
+					}
+				};
+
+			private:
+
+#pragma endregion 
+#pragma region Window_H -> GLFWobject_H
 				class GLFWobject {
 				public:
 					struct alpha8Bit {
@@ -350,8 +321,9 @@ namespace QF
 					/* Animation object for GLFWobjectOperations */
 					std::unique_ptr<QF::Utils::BasicAnim> m_GLFWobjectOperationsAnim = nullptr;
 				};
-
-			private:
+#pragma endregion
+#pragma region Window_H -> Continue			
+private:
 				/* Immutable identification of a window 
 					* Cannot be changed after set, should be only set by windowing engine
 					* Its this way because of engine structure, could i do it without this? yes, did i? no
@@ -382,6 +354,9 @@ namespace QF
 				const long long g_ImmutableID() const;
 				std::unique_ptr<GLFWobject>& g_GLFWobject();
 			};
+#pragma endregion
 		}
 	}
 }
+
+#pragma endregion

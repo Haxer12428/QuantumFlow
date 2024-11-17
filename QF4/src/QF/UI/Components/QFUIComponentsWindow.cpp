@@ -132,8 +132,8 @@
 	void QF::UI::Components::Window::assignChildrenFromStack() {
 		/* Assign 1 per loop */
 		while (!m_ChildrenAssigmentStack.empty()) {
-			/* 
-				Check for incorrect push: 
+			/*
+				Check for incorrect push:
 					i still dont know unique_ptr's or chat gpt is a retard
 			*/
 			if (m_ChildrenAssigmentStack.front() != nullptr) {
@@ -151,3 +151,106 @@
 			}
 		}
 	}
+/* Main loop -> public */
+	void QF::UI::Components::Window::hook_MainLoop() {
+		/* Main loop early call */
+		mainloopEarly();
+
+		/* Set flag */
+		m_InMainLoop = true; 
+
+		/* Prepare for render */
+		mainloopPrepareForRender();
+
+		/* Render call */
+		childrenEventPropagationBottomToTop<QF::UI::Components::EventSystem::Event>([&](std::unique_ptr<Panel>& _Panel) -> bool 
+			{
+				return true; 
+			},
+			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Event 
+			{
+				return QF::UI::Components::EventSystem::Event{};
+			}
+		);
+
+		/* Finalize render */
+		mainloopFinalizeRender();
+
+		/* Set flag */
+		m_InMainLoop = false; 
+	}
+/* Main loop -> private */
+	void QF::UI::Components::Window::mainloopEarly() {
+		/* Assign children from stack */
+		assignChildrenFromStack();
+	}
+
+	void QF::UI::Components::Window::mainloopPrepareForRender() {
+		/* Get glfw object */
+		GLFWwindow* glfwWindow = m_GLFWobject->g_Object();
+
+		/* Set context's */
+		glfwMakeContextCurrent(glfwWindow);
+		ImGui::SetCurrentContext(m_GLFWobject->g_ImGuiContext());
+
+		/* Pool events */
+		glfwPollEvents();
+
+		/* Call glfwobject's main loop */
+		m_GLFWobject->hook_MainLoop();
+
+		/* Handle gl buffer */
+		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		/* Create imgui's frame */
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		/* Create main panel for rendering */
+		ImGui::SetNextWindowSize(m_GLFWobject->g_Size(), ImGuiCond_Always);
+
+		/* Set panel position as 0, 0 */
+		ImGui::SetNextWindowPos({ 0.0f, 0.0f }, ImGuiCond_Always);
+
+		/* Set panel params */
+		ImGui::Begin(std::to_string(g_ImmutableID()).c_str(), nullptr,
+			/* Flags */
+			ImGuiWindowFlags_NoTitleBar | 
+			ImGuiWindowFlags_NoResize | 
+			ImGuiWindowFlags_NoScrollbar | 
+			(m_GLFWobject->is_Animating() ? ImGuiWindowFlags_NoInputs : 0)
+			);
+		
+	}
+
+	void QF::UI::Components::Window::mainloopFinalizeRender() {
+		/* Get glfw object */
+		GLFWwindow* glfwWindow = m_GLFWobject->g_Object();
+
+		/* Set context's */
+		glfwMakeContextCurrent(glfwWindow);
+		ImGui::SetCurrentContext(m_GLFWobject->g_ImGuiContext());
+
+		/* Pool events */
+		glfwPollEvents();
+
+		/* Finalize draw list*/
+		ImGui::End();
+		ImGui::EndFrame();
+
+		//ImGui::UpdatePlatformWindows();
+		ImGui::UpdatePlatformWindows();
+
+		/* Get render  */
+		ImGui::Render();
+
+		/* Pass to opengl  */
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		/* Swap buffers to finalize */
+		glfwSwapBuffers(m_GLFWobject->g_Object());
+	}
+
+

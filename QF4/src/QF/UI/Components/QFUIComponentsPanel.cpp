@@ -2,7 +2,7 @@
 
 QF::UI::Components::Panel::Panel(QF::UI::Components::Element* _Parent, const QF::Utils::Vec2& _Position,
 	const QF::Utils::Vec2& _Size, bool _CARE) 
-	: m_Parent{_Parent}, Element()
+	: m_Parent{_Parent}, Element(), m_EventHandler{std::make_unique<QF::UI::Components::EventSystem::EventHandler>()}
 {
 	/* Declare that im a panel */
 	im_Panel(this);
@@ -15,7 +15,8 @@ QF::UI::Components::Panel::Panel(QF::UI::Components::Element* _Parent, const QF:
 		"Panel created successfully"
 		);
 
-	QF::UI::Components::EventSystem::Event();
+	g_EventHandler()->Subscribe<QF::UI::Components::EventSystem::Event>(this, &Panel::renderer);
+	g_EventHandler()->Dispatch(EventSystem::Event());
 }
 
 QF::UI::Components::Panel::~Panel() {
@@ -44,13 +45,17 @@ QF::UI::Components::Panel::~Panel() {
 /* Parent handling -> private */
 	void QF::UI::Components::Panel::assignAsChildrenToAbsoluteParent() {
 		if (!has_AbsoluteParent()) {
-			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, 
+			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__,
 				"Absolute parent for this panel doesn't exist, requesting shutdown "
-				);
+			);
 			__QF_SHUTDOWN_MSG();
 			/* runtime error */
 			throw std::runtime_error("Absolute parent == nullptr");
 		}
 		/* Assign as a child */
 		g_AbsoluteParent()->i_WantToBeAssigned(this);
+	}
+/* Event handling -> public */
+	std::unique_ptr<QF::UI::Components::EventSystem::EventHandler>& QF::UI::Components::Panel::g_EventHandler() {
+		return m_EventHandler;
 	}
