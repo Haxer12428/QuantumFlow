@@ -6,12 +6,15 @@ namespace QF
 {
 	namespace UI
 	{
-		namespace Components { class Window; }
+		namespace Components {
+			class Window; 
+		}
 
 		class App
 		{
 		public:
 			App();
+			~App();
 
 			/* Initialization */
 			virtual const bool onInit();

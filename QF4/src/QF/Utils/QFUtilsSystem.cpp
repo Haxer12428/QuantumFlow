@@ -58,7 +58,6 @@
     taskbarInfo.m_Size = QF::Utils::Vec2::g_SizeFromRECT
       (appbarData.rc);
 
-    std::cout << taskbarInfo.m_Size.g_String() << " <- taskbar size\n";
     /* Return valid */
     return taskbarInfo;
   }

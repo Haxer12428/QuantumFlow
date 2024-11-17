@@ -11,19 +11,17 @@ public:
 	const bool onInit() override {
 		std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
 
-		for (int x = 1; x <= 10; x++)
+		for (int x = 1; x <= 1; x++)
 		{
-			QF::UI::Components::Window* _Window = new QF::UI::Components::Window(
-				{ 400, 400 }, { 800, 600 });
-
-
-
-			g_WindowHandler() ->
-				im_Child(_Window);
-
+			QF::UI::Components::Window* _Window = new QF::UI::Components::Window(this,
+				{ __QF_DONT_CARE }, { __QF_DONT_CARE });
 
 
 			std::cout << "Created windows: " << x << "\n";
+			_Window->g_GLFWobject()->s_GLFWobjectOperationsAnimationState(true);
+
+			new QF::UI::Components::Panel(_Window, { 10.0f, 10.0f }, { 100.0f, 100.0f });
+			
 		}
 
 		std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();

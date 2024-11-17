@@ -77,6 +77,9 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,6 +95,9 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -108,6 +114,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,6 +133,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,10 +149,15 @@
     <ClCompile Include="src\QF\Core\QFCore.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIAppWindowHandler.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIApp.cpp" />
+    <ClCompile Include="src\QF\UI\Components\QFUIComponentsElement.cpp" />
+    <ClCompile Include="src\QF\UI\Components\QFUIComponentsEventSystem.cpp" />
+    <ClCompile Include="src\QF\UI\Components\QFUIComponentsPanel.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsWindow.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsWindowGLFWobject.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsBasicAnim.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsDebug.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsMath.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsRect.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsSystem.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsVec2.cpp" />
   </ItemGroup>
@@ -152,8 +169,10 @@
     <ClInclude Include="src\QF\UI\QFUI.h" />
     <ClInclude Include="src\QF\UI\App\QFUIApp.h" />
     <ClInclude Include="src\QF\Utils\QFUtils.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsBasicAnim.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsDebug.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsMath.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsRect.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsSystem.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsVec2.h" />
   </ItemGroup>

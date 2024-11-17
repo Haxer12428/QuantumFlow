@@ -1,16 +1,33 @@
 #include "QFUIComponentsWindow.h"
 
+
 /* Constructor & Destructor */
-	QF::UI::Components::Window::Window(
-		const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size
-	) {
+	QF::UI::Components::Window::Window(QF::UI::App* _Application,
+		const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, bool _CustomTitleBar
+	) 
+		: m_Application{ _Application }, Element()
+	{
 		try 
 		{
+			im_Window(this);
+
 			/* Create glfw object */
 			m_GLFWobject = std::make_unique<GLFWobject>();
+
+			/* Set starting position & size assigned to window */
+			m_GLFWobject->s_PositionStarting(_Position);
+			m_GLFWobject->s_SizeStarting(_Size);
+
+			/* Set custom title bar state */
+			m_GLFWobject->s_CustomTitleBarState(_CustomTitleBar);
+
 			/* Create glfw window */
 			m_GLFWobject->createObject();
 
+			/* Declare as a child of application event handler */
+			m_Application->g_WindowHandler()
+				->im_Child(this);
+			
 		}
 		catch (const std::exception& _Exception) { 
 			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, std::format(
@@ -78,4 +95,59 @@
 		/* Set */
 		m_ImmutableID = _ID;
 		return true; 
+	}
+/* Children handling -> Public */
+	void QF::UI::Components::Window::im_Child(std::unique_ptr<Panel> _Child) {
+		if (_Child == nullptr) {
+			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__,
+				"Panel cannot become a children of Window, its nullptr"
+			); return; 
+		}
+		/* Set immutable id */
+		if (!_Child->s_ImmutableId(g_NewImmutableIdForChild())) {
+			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__,
+				"Immutable id for this panel is already generated. This might cause real problems, shutting downm qf."
+				);
+			__QF_SHUTDOWN_MSG();
+			/* Runtime error */
+			throw std::runtime_error("Cannot define immutable id");
+		}
+		/* Push back to children stack */
+		m_Children.push_back(std::move(_Child));
+		/* Log success */
+		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, std::format(
+			"Assigned panel to children stack, immutable_id: {}", m_Children.back()->g_ImmutableId()
+			));
+	}
+
+	void QF::UI::Components::Window::i_WantToBeAssigned(Panel* _Child) {
+		m_ChildrenAssigmentStack.push_back(std::unique_ptr<Panel>(_Child));
+	}
+
+/* Children handling -> Private */
+	const long long QF::UI::Components::Window::g_NewImmutableIdForChild() {
+		m_ChildrenImmutableIdsCount++; return m_ChildrenImmutableIdsCount;
+	}
+
+	void QF::UI::Components::Window::assignChildrenFromStack() {
+		/* Assign 1 per loop */
+		while (!m_ChildrenAssigmentStack.empty()) {
+			/* 
+				Check for incorrect push: 
+					i still dont know unique_ptr's or chat gpt is a retard
+			*/
+			if (m_ChildrenAssigmentStack.front() != nullptr) {
+				im_Child(std::move(m_ChildrenAssigmentStack.front()));
+				/* Log success */
+				__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__,
+					"Successfully pushed panel; assign stack -> children stack"
+				);
+			}
+
+			/* Deletion of leftover nullptr */
+			if (m_ChildrenAssigmentStack.front() == nullptr)
+			{
+				m_ChildrenAssigmentStack.erase(m_ChildrenAssigmentStack.begin());
+			}
+		}
 	}

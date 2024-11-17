@@ -12,18 +12,49 @@
  QF::Utils::Vec2::Vec2(float _x, float _y)
 	 : x{ _x }, y{ _y }
  {};
+ /* Importing from vector */ 	 /* Experimental implementations, might cause errors */
+ QF::Utils::Vec2::Vec2(const std::vector<float>& _Vec) {
+	 /* It's empty */
+	 if (_Vec.empty()) {
+		 x = 0; y = 0; return; 
+	 }
+	 /* Only one is correct */
+	 if (_Vec.size() == 1) {
+		 x = _Vec[0]; y = _Vec[1]; return;
+	 }
+	 /* Both correct */
+	 x = _Vec[0];
+	 y = _Vec[1];
+ }
+
+ QF::Utils::Vec2::Vec2(const std::vector<float>& _Vec, size_t _IndexX, size_t _IndexY) {
+	 /* Vector's empty */
+	 if (_Vec.empty()) {
+		 x = 0; y = 0; return; 
+	 }
+	 /* Vector doesn't have those indexes */
+	 const size_t vecMaxPos = (_Vec.size() - 1);
+
+	 /* Tried accessing variables that aren't assigned */
+	 if (vecMaxPos < _IndexX || vecMaxPos < _IndexY) {
+		 x = 0; y = 0; return; 
+	 }
+	 /* Assign correctly */
+	 x = _Vec[_IndexX];
+	 y = _Vec[_IndexY];
+ }
 /* Operators */
- QF::Utils::Vec2 QF::Utils::Vec2::operator-(Vec2& _Other)
+ QF::Utils::Vec2 QF::Utils::Vec2::operator-(const Vec2& _Other)
  {
 	 return { x - _Other.x, y - _Other.y };
  }
 
- QF::Utils::Vec2 QF::Utils::Vec2::operator+(Vec2& _Other)
+ QF::Utils::Vec2 QF::Utils::Vec2::operator+(const Vec2& _Other)
  {
 	 return { x + _Other.x, x + _Other.y };
  }
 
- QF::Utils::Vec2 QF::Utils::Vec2::operator*(Vec2& _Other)
+ QF::Utils::Vec2 QF::Utils::Vec2::operator*(const Vec2& _Other)
  {
 	 return { x * _Other.x, y * _Other.y };
  }
@@ -33,7 +64,7 @@
 	 return { x * _Other, y * _Other };
  }
 
- QF::Utils::Vec2 QF::Utils::Vec2::operator/(Vec2& _Other)
+ QF::Utils::Vec2 QF::Utils::Vec2::operator/(const Vec2& _Other)
  {
 	 QF::Utils::Vec2 otherCopy = _Other;
 	 /* Handle division by 0 */
@@ -49,6 +80,19 @@
 
 	 return { x / otherCopy, y / otherCopy };
  }
+
+ QF::Utils::Vec2& QF::Utils::Vec2::operator=(const Vec2& _Other) {
+	 if (this == &_Other) return *this;
+	 /* Copy */
+	 this->x = _Other.x; 
+	 this->y = _Other.y;
+
+	 return *this;
+ }
+
+ const bool QF::Utils::Vec2::operator==(const QF::Utils::Vec2& _Other) {
+	 return ((this->x == _Other.x) && (this->y == _Other.y));
+ }
 /* Transformations */
  const std::string QF::Utils::Vec2::g_String() const 
  { return std::format("Vec2(x: {},y: {})", x, y); }
@@ -59,6 +103,10 @@
 
  const QF::Utils::Vec2 QF::Utils::Vec2::g_SizeFromRECT(const RECT& _Rect) {
 	 return { static_cast<float>(_Rect.right - _Rect.left), static_cast<float>(_Rect.bottom - _Rect.top) };
+ }
+
+ const std::vector<float> QF::Utils::Vec2::g_DataVector() const {
+	 return { x, y };
  }
 /* Chekcs */
  const bool QF::Utils::Vec2::is_InBounds(const Vec2& _First, const Vec2& _Size) const {
