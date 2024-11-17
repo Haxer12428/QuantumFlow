@@ -114,6 +114,11 @@
 		}
 		/* Push back to children stack */
 		m_Children.push_back(std::move(_Child));
+		/* Propagate event that tell's panel that it can link with other panels as its linked to window */
+		m_Children.back()->g_EventHandler()->Dispatch(
+			EventSystem::Events::PanelAssignedToWindowStack{}
+			);
+
 		/* Log success */
 		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, std::format(
 			"Assigned panel to children stack, immutable_id: {}", m_Children.back()->g_ImmutableId()
@@ -163,15 +168,7 @@
 		mainloopPrepareForRender();
 
 		/* Render call */
-		childrenEventPropagationBottomToTop<QF::UI::Components::EventSystem::Event>([&](std::unique_ptr<Panel>& _Panel) -> bool 
-			{
-				return true; 
-			},
-			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Event 
-			{
-				return QF::UI::Components::EventSystem::Event{};
-			}
-		);
+		mainloopRender();
 
 		/* Finalize render */
 		mainloopFinalizeRender();
@@ -180,6 +177,20 @@
 		m_InMainLoop = false; 
 	}
 /* Main loop -> private */
+	void QF::UI::Components::Window::mainloopRender()
+	{
+		childrenEventPropagationBottomToTop<QF::UI::Components::EventSystem::Events::Render>(
+			[&](std::unique_ptr<Panel>& _Panel) -> bool
+			{
+				return true; 
+			},
+			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Events::Render
+			{
+				return QF::UI::Components::EventSystem::Events::Render{};
+			}
+		);
+	}
+
 	void QF::UI::Components::Window::mainloopEarly() {
 		/* Assign children from stack */
 		assignChildrenFromStack();

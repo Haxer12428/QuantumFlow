@@ -13,6 +13,7 @@ public:
 
 		for (int x = 1; x <= 1; x++)
 		{
+			//QF::Utils::Debug::s_ToAllPrintHints(true);
 			QF::UI::Components::Window* _Window = new QF::UI::Components::Window(this,
 				{ __QF_DONT_CARE }, { __QF_DONT_CARE });
 
@@ -20,8 +21,14 @@ public:
 			std::cout << "Created windows: " << x << "\n";
 			_Window->g_GLFWobject()->s_GLFWobjectOperationsAnimationState(true);
 
-			new QF::UI::Components::Panel(_Window, { 10.0f, 10.0f }, { 100.0f, 100.0f });
+			QF::UI::Components::Panel* lastpanel = new QF::UI::Components::Panel(_Window, { 10.0f, 10.0f }, { 100.0f, 100.0f });
 			
+			QF::Utils::Debug::s_ToAllPrintHints(false);
+			for (int x = 0; x < 100000; x++) {
+
+				lastpanel = new QF::UI::Components::Panel(lastpanel, { 10.0f, 10.0f }, { 100.0f, 100.0f });
+			}
+			//QF::Utils::Debug::s_ToAllPrintHints(true);
 		}
 
 		std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
@@ -39,7 +46,7 @@ public:
 int main()
 {
 	__QF_INIT();
-	QF::Utils::Debug::s_ToAllPrintHints(true);
+	//QF::Utils::Debug::s_ToAllPrintHints(false);
 
 
 	QF::UI::App::implementApplication<Application>();

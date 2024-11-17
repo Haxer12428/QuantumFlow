@@ -16,9 +16,27 @@ namespace QF
 			class EventSystem
 			{
 			public:
+			
 				class Event {
 				public:
 					virtual ~Event() = default; // Ensure proper cleanup for derived classes
+				};
+
+				class Events
+				{
+				public:
+
+					class Render : public Event {
+					public: 
+						~Render() = default; 
+						Render() = default;
+					};
+
+					class PanelAssignedToWindowStack : public Event {
+					public:
+						PanelAssignedToWindowStack() = default;
+						~PanelAssignedToWindowStack() = default;
+					};
 				};
 
 				class EventHandler {
@@ -135,15 +153,25 @@ namespace QF
 				const bool s_ImmutableId(long long _Id);
 				Element* g_Parent() const;
 				const long long g_ImmutableId() const; 
+				const bool is_Visible() const; 
+
+				const QF::Utils::Vec2 g_FinalPosition() const; 
+
+				void renderingevent(QF::UI::Components::EventSystem::Events::Render& _RenderEvt)
+				{
+					ImDrawList* DrawList = ImGui::GetWindowDrawList();
+					DrawList->AddRectFilled(m_Position, g_FinalPosition(), ImColor(255, 255, 0), 0.1f);
+					
+				}
+
+				void im_Child(Panel* m_Child);
 
 				std::unique_ptr<EventSystem::EventHandler>& g_EventHandler(); 
-
-				void renderer(QF::UI::Components::EventSystem::Event& _Event) {
-					printf("renderer called\n");
-				}
 			private:
 				void assignAsChildrenToAbsoluteParent();
+				void assignAsChildrenToParent();
 
+				void assignedAsChildrenToAbsoluteParent(EventSystem::Events::PanelAssignedToWindowStack& _Event);
 			private:
 				Element* m_Parent; 
 				std::vector<Panel*> m_Children; 
@@ -153,6 +181,12 @@ namespace QF
 
 				/* Event handler */
 				std::unique_ptr<QF::UI::Components::EventSystem::EventHandler> m_EventHandler;
+
+				/* Visibility */
+				bool m_Visible = true; 
+
+				/* Position & Size */
+				QF::Utils::Vec2 m_Position, m_Size; 
 			};
 		}
 	}
@@ -191,6 +225,7 @@ namespace QF
 				void mainloopEarly();
 				void mainloopPrepareForRender();
 				void mainloopFinalizeRender();
+				void mainloopRender();
 
 				/* Event handlers */
 				template<typename __EventType>
