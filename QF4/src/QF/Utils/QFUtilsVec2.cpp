@@ -51,7 +51,7 @@
 
  QF::Utils::Vec2 QF::Utils::Vec2::operator+(const Vec2& _Other)
  {
-	 return { x + _Other.x, x + _Other.y };
+	 return { x + _Other.x, y + _Other.y };
  }
 
  QF::Utils::Vec2 QF::Utils::Vec2::operator*(const Vec2& _Other)
@@ -90,6 +90,10 @@
 	 return *this;
  }
 
+ const bool QF::Utils::Vec2::operator<=(const QF::Utils::Vec2& _Other) const {
+	 return ((this->x <= _Other.x) && (this->y <= _Other.y));
+ }
+
  const bool QF::Utils::Vec2::operator==(const QF::Utils::Vec2& _Other) {
 	 return ((this->x == _Other.x) && (this->y == _Other.y));
  }
@@ -107,6 +111,13 @@
 
  const std::vector<float> QF::Utils::Vec2::g_DataVector() const {
 	 return { x, y };
+ }
+
+ QF::Utils::Vec2& QF::Utils::Vec2::limit(const Vec2& _Limit) {
+	 x = std::min(x, _Limit.x);
+	 y = std::min(y, _Limit.y);
+
+	 return *this;
  }
 /* Chekcs */
  const bool QF::Utils::Vec2::is_InBounds(const Vec2& _First, const Vec2& _Size) const {

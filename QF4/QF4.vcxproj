@@ -149,13 +149,15 @@
     <ClCompile Include="src\QF\Core\QFCore.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIAppWindowHandler.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIApp.cpp" />
+    <ClCompile Include="src\QF\UI\Components\GLFWobject\TitleBar\QFUIComponentsWindowGLFWobjectTitleBar.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsElement.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsEventSystem.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsPanel.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsWindow.cpp" />
-    <ClCompile Include="src\QF\UI\Components\QFUIComponentsWindowGLFWobject.cpp" />
+    <ClCompile Include="src\QF\UI\Components\GLFWobject\QFUIComponentsWindowGLFWobject.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsBasicAnim.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsDebug.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsIdMenager.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsMath.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsRect.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsSystem.cpp" />
@@ -171,6 +173,7 @@
     <ClInclude Include="src\QF\Utils\QFUtils.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsBasicAnim.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsDebug.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsIdManager.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsMath.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsRect.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsSystem.h" />

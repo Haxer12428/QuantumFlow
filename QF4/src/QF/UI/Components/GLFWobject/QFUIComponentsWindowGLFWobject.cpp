@@ -1,13 +1,17 @@
-#include "QFUIComponentsWindow.h"
+#include "../QFUIComponentsWindow.h"
 
 /* Constructor & Destructor */
-	QF::UI::Components::Window::GLFWobject::GLFWobject() : 
+	QF::UI::Components::Window::GLFWobject::GLFWobject(QF::UI::Components::Window* _Parent) : 
 		m_Object{ nullptr }, 
 		m_SizeStarting{ __QF_DONT_CARE, __QF_DONT_CARE },
-		m_PositionStarting{ __QF_DONT_CARE, __QF_DONT_CARE }
+		m_PositionStarting{ __QF_DONT_CARE, __QF_DONT_CARE },
+		m_Parent{_Parent}
 	{
 		/* Initialize animation class */
 		animateGLFWobjectInit();
+
+		/* Initialize custom title bar */
+		m_CustomTitleBar = new CustomTitleBar(_Parent);
 	}
 
 	QF::UI::Components::Window::GLFWobject::~GLFWobject() {
@@ -43,6 +47,62 @@
 
 	const bool QF::UI::Components::Window::GLFWobject::is_UsingCustomTitleBar() const {
 		return m_CustomTitleBar;
+	}
+	
+	const QF::Utils::Rect QF::UI::Components::Window::GLFWobject::g_TitleBarRect() const {
+		/* Custom title bar */
+		if (m_CustomTitleBar) {
+			return QF::Utils::Rect{{0.0f, 0.0f}, { g_Size().x, m_CustomTitleBarSizeY }};
+		}
+		/* Check for m object existance */
+		if (m_Object == nullptr) {
+			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "GLFWobject doesn't exist;"); return {};
+		};
+
+		/* Window's title bar */
+		RECT windowsTitleBarRect;
+		HWND windowHWND = glfwGetWin32Window(m_Object);
+
+		if (GetWindowRect(windowHWND, &windowsTitleBarRect)) {
+			/* Get window area */
+			int windowWidth = (windowsTitleBarRect.right - windowsTitleBarRect.left);
+			int windowHeight = (windowsTitleBarRect.bottom - windowsTitleBarRect.top);
+
+			RECT windowsClientRect;
+			GetClientRect(windowHWND, &windowsClientRect);
+
+			/* Get client area */
+			int windowClientWidth = (windowsClientRect.right - windowsClientRect.left);
+			int windowClientHeight = (windowsClientRect.bottom - windowsClientRect.top);
+
+			/* Return rect of title bar (windows)*/
+			return QF::Utils::Rect{
+				{0.0f, 0.0f}, { static_cast<float>(windowWidth), static_cast<float>(windowHeight - windowClientHeight) }
+				};
+		}
+		__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Failed to retrive window rect;"); return {};
+	}
+
+	const QF::Utils::Rect QF::UI::Components::Window::GLFWobject::g_ClientAreaRect() const {
+		const QF::Utils::Vec2 windowSize = g_Size();
+		const QF::Utils::Vec2 titleBarSize = g_TitleBarRect().g_Size();
+
+		/* Calculate */
+		const QF::Utils::Vec2 clientAreaStart = { 0.0f, titleBarSize.y };
+		const QF::Utils::Vec2 clientAreaSize = (windowSize - QF::Utils::Vec2{0.0f, titleBarSize.y});
+
+		return { clientAreaStart, clientAreaSize };
+	}
+
+	const QF::Utils::Rect QF::UI::Components::Window::GLFWobject::g_FixedClientAreaRect() const
+	{
+		/* Check for custom title bar */
+		if (m_CustomTitleBar) {
+			return g_ClientAreaRect();
+		}
+		/* Fixed so on normal (windows) title bar it will start from 0,0 to avoid rendering issues */
+		QF::Utils::Rect clientAreaRect = g_ClientAreaRect();
+		return { {0.0f, 0.0f}, clientAreaRect.g_FinalPosition() - clientAreaRect.g_Position() };
 	}
 
 	const QF::Utils::Vec2 QF::UI::Components::Window::GLFWobject::g_Size() const {

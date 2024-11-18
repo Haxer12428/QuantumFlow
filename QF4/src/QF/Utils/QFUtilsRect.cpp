@@ -25,3 +25,6 @@
 		return (g_Position() + g_Size());
 	}
 
+	const std::string QF::Utils::Rect::g_String() const {
+		return std::format("Rect({}, {})", g_Position().g_String(), g_Size().g_String());
+	}

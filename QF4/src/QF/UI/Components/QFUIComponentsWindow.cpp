@@ -12,7 +12,7 @@
 			im_Window(this);
 
 			/* Create glfw object */
-			m_GLFWobject = std::make_unique<GLFWobject>();
+			m_GLFWobject = std::make_unique<GLFWobject>(this);
 
 			/* Set starting position & size assigned to window */
 			m_GLFWobject->s_PositionStarting(_Position);
@@ -51,7 +51,7 @@
 	}
 
 	QF::UI::Components::Window::~Window() {
-		/* Override flag to tell window menager that u cannot push me or use me ;) */
+		/* Override flag to tell window Manager that u cannot push me or use me ;) */
 		m_Destructed = true; 
 
 		/* Let the ppl know */
@@ -182,7 +182,7 @@
 		childrenEventPropagationBottomToTop<QF::UI::Components::EventSystem::Events::Render>(
 			[&](std::unique_ptr<Panel>& _Panel) -> bool
 			{
-				return true; 
+				return (_Panel->is_VisibleFixed());
 			},
 			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Events::Render
 			{

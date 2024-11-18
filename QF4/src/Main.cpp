@@ -17,16 +17,17 @@ public:
 			QF::UI::Components::Window* _Window = new QF::UI::Components::Window(this,
 				{ __QF_DONT_CARE }, { __QF_DONT_CARE });
 
-
 			std::cout << "Created windows: " << x << "\n";
 			_Window->g_GLFWobject()->s_GLFWobjectOperationsAnimationState(true);
 
-			QF::UI::Components::Panel* lastpanel = new QF::UI::Components::Panel(_Window, { 10.0f, 10.0f }, { 100.0f, 100.0f });
+			QF::UI::Components::Panel* lastpanel = new QF::UI::Components::Panel(_Window, { 10.0f, 10.0f }, { 500.0f, 300.0f });
 			
-			QF::Utils::Debug::s_ToAllPrintHints(false);
-			for (int x = 0; x < 100000; x++) {
+			std::cout << _Window->g_GLFWobject()->g_ClientAreaRect().g_String() << "\n";
+			
+			for (int x = 0; x < 3; x++) 
+			{
 
-				lastpanel = new QF::UI::Components::Panel(lastpanel, { 10.0f, 10.0f }, { 100.0f, 100.0f });
+				lastpanel = new QF::UI::Components::Panel(lastpanel, { 100.0f, 100.0f }, { 200.0f, 150.0f });
 			}
 			//QF::Utils::Debug::s_ToAllPrintHints(true);
 		}
@@ -46,7 +47,7 @@ public:
 int main()
 {
 	__QF_INIT();
-	//QF::Utils::Debug::s_ToAllPrintHints(false);
+	QF::Utils::Debug::s_ToAllPrintHints(true);
 
 
 	QF::UI::App::implementApplication<Application>();

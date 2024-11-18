@@ -6,3 +6,4 @@
 #include "QFUtilsMath.h"
 #include "QFUtilsBasicAnim.h"
 #include "QFUtilsRect.h"
+#include "QFUtilsIdManager.h"

@@ -20,6 +20,53 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <cmath>
+#include <type_traits>
+#include <cstdint>
+
+/* Operators for enum classes using flags:
+  i have ZERO clue why those doens't work as intended in the first place 
+   */
+
+template <typename Enum>
+typename std::enable_if<std::is_enum<Enum>::value, Enum>::type
+operator|(Enum lhs, Enum rhs) {
+  using T = typename std::underlying_type<Enum>::type;
+  return static_cast<Enum>(static_cast<T>(lhs) | static_cast<T>(rhs));
+}
+
+// Bitwise AND operator
+template <typename Enum>
+typename std::enable_if<std::is_enum<Enum>::value, Enum>::type
+operator&(Enum lhs, Enum rhs) {
+  using T = typename std::underlying_type<Enum>::type;
+  return static_cast<Enum>(static_cast<T>(lhs) & static_cast<T>(rhs));
+}
+
+// Bitwise OR-assignment operator
+template <typename Enum>
+typename std::enable_if<std::is_enum<Enum>::value, Enum&>::type
+operator|=(Enum& lhs, Enum rhs) {
+  lhs = lhs | rhs;
+  return lhs;
+}
+
+// Bitwise AND-assignment operator
+template <typename Enum>
+typename std::enable_if<std::is_enum<Enum>::value, Enum&>::type
+operator&=(Enum& lhs, Enum rhs) {
+  lhs = lhs & rhs;
+  return lhs;
+}
+
+// Bitwise NOT operator
+template <typename Enum>
+typename std::enable_if<std::is_enum<Enum>::value, Enum>::type
+operator~(Enum e) {
+  using T = typename std::underlying_type<Enum>::type;
+  return static_cast<Enum>(~static_cast<T>(e));
+}
+
+/* Endof : operators */
 
 #define ___QF_EMPTY_STRING ""
 #define __QF_DONT_CARE -1

@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <unordered_map>
 #include <typeindex>
+#include <array>
 
 #pragma region EventSystem_H
 namespace QF
@@ -147,31 +148,72 @@ namespace QF
 		{
 			class Panel : public QF::UI::Components::Element {
 			public:
-				Panel(Element* _Parent, const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, bool _Care = true);
-				~Panel();
+				enum class Flags : uint64_t {
+					m_None = 0,
+					m_DontCareAboutFixedPosition = 1 << 0,
+					m_DontCareAboutFixedSize = 1 << 1,
+					m_DisplayIfSizeIsLessOrEqualToZero = 1 << 2,
+				};
+
+				enum class AlignmentFlags : uint64_t {
+					m_None = 0,
+					m_AlignX = 1 << 0, 
+					m_AlignY = 1 << 1
+				};
+			public:
+				Panel(Element* _Parent, const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, const Flags& _Flags = Flags::m_None);
+				virtual ~Panel();
 
 				const bool s_ImmutableId(long long _Id);
 				Element* g_Parent() const;
 				const long long g_ImmutableId() const; 
+				void s_Visible(bool _New);
+				const bool is_VisibleFixed() const; 
+				const QF::Utils::Vec2 g_Position() const;
+				const QF::Utils::Vec2 g_FixedSize() const;
+				const QF::Utils::Vec2 g_FixedPosition() const;
 				const bool is_Visible() const; 
 
 				const QF::Utils::Vec2 g_FinalPosition() const; 
+				void s_Position(const QF::Utils::Vec2& _New); 
+				void s_Size(const QF::Utils::Vec2& _New); 
 
 				void renderingevent(QF::UI::Components::EventSystem::Events::Render& _RenderEvt)
 				{
 					ImDrawList* DrawList = ImGui::GetWindowDrawList();
-					DrawList->AddRectFilled(m_Position, g_FinalPosition(), ImColor(255, 255, 0), 0.1f);
 					
+					DrawList->AddRect(m_FixedPosition, (m_FixedPosition + m_FixedSize), ImColor(0, 128, 255), 0.1f);
 				}
+
 
 				void im_Child(Panel* m_Child);
 
 				std::unique_ptr<EventSystem::EventHandler>& g_EventHandler(); 
 			private:
+				void assignValuesCapturedFromParent(QF::UI::Components::EventSystem::Events::Render& _r);
+				void alignRunCallback(QF::UI::Components::EventSystem::Events::Render& _r);
+
 				void assignAsChildrenToAbsoluteParent();
 				void assignAsChildrenToParent();
+				
+				const bool assertParent() const;
+
+				void assignFixedPositionAndSizeFromParent();
+				void assignFixedVisibilityFromParent();
 
 				void assignedAsChildrenToAbsoluteParent(EventSystem::Events::PanelAssignedToWindowStack& _Event);
+				
+			public:
+				const uint64_t alignMatchSizeWith(const std::function<QF::Utils::Vec2(Panel* _Panel)> &_Func, AlignmentFlags _Flags);
+				
+				bool alignDestroyCallback(uint64_t UniqueId);
+
+				struct allignObject {
+					uint64_t m_UniqueID;
+					std::function<void(Panel*)> m_Callback;
+				};
+			private:
+				const QF::Utils::Vec2 alignModVec2BasedOnFlags(const QF::Utils::Vec2& _Current, const QF::Utils::Vec2& _Default, AlignmentFlags _Flags);
 			private:
 				Element* m_Parent; 
 				std::vector<Panel*> m_Children; 
@@ -183,10 +225,19 @@ namespace QF
 				std::unique_ptr<QF::UI::Components::EventSystem::EventHandler> m_EventHandler;
 
 				/* Visibility */
+				bool m_VisibleFixed = true; 
 				bool m_Visible = true; 
+				
 
 				/* Position & Size */
 				QF::Utils::Vec2 m_Position, m_Size; 
+				QF::Utils::Vec2 m_FixedPosition, m_FixedSize; 
+
+				std::underlying_type<Flags>::type m_Flags = std::underlying_type<Flags>::type(Flags::m_None);
+				
+				/* Allignment */
+				std::vector<allignObject> m_AllignCallbacks;
+				std::unique_ptr<QF::Utils::IdManager> m_AllignIdManager = std::make_unique<QF::Utils::IdManager>();
 			};
 		}
 	}
@@ -268,8 +319,18 @@ namespace QF
 						float m_Value;
 					};
 
+#pragma region GLFWobject_H -> CustomTitleBar_H 
+					class CustomTitleBar : public QF::UI::Components::Panel {
+					public:
+						CustomTitleBar(QF::UI::Components::Window* m_Parent);
+						virtual ~CustomTitleBar();
+
+					private:
+						
+					};
+#pragma endregion
 				public:
-					GLFWobject();
+					GLFWobject(QF::UI::Components::Window* _Parent);
 					~GLFWobject();
 
 					void createObject(); 
@@ -311,7 +372,10 @@ namespace QF
 					const bool is_Restored() const; 
 
 					const bool is_Animating() const; 
-					const bool is_UsingCustomTitleBar() const; 
+					const bool is_UsingCustomTitleBar() const;
+					const QF::Utils::Rect g_TitleBarRect() const; 
+					const QF::Utils::Rect g_ClientAreaRect() const; 
+					const QF::Utils::Rect g_FixedClientAreaRect() const; 
 
 					/* No support for regular titlebar, do override if u want to play with it*/
 					virtual void s_GLFWobjectOperationsAnimationState(bool State);
@@ -351,10 +415,16 @@ namespace QF
 					
 					bool m_CustomTitleBar = false;
 
+					float m_CustomTitleBarSizeY = 30;
+
 					QF::Utils::Vec2 m_RestoringSize;
 					QF::Utils::Vec2 m_RestoringPosition; 
 					/* Animation object for GLFWobjectOperations */
 					std::unique_ptr<QF::Utils::BasicAnim> m_GLFWobjectOperationsAnim = nullptr;
+
+					/* Custom title bar instance */
+					CustomTitleBar* m_CustomTitleBarInstance = nullptr; 
+					QF::UI::Components::Window* m_Parent = nullptr;
 				};
 #pragma endregion
 #pragma region Window_H -> Continue			
