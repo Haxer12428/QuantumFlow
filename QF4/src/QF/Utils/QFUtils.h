@@ -7,3 +7,4 @@
 #include "QFUtilsBasicAnim.h"
 #include "QFUtilsRect.h"
 #include "QFUtilsIdManager.h"
+#include "QFUtilsCompare.h"

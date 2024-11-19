@@ -1,9 +1,12 @@
 #include "QFUIComponentsWindow.h"
 
+namespace utils = QF::Utils;
+namespace components = QF::UI::Components;
+using self = QF::UI::Components::Window;
 
 /* Constructor & Destructor */
 	QF::UI::Components::Window::Window(QF::UI::App* _Application,
-		const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, bool _CustomTitleBar
+		const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, const std::string& _Name, bool _CustomTitleBar
 	) 
 		: m_Application{ _Application }, Element()
 	{
@@ -12,7 +15,7 @@
 			im_Window(this);
 
 			/* Create glfw object */
-			m_GLFWobject = std::make_unique<GLFWobject>(this);
+			m_GLFWobject = std::make_unique<GLFWobject>(this, _Name);
 
 			/* Set starting position & size assigned to window */
 			m_GLFWobject->s_PositionStarting(_Position);
@@ -164,6 +167,9 @@
 		/* Set flag */
 		m_InMainLoop = true; 
 
+		/* Events */
+		mainloopEventMouseMotion();
+
 		/* Prepare for render */
 		mainloopPrepareForRender();
 
@@ -264,4 +270,31 @@
 		glfwSwapBuffers(m_GLFWobject->g_Object());
 	}
 
+	/* Main loop mouse motion event */
+	void self::mainloopEventMouseMotion() {
+		const utils::Vec2 mousePositionThisFrame = m_GLFWobject->g_MousePositionFixed();
+		/* Check for change */
+		if (m_EventMouseMotionLastFramePosition == mousePositionThisFrame) return; 
+
+		std::cout << mousePositionThisFrame << "\n";
+		/* Override */
+		m_EventMouseMotionLastFramePosition = mousePositionThisFrame;
+
+		/* Propagate */
+		childrenEventPropagationTopToBottom<QF::UI::Components::EventSystem::Events::MouseMotionEvent>(
+			[&](std::unique_ptr<Panel>& _Panel) -> bool
+			{
+				return (_Panel->is_VisibleFixed() && 
+					mousePositionThisFrame.is_InBounds(_Panel->g_FixedPosition(), _Panel->g_FinalPositionFixed()
+					));
+			},
+			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Events::MouseMotionEvent
+			{
+				return QF::UI::Components::EventSystem::Events::MouseMotionEvent{
+					(mousePositionThisFrame - _Panel->g_FixedPosition()), mousePositionThisFrame
+				};
+			},
+			true
+		);
+	}
 

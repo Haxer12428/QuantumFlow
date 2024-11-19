@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <array>
+#include "imgui.h"
 
 #pragma region EventSystem_H
 namespace QF
@@ -29,14 +30,29 @@ namespace QF
 
 					class Render : public Event {
 					public: 
-						~Render() = default; 
+						virtual ~Render() = default; 
 						Render() = default;
 					};
 
 					class PanelAssignedToWindowStack : public Event {
 					public:
 						PanelAssignedToWindowStack() = default;
-						~PanelAssignedToWindowStack() = default;
+						virtual ~PanelAssignedToWindowStack() = default;
+					};
+
+					class MouseEvent : public Event {
+					public:
+						MouseEvent(const QF::Utils::Vec2& FixedTo, const QF::Utils::Vec2& Regular);
+
+						const QF::Utils::Vec2 g_Position() const;
+						const QF::Utils::Vec2 g_PositionFixed() const; 
+					private:
+						QF::Utils::Vec2 m_PosFixed, m_Pos;
+					};
+
+					class MouseMotionEvent : public MouseEvent {
+					public:
+						MouseMotionEvent(const QF::Utils::Vec2& _Fixed, const QF::Utils::Vec2& _Regular);
 					};
 				};
 
@@ -139,6 +155,58 @@ namespace QF
 
 #pragma endregion
 
+#pragma region SimpleDC
+
+namespace QF
+{
+	namespace UI
+	{
+		namespace Components
+		{
+			class SimpleDC
+			{
+			public:
+				enum class DrawingFlags : uint64_t {
+					m_None = 0,
+					m_AlignCenterX = 1 << 0,
+					m_AlignCenterY = 1 << 1,
+					m_AlignIgnoreBoundaryLimits = 1 << 2
+				};
+
+			public:
+				SimpleDC(QF::UI::Components::Panel* _Panel);
+				virtual ~SimpleDC();
+
+				void pushFont(ImFont* _Font);
+				void popFont();
+
+				void putRect(const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, ImColor _Clr, float _Rounding = 0.0f, float _Thickness = 1.0f, DrawingFlags _Flags = DrawingFlags::m_None, ImDrawFlags _ImGuiFlags = 0);
+				void putRectFilled(const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, ImColor _Clr, float _Rounding = 0.0f, DrawingFlags _Flags = DrawingFlags::m_None, ImDrawFlags _ImGuiFlags = 0);
+				
+				/* Use push | pop font functions to switch between fonts */
+				void putText(const QF::Utils::Vec2& _Pos, const std::string& _Text, ImColor _Clr, DrawingFlags _Flags = DrawingFlags::m_None);
+			private:
+				void alignInitFunctions();
+
+				const QF::Utils::Vec2 fixVec2(const QF::Utils::Vec2& _Pos) const;
+
+
+				const QF::Utils::Rect g_AlignedRect(const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, DrawingFlags _Flags);
+				
+
+				std::vector<std::function<const QF::Utils::Rect(const QF::Utils::Vec2&, const QF::Utils::Vec2&, DrawingFlags)>> m_AlignFunctions;
+			private:
+				QF::UI::Components::Panel* m_Panel;
+				ImDrawList* m_DrawList;
+				bool m_FontPushed = false;
+			};
+		}
+	}
+}
+
+#pragma endregion 
+
+
 #pragma region Panel_H
 namespace QF
 {
@@ -146,6 +214,8 @@ namespace QF
 	{
 		namespace Components
 		{
+			class SimpleDC;
+
 			class Panel : public QF::UI::Components::Element {
 			public:
 				enum class Flags : uint64_t {
@@ -169,9 +239,11 @@ namespace QF
 				const long long g_ImmutableId() const; 
 				void s_Visible(bool _New);
 				const bool is_VisibleFixed() const; 
+				const QF::Utils::Vec2 g_Size() const; 
 				const QF::Utils::Vec2 g_Position() const;
 				const QF::Utils::Vec2 g_FixedSize() const;
 				const QF::Utils::Vec2 g_FixedPosition() const;
+				const QF::Utils::Vec2 g_FinalPositionFixed() const;
 				const bool is_Visible() const; 
 
 				const QF::Utils::Vec2 g_FinalPosition() const; 
@@ -180,9 +252,10 @@ namespace QF
 
 				void renderingevent(QF::UI::Components::EventSystem::Events::Render& _RenderEvt)
 				{
-					ImDrawList* DrawList = ImGui::GetWindowDrawList();
-					
-					DrawList->AddRect(m_FixedPosition, (m_FixedPosition + m_FixedSize), ImColor(0, 128, 255), 0.1f);
+					QF::UI::Components::SimpleDC canvas{this};
+
+					canvas.putRect({ 0, 0 }, g_FixedSize(), ImColor(0, 128, 255));
+					//canvas.putRectFilled({ 0, 0 }, { 40, 30 }, ImColor(0, 0, 255), 0.0f, QF::UI::Components::SimpleDC::DrawingFlags::m_AlignCenterX | QF::UI::Components::SimpleDC::DrawingFlags::m_AlignCenterY);
 				}
 
 
@@ -205,7 +278,8 @@ namespace QF
 				
 			public:
 				const uint64_t alignMatchSizeWith(const std::function<QF::Utils::Vec2(Panel* _Panel)> &_Func, AlignmentFlags _Flags);
-				
+				const uint64_t alignMatchPositionWith(const std::function<QF::Utils::Vec2(Panel* _Panel)>& _Fucn, AlignmentFlags _Flags);
+
 				bool alignDestroyCallback(uint64_t UniqueId);
 
 				struct allignObject {
@@ -245,6 +319,45 @@ namespace QF
 
 #pragma endregion 
 
+#pragma region Built_H 
+
+namespace QF
+{
+	namespace UI
+	{
+		namespace Components
+		{
+			namespace Built
+			{
+				class Button : public QF::UI::Components::Panel
+				{
+				public:
+					struct Hints
+					{
+						ImU32 m_BGColor;
+						Panel::Flags m_PanelFlags = Panel::Flags::m_None;
+						QF::Utils::Vec2 m_Pos;
+						QF::Utils::Vec2 m_Size; 
+					};
+
+				public:
+					Hints& g_Hints();
+
+					Button(QF::UI::Components::Element* _Element, Hints& _Hints); 
+					virtual ~Button();
+				private:
+					void Render(QF::UI::Components::EventSystem::Events::Render& _r);
+					void MouseMotionEvent(QF::UI::Components::EventSystem::Events::MouseMotionEvent& _r);
+
+					Hints m_Hints; 
+				};
+			}
+		}
+	}
+}
+
+#pragma endregion Built_H
+
 #pragma region Window_H
 namespace QF
 {
@@ -260,6 +373,7 @@ namespace QF
 				Window(App* Application, 
 					const QF::Utils::Vec2& _Position = {__QF_DONT_CARE},
 					const QF::Utils::Vec2& _Size = {__QF_DONT_CARE},
+					const std::string& _Name = "QFWindow",
 					bool _CustomTitleBar = true 
 				);
 
@@ -278,6 +392,10 @@ namespace QF
 				void mainloopFinalizeRender();
 				void mainloopRender();
 
+				/* Events */
+				QF::Utils::Vec2 m_EventMouseMotionLastFramePosition;
+				void mainloopEventMouseMotion();
+
 				/* Event handlers */
 				template<typename __EventType>
 				void childrenEventPropagationBottomToTop(
@@ -294,6 +412,26 @@ namespace QF
 
 							/* Check for abortion flag */
 							if (_AbortOnPropagation) return; 
+						}
+					}
+				};
+
+				template<typename __EventType>
+				void childrenEventPropagationTopToBottom(
+					const std::function<bool(std::unique_ptr<Panel>&)>& _Condition, const std::function<__EventType(std::unique_ptr<Panel>&)>& _Event, bool _AbortOnPropagation = false
+				) {
+					if (m_Children.empty()) return;
+					/* Iterate throught children from bottom to top */
+					for (int _Iterator = (static_cast<int>(m_Children.size()) - 1); _Iterator >= 0;
+						--_Iterator) {
+						std::unique_ptr<Panel>& childObj = m_Children[_Iterator];
+
+						/* If condition returns true propagate event */
+						if (_Condition(childObj)) {
+							(childObj->g_EventHandler())->Dispatch(_Event(childObj));
+
+							/* Check for abortion flag */
+							if (_AbortOnPropagation) return;
 						}
 					}
 				};
@@ -322,15 +460,29 @@ namespace QF
 #pragma region GLFWobject_H -> CustomTitleBar_H 
 					class CustomTitleBar : public QF::UI::Components::Panel {
 					public:
+						struct Hints
+						{
+							ImU32 m_BGColor = ImColor(54, 54, 54);
+							ImU32 m_NameColor = ImColor(255, 255, 255);
+						};
+
+					public:
 						CustomTitleBar(QF::UI::Components::Window* m_Parent);
 						virtual ~CustomTitleBar();
 
+						Hints& g_Hints();
 					private:
-						
+						void Render(EventSystem::Events::Render& _r);
+						void alignButtonsPosition();
+						void createButtons(int _Count);
+
+
+						Hints m_Hints; 
+						std::vector<QF::UI::Components::Built::Button*> m_Buttons; 
 					};
 #pragma endregion
 				public:
-					GLFWobject(QF::UI::Components::Window* _Parent);
+					GLFWobject(QF::UI::Components::Window* _Parent, const std::string& _Name);
 					~GLFWobject();
 
 					void createObject(); 
@@ -348,11 +500,13 @@ namespace QF
 
 					const QF::Utils::Vec2 g_Size() const; 
 					const QF::Utils::Vec2 g_Position() const; 
+					const QF::Utils::Vec2 g_MousePositionFixed() const; 
+
+					const std::string g_Name() const; 
 
 					ImGuiContext* g_ImGuiContext();
 					GLFWwindow* g_Object();
 
-					
 
 					/* Minimalization & Maximalization & Restore 
 						* All of them can be custom with setting a hint 
@@ -425,6 +579,8 @@ namespace QF
 					/* Custom title bar instance */
 					CustomTitleBar* m_CustomTitleBarInstance = nullptr; 
 					QF::UI::Components::Window* m_Parent = nullptr;
+
+					std::string m_Name;
 				};
 #pragma endregion
 #pragma region Window_H -> Continue			
@@ -450,6 +606,7 @@ private:
 
 				const long long g_NewImmutableIdForChild();
 				long long m_ChildrenImmutableIdsCount = -1;
+
 			public:
 				const bool is_WantingToDestruct() const; 
 				const bool is_Destructed() const; 

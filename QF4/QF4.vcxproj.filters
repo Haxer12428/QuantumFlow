@@ -57,13 +57,22 @@
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsPanel.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\QF\UI\Components\QFUIComponentsEventSystem.cpp">
+    <ClCompile Include="src\QF\UI\Components\QFUIComponentsEventSystemEvents.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\UI\Components\GLFWobject\TitleBar\QFUIComponentsWindowGLFWobjectTitleBar.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\Utils\QFUtilsIdMenager.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\UI\Components\QFUIComponentsSimpleDC.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\Utils\QFUtilsCompare.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltButton.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,6 +117,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="src\QF\Utils\QFUtilsIdManager.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QF\Utils\QFUtilsCompare.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>

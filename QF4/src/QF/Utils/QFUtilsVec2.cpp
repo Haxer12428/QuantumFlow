@@ -12,6 +12,11 @@
  QF::Utils::Vec2::Vec2(float _x, float _y)
 	 : x{ _x }, y{ _y }
  {};
+ /* Importing from ImVec2 */
+ QF::Utils::Vec2::Vec2(ImVec2 _Vec)
+	 : x{ _Vec.x }, y{ _Vec.y }
+ {};
+
  /* Importing from vector */ 	 /* Experimental implementations, might cause errors */
  QF::Utils::Vec2::Vec2(const std::vector<float>& _Vec) {
 	 /* It's empty */

@@ -1,17 +1,15 @@
 #include "../QFUIComponentsWindow.h"
 
 /* Constructor & Destructor */
-	QF::UI::Components::Window::GLFWobject::GLFWobject(QF::UI::Components::Window* _Parent) : 
+	QF::UI::Components::Window::GLFWobject::GLFWobject(QF::UI::Components::Window* _Parent, const std::string& _Name) : 
 		m_Object{ nullptr }, 
 		m_SizeStarting{ __QF_DONT_CARE, __QF_DONT_CARE },
 		m_PositionStarting{ __QF_DONT_CARE, __QF_DONT_CARE },
-		m_Parent{_Parent}
+		m_Parent{_Parent},
+		m_Name{_Name}
 	{
 		/* Initialize animation class */
 		animateGLFWobjectInit();
-
-		/* Initialize custom title bar */
-		m_CustomTitleBar = new CustomTitleBar(_Parent);
 	}
 
 	QF::UI::Components::Window::GLFWobject::~GLFWobject() {
@@ -44,6 +42,18 @@
 		/* Return casted */
 		return { static_cast<float>(x), static_cast<float>(y) };
 	}
+
+	const QF::Utils::Vec2 QF::UI::Components::Window::GLFWobject::g_MousePositionFixed() const {
+		double x, y; 
+		glfwGetCursorPos(m_Object, &x, &y);
+
+		return { static_cast<float>(x), static_cast<float>(y) };
+	}
+
+	const std::string QF::UI::Components::Window::GLFWobject::g_Name() const {
+		return glfwGetWindowTitle(m_Object);
+	}
+
 
 	const bool QF::UI::Components::Window::GLFWobject::is_UsingCustomTitleBar() const {
 		return m_CustomTitleBar;
@@ -257,7 +267,7 @@
 		/* Create object with positons not set eg: 1, 1 
 			glfw is returning nullptr when window is created with negative integeters
 		*/
-		m_Object = glfwCreateWindow(1, 1, "GLFWwindow", NULL, NULL);
+		m_Object = glfwCreateWindow(1, 1, m_Name.c_str(), NULL, NULL);
 		/* Check for window creation status */
 		if (m_Object == nullptr) {
 			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__,
@@ -289,6 +299,11 @@
 
 		/* Update animation restore data */
 		animateGLFWobjectUpdateRestoreData();
+
+		/* Initialize custom title bar */
+		if (m_CustomTitleBar) {
+			m_CustomTitleBar = new CustomTitleBar(m_Parent);
+		}
 	}
 
 	const bool QF::UI::Components::Window::GLFWobject::createImGuiContext() {

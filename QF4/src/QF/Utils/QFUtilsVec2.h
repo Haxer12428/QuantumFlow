@@ -20,6 +20,7 @@ namespace QF
       /* Constructors */
       ~Vec2() = default;
       Vec2();
+      Vec2(ImVec2 _Vec);
       Vec2(float _x);
       Vec2(float _x, float _y);
       Vec2(const std::vector<float>& _Value);

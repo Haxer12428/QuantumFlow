@@ -67,6 +67,7 @@ QF::UI::Components::Panel::~Panel() {
 		/* Check if size offset & position offset is alight */
 		if (!(m_Flags & static_cast<std::underlying_type<Flags>::type>(Panel::Flags::m_DisplayIfSizeIsLessOrEqualToZero))
 				&& m_FixedSize <= QF::Utils::Vec2{ 0.0f, 0.0f }) {
+			/* Todo: fix size offset if parent has dont care flags on offsets, now u need display flags */
 			return false; 
 		}
 		/* Check for class visibility */
@@ -86,6 +87,10 @@ QF::UI::Components::Panel::~Panel() {
 		return m_Position;
 	}
 
+	const QF::Utils::Vec2 QF::UI::Components::Panel::g_Size() const {
+		return m_Size;
+	}
+
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FixedSize() const
 	{
 		return m_FixedSize;	
@@ -94,6 +99,10 @@ QF::UI::Components::Panel::~Panel() {
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FixedPosition() const
 	{
 		return m_FixedPosition;
+	}
+
+	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FinalPositionFixed() const {
+		return (m_FixedPosition + m_FixedSize);
 	}
 
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FinalPosition() const {
@@ -279,6 +288,16 @@ QF::UI::Components::Panel::~Panel() {
 
 			s_Size(alignModVec2BasedOnFlags(newSize, m_Size, _Flags));
 		}});
+		/* Return unique id */
+		return m_AllignCallbacks.back().m_UniqueID;
+	}
+
+	const uint64_t QF::UI::Components::Panel::alignMatchPositionWith(const std::function<QF::Utils::Vec2(QF::UI::Components::Panel* _Panel)>& _Func, AlignmentFlags _Flags) {
+		m_AllignCallbacks.push_back({ m_AllignIdManager->g_New(), [=](Panel* _Panel) -> void {
+			const QF::Utils::Vec2 newPos = _Func(_Panel);
+
+			s_Position(alignModVec2BasedOnFlags(newPos, m_Size, _Flags));
+		} });
 		/* Return unique id */
 		return m_AllignCallbacks.back().m_UniqueID;
 	}
