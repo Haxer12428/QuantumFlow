@@ -1,5 +1,8 @@
 #include "QFUtilsBasicAnim.h"
 
+namespace utils = QF::Utils;
+using self = utils::BasicAnim;
+
 /* Constructor & Destructor */
 	QF::Utils::BasicAnim::BasicAnim()  {
 	};
@@ -29,6 +32,7 @@
 		m_ValuesWanted = _New.g_DataVector();
 	}
 
+
 	/* std::vector */
 	void QF::Utils::BasicAnim::s_Starting(std::vector<float> _New) {
 		m_ValuesStarting = _New;
@@ -38,8 +42,21 @@
 		m_ValuesWanted = _New;
 	}
 
+	/* ImColor */
+	void QF::Utils::BasicAnim::s_Wanted(ImColor _New) {
+		m_ValuesWanted = { _New.Value.x, _New.Value.y, _New.Value.y, _New.Value.w };
+	}
+
+	void QF::Utils::BasicAnim::s_Starting(ImColor _New) {
+		m_ValuesStarting = { _New.Value.x, _New.Value.y, _New.Value.y, _New.Value.w };
+	}
+
 	const std::vector<float> QF::Utils::BasicAnim::g_Wanted() const {
 		return m_ValuesWanted;
+	}
+
+	const std::vector<float> self::g_Last() const {
+		return m_ValuesLast;	
 	}
 
 	const bool QF::Utils::BasicAnim::is_Finished() const {
@@ -63,6 +80,12 @@
 		}
 		/* Update clock */
 		m_StartedAnimation = std::chrono::high_resolution_clock::now();
+	}
+
+	const ImColor self::g_ImColor(const std::vector<float>& _ValueList) {
+		if (_ValueList.size() != 4) return ImColor();
+
+		return ImColor(_ValueList[0], _ValueList[1], _ValueList[2], _ValueList[3]);
 	}
 
 	const std::vector<float> QF::Utils::BasicAnim::g_Animated(int _MsToFinish) {

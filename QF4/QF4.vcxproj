@@ -160,7 +160,8 @@
     <ClCompile Include="src\QF\Utils\QFUtilsBasicAnim.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsCompare.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsDebug.cpp" />
-    <ClCompile Include="src\QF\Utils\QFUtilsIdMenager.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsIdManager.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsImage.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsMath.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsRect.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsSystem.cpp" />
@@ -178,10 +179,19 @@
     <ClInclude Include="src\QF\Utils\QFUtilsCompare.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsDebug.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsIdManager.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsImage.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsMath.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsRect.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsSystem.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsVec2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <_EmbedManagedResourceFile Include="Texture\iconclose.png" />
+    <_EmbedManagedResourceFile Include="Texture\iconmax.png" />
+    <_EmbedManagedResourceFile Include="Texture\iconmin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

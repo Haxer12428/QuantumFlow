@@ -2,7 +2,6 @@
 #define NOMINMAX
 #define GLFW_EXPOSE_NATIVE_WIN32
 #define _USE_MATH_DEFINES
-
 #include <iostream>
 #include <format>
 #include <vector>

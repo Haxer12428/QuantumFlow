@@ -11,6 +11,7 @@
 
 	QF::UI::App::~App()
 	{
+
 		/* Terminate glfw */
 		glfwTerminate();
 		/* Tell that i termianated successfully */

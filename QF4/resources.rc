@@ -1,0 +1,3 @@
+ICON_CLOSE_PNG RCDATA "Texture/iconclose.png"
+ICON_MIN_PNG RCDATA "Texture/iconmin.png"
+ICON_MAX_PNG RCDATA "Texture/iconmax.png"

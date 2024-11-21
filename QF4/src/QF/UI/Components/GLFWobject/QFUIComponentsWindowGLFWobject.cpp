@@ -1,5 +1,9 @@
 #include "../QFUIComponentsWindow.h"
 
+namespace components = QF::UI::Components;
+using comp_window = components::Window;
+namespace utils = QF::Utils;
+
 /* Constructor & Destructor */
 	QF::UI::Components::Window::GLFWobject::GLFWobject(QF::UI::Components::Window* _Parent, const std::string& _Name) : 
 		m_Object{ nullptr }, 
@@ -14,18 +18,30 @@
 
 	QF::UI::Components::Window::GLFWobject::~GLFWobject() {
 		/* Set context's to avoid deleting not wanted backend's & avoid opengl's buffers glitches */
-		glfwMakeContextCurrent(m_Object);
-		ImGui::SetCurrentContext(m_ImGuiContext);
+		if (m_Object == nullptr) return; 
+		/* This is essential as fuck 
+			U retarded fuck better read this before doing anythign here: 
+				*or prepare for day-long seesion of shit vs 'local debugger'
+			the order of this operations is i think only one that works 
+			to future me: be carefull when u modify window's code
+				it needs to be in this exact order + 
+				it needs to reinit imgui for each widnow after 
+				one is deleted, i know its stupid!
+				But what we can do? Nothing!
+				I mean we can, raw opengl
+				But then what will be the issue? 
+				Kernel? GPU driver? 
+				keep going man
 
-		/* Shutdown the backend's */
-		ImGui_ImplGlfw_Shutdown();
-		ImGui_ImplOpenGL3_Shutdown();
+						*/
 
 		/* Destroy imgui's content */
+		ImGui::SetCurrentContext(m_ImGuiContext);
+		glfwDestroyWindow(m_Object);
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext(m_ImGuiContext);
 
-		/* Destroy glfw window */
-		glfwDestroyWindow(m_Object);
 	}
 /* Getting params by user */
 	const QF::Utils::Vec2	QF::UI::Components::Window::GLFWobject::g_Position() const {
@@ -49,6 +65,14 @@
 
 		return { static_cast<float>(x), static_cast<float>(y) };
 	}
+
+	const utils::Vec2 comp_window::GLFWobject::g_MousePosition() const {
+		const utils::Vec2 windowPosition = g_Position();
+		const utils::Vec2 fixedMousePosition = g_MousePositionFixed();
+
+		return (windowPosition + fixedMousePosition);
+	}
+
 
 	const std::string QF::UI::Components::Window::GLFWobject::g_Name() const {
 		return glfwGetWindowTitle(m_Object);
@@ -102,6 +126,12 @@
 		const QF::Utils::Vec2 clientAreaSize = (windowSize - QF::Utils::Vec2{0.0f, titleBarSize.y});
 
 		return { clientAreaStart, clientAreaSize };
+	}
+
+	/* Based on mouse position fixed (to window) */
+	const bool components::Window::GLFWobject::is_MouseInClientArea() const {
+		const utils::Rect clientRect = g_ClientAreaRect();
+		return g_MousePositionFixed().is_InBounds(clientRect.g_Position(), clientRect.g_Size());
 	}
 
 	const QF::Utils::Rect QF::UI::Components::Window::GLFWobject::g_FixedClientAreaRect() const
@@ -242,6 +272,7 @@
 		SetLayeredWindowAttributes(hwnd, 0, (BYTE)(_New.g()), LWA_ALPHA);
 	}
 
+
 /* GLFW window creation */
 	void QF::UI::Components::Window::GLFWobject::createObject() {
 		/* GLFWobject creation check */
@@ -304,6 +335,16 @@
 		if (m_CustomTitleBar) {
 			m_CustomTitleBar = new CustomTitleBar(m_Parent);
 		}
+	}
+
+	void QF::UI::Components::Window::GLFWobject::reinitImgui() {
+		ImGui::SetCurrentContext(m_ImGuiContext);
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext(m_ImGuiContext);
+		
+		/* Initialize */
+		createImGuiContext();
 	}
 
 	const bool QF::UI::Components::Window::GLFWobject::createImGuiContext() {
@@ -633,6 +674,10 @@
 		m_RestoringSize = g_Size();
 	}
 /* Public functions (user) */
+	void comp_window::GLFWobject::destroy() {
+		glfwSetWindowShouldClose(m_Object, true);
+	}
+
 	void QF::UI::Components::Window::GLFWobject::minimalize() {
 		/* Check if anim is enabled */
 		if (!m_AnimateGLFWobjectOperations) {

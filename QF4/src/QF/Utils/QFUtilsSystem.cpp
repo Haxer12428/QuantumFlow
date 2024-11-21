@@ -1,5 +1,8 @@
 #include "QFUtilsSystem.h"
 
+namespace utils = QF::Utils;
+using self = utils::System;
+
 /* Getting all windows on monitor */
 	const std::vector<QF::Utils::System::WindowInfo> QF::Utils::System::g_AllWindowsOnMonitor() {
 		std::vector<WindowInfo> windowsCollected;
@@ -60,4 +63,49 @@
 
     /* Return valid */
     return taskbarInfo;
+  }
+
+  std::string LPWSTRToLPCSTR(LPWSTR wideStr) {
+    // Get the size of the wide string when converted to a multi-byte string
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, NULL, 0, NULL, NULL);
+    std::string convertedStr(size_needed, 0);
+
+    // Perform the conversion
+    WideCharToMultiByte(CP_UTF8, 0, wideStr, -1, &convertedStr[0], size_needed, NULL, NULL);
+    return convertedStr;
+  }
+
+/* Getting png file from embedded resource */
+  std::vector<char> self::g_PNGdataFromEmbeddedResource(const std::string& _ResourceName) {
+
+    HRSRC hResInfo = FindResourceW(NULL, 
+      std::wstring(_ResourceName.begin(), _ResourceName.end()).c_str(), 
+        RT_RCDATA
+      ); /* Binary type */
+
+    if (hResInfo == NULL) {
+      __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Resource not found");
+      return {};
+    }
+
+    DWORD resourceSize = SizeofResource(NULL, hResInfo);
+    if (resourceSize == 0) {
+      __QF_DEBUG_LOG(__QF_WARNING, __FUNCTION__, "Resource is empty.");
+      return {};
+    }
+
+    /* Load resource into memory */
+    HGLOBAL resourceHandler = LoadResource(NULL, hResInfo);
+    if (resourceHandler == NULL) {
+      __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Failed to load resource");
+      return {};
+    }
+
+    /* Lock resource and extract data from it */
+    const char* resourceData = static_cast<const char*>(LockResource(resourceHandler));
+
+    /* Get buffer into a vector */
+    std::vector<char> resourceBuffer(resourceData, resourceData + resourceSize);
+
+    return resourceBuffer;
   }

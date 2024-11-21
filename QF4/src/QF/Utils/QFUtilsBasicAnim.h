@@ -18,12 +18,17 @@ namespace QF {
 			void s_Starting(float _Value); 
 			void s_Starting(QF::Utils::Vec2 _Value);
 			void s_Starting(std::vector<float> _Set);
+			void s_Starting(ImColor _Value);
 
 			void s_Wanted(float _Value); 
 			void s_Wanted(QF::Utils::Vec2 _Value);
 			void s_Wanted(std::vector<float> _Set);
+			void s_Wanted(ImColor _Value);
+			const std::vector<float> g_Last() const; 
 
 			const std::vector<float> g_Wanted() const; 
+			
+			static const ImColor g_ImColor(const std::vector<float>& _ValueList);
 
 			const std::vector<float> g_Animated(int _MsToFinish); 
 			void startAnimation();

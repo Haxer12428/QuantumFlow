@@ -8,3 +8,4 @@
 #include "QFUtilsRect.h"
 #include "QFUtilsIdManager.h"
 #include "QFUtilsCompare.h"
+#include "QFUtilsImage.h"

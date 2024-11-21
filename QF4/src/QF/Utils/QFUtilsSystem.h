@@ -1,6 +1,7 @@
 #pragma once
 #include "../QF.h"
-
+#define NOMINMAX
+#include <Windows.h>
 
 namespace QF
 {
@@ -23,6 +24,8 @@ namespace QF
 			};
 
 			static const TaskbarInfo g_TaskbarInfo();
+
+			static std::vector<char> g_PNGdataFromEmbeddedResource(const std::string& _Name);
 		};
 	}
 }

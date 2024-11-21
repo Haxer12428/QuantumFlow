@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 namespace QF
 {
@@ -70,6 +71,7 @@ namespace QF
       static const Vec2 g_SizeFromRECT(const RECT& _Rect);
 
       Vec2& limit(const Vec2& _Limit);
+      Vec2 clamp(const Vec2& _start, const Vec2& _final) const;
 
       const std::vector<float> g_DataVector() const;
       /* Checks */

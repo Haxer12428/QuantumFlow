@@ -63,7 +63,7 @@
     <ClCompile Include="src\QF\UI\Components\GLFWobject\TitleBar\QFUIComponentsWindowGLFWobjectTitleBar.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\QF\Utils\QFUtilsIdMenager.cpp">
+    <ClCompile Include="src\QF\Utils\QFUtilsIdManager.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsSimpleDC.cpp">
@@ -73,6 +73,9 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltButton.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\Utils\QFUtilsImage.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,5 +125,24 @@
     <ClInclude Include="src\QF\Utils\QFUtilsCompare.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="src\QF\Utils\QFUtilsImage.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <_EmbedManagedResourceFile Include="Texture\iconclose.png">
+      <Filter>Pliki zasobów</Filter>
+    </_EmbedManagedResourceFile>
+    <_EmbedManagedResourceFile Include="Texture\iconmax.png">
+      <Filter>Pliki zasobów</Filter>
+    </_EmbedManagedResourceFile>
+    <_EmbedManagedResourceFile Include="Texture\iconmin.png">
+      <Filter>Pliki zasobów</Filter>
+    </_EmbedManagedResourceFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources.rc">
+      <Filter>Pliki zasobów</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

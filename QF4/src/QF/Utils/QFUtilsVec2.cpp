@@ -1,5 +1,7 @@
 #include "QFUtilsVec2.h"
 
+using self = QF::Utils::Vec2; 
+
 /* Constructors */
  QF::Utils::Vec2::Vec2() 
 	 : x{0.0f}, y{0.0f}
@@ -123,6 +125,13 @@
 	 y = std::min(y, _Limit.y);
 
 	 return *this;
+ }
+
+ self QF::Utils::Vec2::clamp(const self& _First, const self& _Last) const {
+	 float clampedX = std::clamp(x, _First.x, _Last.x);
+	 float clampedY = std::clamp(y, _First.y, _Last.y);
+
+	 return { clampedX, clampedY };
  }
 /* Chekcs */
  const bool QF::Utils::Vec2::is_InBounds(const Vec2& _First, const Vec2& _Size) const {

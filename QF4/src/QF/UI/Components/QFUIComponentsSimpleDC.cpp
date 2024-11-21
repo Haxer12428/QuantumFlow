@@ -2,15 +2,33 @@
 
 namespace components = QF::UI::Components;
 namespace utils = QF::Utils;
+using self = QF::UI::Components::SimpleDC;
 
 components::SimpleDC::SimpleDC(Panel* _Element)
 	: m_Panel{ _Element } 
 {
+	/* SOOO LONG DEBUGGING SESSION JUST BECAUSE CONTEXT WAS NOT SET
+	* ANY OTHER IMGUIS OPERATIONS FROM THIS MOMENT IN TIME WILL BE FORWARDED BY IMGUIS CONTEXT SET!!!
+	*/
+	ImGui::SetCurrentContext(_Element->g_AbsoluteParent()->g_GLFWobject()->g_ImGuiContext());
+
 	m_DrawList = ImGui::GetWindowDrawList();
 	alignInitFunctions();
+
+	utils::Rect clientRect = _Element->g_AbsoluteParent()->g_Window()->g_GLFWobject()->g_ClientAreaRect();
+
+	if (_Element->g_Flags() & static_cast<std::underlying_type<Panel::Flags>::type>(Panel::Flags::m_DontCareAboutClipRectWhenRendering)) {
+		m_DrawList->PushClipRect(_Element->g_FixedPosition(), _Element->g_FinalPositionFixed()); return; 
+	}
+
+	m_DrawList->PushClipRect(
+		_Element->g_FixedPosition().clamp(clientRect.g_Position(), clientRect.g_FinalPosition()), _Element->g_FinalPositionFixed().clamp(clientRect.g_Position(), clientRect.g_FinalPosition())
+		);
 }
 
-components::SimpleDC::~SimpleDC() = default; 
+components::SimpleDC::~SimpleDC()  {
+	m_DrawList->PopClipRect();
+};
 
 /* drawing help operators */
 	/* push font & pop font have basic safety to avoid assertion fails */
@@ -78,6 +96,8 @@ components::SimpleDC::~SimpleDC() = default;
 			RectNew = _AlignFunc(RectNew.g_Position(), RectNew.g_Size(), _Flags);
 		}
 
+		
+
 		return RectNew;
 	}
 
@@ -86,4 +106,30 @@ components::SimpleDC::~SimpleDC() = default;
 
 		utils::Rect alignedRect = g_AlignedRect(_Pos, textSize, _Flags);
 		m_DrawList->AddText(fixVec2(alignedRect.g_Position()), _Clr, _Text.c_str());
+	}
+
+	void self::putTexture(const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, GLuint _GLTextureID, DrawingFlags _Flags, ImU32 color, const QF::Utils::Vec2& uv_min, const QF::Utils::Vec2& uv_max) {
+		/* Abort if flag is set && texture == undefined */
+		if (_GLTextureID == 0 && utils::Compare::bitFlagPoolMatchEnumClass(
+			DrawingFlags::m_putTextureAbortIfTextureUndefined, _Flags)
+			)
+			return; 
+			
+		utils::Rect alignedRect = g_AlignedRect(_Pos, _Size, _Flags);
+
+		m_DrawList->AddImage(reinterpret_cast<ImTextureID>(_GLTextureID), fixVec2(alignedRect.g_Position()), fixVec2(alignedRect.g_FinalPosition()), uv_min, uv_max, color);
+	}
+
+	void self::putLine(const utils::Vec2& _Pos1, const utils::Vec2& _Pos2, ImU32 _Color, float _Thickness, DrawingFlags _Flags) {
+		utils::Rect alignedRect = g_AlignedRect(_Pos1,
+			{ _Pos2.x - _Pos1.x, _Pos2.y - _Pos1.y }, _Flags
+			);
+
+		m_DrawList->AddLine(fixVec2(alignedRect.g_Position()), fixVec2(alignedRect.g_FinalPosition()), _Color, _Thickness);
+	}
+
+	void self::putCircleFilled(const QF::Utils::Vec2& _Center, float _Radius, ImU32 _Color, int _Segments, DrawingFlags _Flags) {
+		utils::Rect alignedRect = g_AlignedRect(_Center, {0.0f}, _Flags);
+
+		m_DrawList->AddCircleFilled(fixVec2(alignedRect.g_Position()), _Radius, _Color, _Segments);
 	}

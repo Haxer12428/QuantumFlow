@@ -7,6 +7,10 @@
 	}
 
 	QF::UI::App::WindowHandler::~WindowHandler() {
+		if (m_ChildrenImmutableIdsCount != -1) {
+
+		}
+
 		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__,
 			"Destructed.");
 	}
@@ -14,6 +18,7 @@
 	void QF::UI::App::WindowHandler::enterMainLoop() {
 		std::chrono::high_resolution_clock::time_point framerateCountStarted;
 		size_t childrenIterator = 0;
+		size_t childrenIteratorEndStartedProcessing = 0;
 
 		/* Get next window that's suitable for processing */
 		auto processedAll = [&]() -> void {
@@ -21,9 +26,12 @@
 		};
 
 		auto didProcessAll = [&]() -> const bool {
-			return (childrenIterator == (m_Children.size()));
+			return (childrenIterator == m_Children.size());
 		};
 
+		/*
+		* CRASHES IN MAIN.H (EXPLANATION) MIGHT BE CAUSED BY DELETING WINDOW AND INSERTING ANOTHER ONE IG
+		*/
 		auto g_NextWindowToProcess = [&]() -> const size_t {
 			for (size_t _Iterator = childrenIterator; _Iterator < m_Children.size();
 				_Iterator++) {
@@ -125,6 +133,7 @@
 
 		while (!m_Children.empty()) {
 			framerateStartCounting();
+
 			processWindows();
 			std::string framerateStr = std::to_string(g_Framerate());
 			SetConsoleTitle(LPCWSTR(std::wstring(framerateStr.begin(), framerateStr.end()).c_str()));
@@ -165,6 +174,8 @@
 	void QF::UI::App::WindowHandler::closeWindows(
 		const std::vector<long long>& _IdsToClose
 	) {
+		if (_IdsToClose.empty()) return;
+
 		/* Closing singular children func */
 		auto closeChild = [&](const long long& _Id) -> bool {
 			size_t childrenIterator = 0;
@@ -198,5 +209,11 @@
 				/* Throw exception */
 				throw std::exception("_Id doens't match any window signature");
 			}
+		}
+		/* Re init all context available */
+		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, "Reinitializing imgui");
+
+		for (auto& _Window : m_Children) {
+			_Window->g_GLFWobject()->reinitImgui();
 		}
 	}

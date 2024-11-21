@@ -1,5 +1,9 @@
 #include "QFUIComponentsWindow.h"
 
+namespace components = QF::UI::Components;
+namespace utils = QF::Utils;
+using self = components::Panel;
+
 QF::UI::Components::Panel::Panel(QF::UI::Components::Element* _Parent, const QF::Utils::Vec2& _Position,
 	const QF::Utils::Vec2& _Size, const Flags& _Flags) 
 	: m_Parent{_Parent}, Element(), m_EventHandler{std::make_unique<QF::UI::Components::EventSystem::EventHandler>()},
@@ -16,8 +20,8 @@ QF::UI::Components::Panel::Panel(QF::UI::Components::Element* _Parent, const QF:
 
 	/* Subscribe to event -> called after panel is assigned to absolute parent */
 	m_EventHandler->Subscribe<EventSystem::Events::PanelAssignedToWindowStack>(this, &Panel::assignedAsChildrenToAbsoluteParent);
-	m_EventHandler->Subscribe<EventSystem::Events::Render>(this, &Panel::assignValuesCapturedFromParent);
-	m_EventHandler->Subscribe<EventSystem::Events::Render>(this, &Panel::alignRunCallback);
+	m_EventHandler->Subscribe<EventSystem::Events::BeforeRender>(this, &Panel::assignValuesCapturedFromParent);
+	m_EventHandler->Subscribe<EventSystem::Events::Render>(this, &Panel::alignAndUtilRunCallbacks);
 
 	/* Log success */
 	__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, 
@@ -71,15 +75,33 @@ QF::UI::Components::Panel::~Panel() {
 			return false; 
 		}
 		/* Check for class visibility */
-		if (is_Visible() == false)
-			return false; 
+
+		/* TODO FIX: LATER */
+		const utils::Rect clientRect = g_AbsoluteParent()->g_GLFWobject()->g_ClientAreaRect();
+		const utils::Vec2 fixedPos = g_FixedPosition();
+		const utils::Vec2 fixedFinalPos = g_FinalPositionFixed();
+
+		if (!(m_Flags & static_cast<std::underlying_type<Flags>::type>(Panel::Flags::m_DontCareAboutClipRectWhenRendering)))
+		{
+			/* Panels are dissapearing?? WHAT -> fixed */
+			if (!g_FixedPosition().is_InBounds(clientRect.g_Position(), clientRect.g_FinalPosition())) {
+				return false;
+			}
+		}
 
 		/* Return class var */
-		return m_VisibleFixed; 
+		return m_VisibleFixed;
 	}
 
 	const bool QF::UI::Components::Panel::is_Visible() const {
 		return m_Visible; 
+	}
+
+	const bool self::is_MouseOnPanel() const {
+		if (!g_AbsoluteParent()) return false; 
+		const utils::Vec2 mousePosition = g_AbsoluteParent()->g_GLFWobject()->g_MousePositionFixed();
+
+		return mousePosition.is_InBounds(g_FixedPosition(), g_FixedSize());
 	}
 
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_Position() const
@@ -105,6 +127,18 @@ QF::UI::Components::Panel::~Panel() {
 		return (m_FixedPosition + m_FixedSize);
 	}
 
+	const utils::Vec2 self::g_CenterPosition() const {
+		return (g_Position() + (g_Size() / 2.0f));
+	}
+
+	const utils::Vec2 self::g_Center() const {
+		return g_Size() / 2.0f;
+	}
+
+	const uint64_t self::g_Flags() const {
+		return m_Flags;
+	}
+
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FinalPosition() const {
 		return (m_Position + m_Size);
 	}
@@ -127,8 +161,9 @@ QF::UI::Components::Panel::~Panel() {
 		assignFixedPositionAndSizeFromParent();
 	}
 
-	void QF::UI::Components::Panel::assignValuesCapturedFromParent(EventSystem::Events::Render& r) {
+	void QF::UI::Components::Panel::assignValuesCapturedFromParent(EventSystem::Events::BeforeRender& r) {
 		assignFixedPositionAndSizeFromParent();
+		
 	}
 
 	void QF::UI::Components::Panel::assignAsChildrenToAbsoluteParent() {
@@ -167,7 +202,7 @@ QF::UI::Components::Panel::~Panel() {
 		assertParent();
 
 		auto calculateFixedPositionAndSize = [&](const std::array<QF::Utils::Vec2, 2>& _Captured) 
-			-> const std::array<QF::Utils::Vec2, 2>
+			-> const std::vector<QF::Utils::Vec2>
 		{
 			QF::Utils::Vec2 fixedPosition = m_Position; 
 			QF::Utils::Vec2 fixedSize = m_Size; 
@@ -182,7 +217,7 @@ QF::UI::Components::Panel::~Panel() {
 				fixedSize.limit(_Captured.at(1) - m_Position);
 			}
 
-			return std::array<QF::Utils::Vec2, 2>{fixedPosition, fixedSize};
+			return std::vector<QF::Utils::Vec2>{fixedPosition, fixedSize};
 		};
 
 		/* Capture from a parent if good */
@@ -195,7 +230,7 @@ QF::UI::Components::Panel::~Panel() {
 			capturedFromWindow[1] = m_Size + m_Position;
 
 			/* Calculate */
-			std::array<QF::Utils::Vec2, 2> fixedPosAndSize = calculateFixedPositionAndSize(capturedFromWindow);
+			std::vector<QF::Utils::Vec2> fixedPosAndSize = calculateFixedPositionAndSize(capturedFromWindow);
 			
 			/* Apply & Abort */
 			m_FixedPosition = fixedPosAndSize[0];
@@ -213,7 +248,7 @@ QF::UI::Components::Panel::~Panel() {
 		capturedFromPanel[1] = parentingPanel->g_FixedSize();
 
 		/* Calculate */
-		std::array<QF::Utils::Vec2, 2> fixedPosAndSize = calculateFixedPositionAndSize(capturedFromPanel);
+		std::vector<QF::Utils::Vec2> fixedPosAndSize = calculateFixedPositionAndSize(capturedFromPanel);
 
 		/* Apply */
 		m_FixedPosition = fixedPosAndSize[0];
@@ -236,8 +271,11 @@ QF::UI::Components::Panel::~Panel() {
 		m_Position = _New; 
 	}
 /* Alignment */
-	void QF::UI::Components::Panel::alignRunCallback(EventSystem::Events::Render&) {
+	void QF::UI::Components::Panel::alignAndUtilRunCallbacks(EventSystem::Events::Render&) {
 		for (auto _Obj : m_AllignCallbacks) {
+			_Obj.m_Callback(this);
+		}
+		for (auto _Obj : m_UtilCallbacks) {
 			_Obj.m_Callback(this);
 		}
 	}
@@ -302,3 +340,9 @@ QF::UI::Components::Panel::~Panel() {
 		return m_AllignCallbacks.back().m_UniqueID;
 	}
 	
+/* Utils -> callbacks */
+	const uint64_t self::utilAddPreRenderCallback(const std::function<void(self*)>& _Callback) {
+		m_UtilCallbacks.push_back({ m_UtilCallbacksIdManager->g_New(), _Callback });
+
+		return m_UtilCallbacks.back().m_UniqueID;
+	}

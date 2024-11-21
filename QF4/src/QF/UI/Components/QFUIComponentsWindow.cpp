@@ -130,6 +130,11 @@ using self = QF::UI::Components::Window;
 
 	void QF::UI::Components::Window::i_WantToBeAssigned(Panel* _Child) {
 		m_ChildrenAssigmentStack.push_back(std::unique_ptr<Panel>(_Child));
+		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, "Put panel is assignment queue.");
+	}
+
+	QF::UI::App* self::g_Application() {
+		return m_Application;
 	}
 
 /* Children handling -> Private */
@@ -169,6 +174,8 @@ using self = QF::UI::Components::Window;
 
 		/* Events */
 		mainloopEventMouseMotion();
+		mainloopEventMouseClick();
+		mainloopEventMousePanelDrag();
 
 		/* Prepare for render */
 		mainloopPrepareForRender();
@@ -179,6 +186,8 @@ using self = QF::UI::Components::Window;
 		/* Finalize render */
 		mainloopFinalizeRender();
 
+		assignChildrenFromStack();
+
 		/* Set flag */
 		m_InMainLoop = false; 
 	}
@@ -188,6 +197,7 @@ using self = QF::UI::Components::Window;
 		childrenEventPropagationBottomToTop<QF::UI::Components::EventSystem::Events::Render>(
 			[&](std::unique_ptr<Panel>& _Panel) -> bool
 			{
+				_Panel->g_EventHandler()->Dispatch(EventSystem::Events::BeforeRender{});
 				return (_Panel->is_VisibleFixed());
 			},
 			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Events::Render
@@ -199,7 +209,7 @@ using self = QF::UI::Components::Window;
 
 	void QF::UI::Components::Window::mainloopEarly() {
 		/* Assign children from stack */
-		assignChildrenFromStack();
+		
 	}
 
 	void QF::UI::Components::Window::mainloopPrepareForRender() {
@@ -258,7 +268,7 @@ using self = QF::UI::Components::Window;
 		ImGui::EndFrame();
 
 		//ImGui::UpdatePlatformWindows();
-		ImGui::UpdatePlatformWindows();
+		//ImGui::UpdatePlatformWindows();
 
 		/* Get render  */
 		ImGui::Render();
@@ -276,7 +286,6 @@ using self = QF::UI::Components::Window;
 		/* Check for change */
 		if (m_EventMouseMotionLastFramePosition == mousePositionThisFrame) return; 
 
-		std::cout << mousePositionThisFrame << "\n";
 		/* Override */
 		m_EventMouseMotionLastFramePosition = mousePositionThisFrame;
 
@@ -296,5 +305,88 @@ using self = QF::UI::Components::Window;
 			},
 			true
 		);
+	}
+	/* Main loop mouse click event */
+	void self::mainloopEventMouseClick() {
+		/* Event propagate check */
+		auto propageteEvent = [&]() -> bool {
+			bool currentLMBstate = glfwGetMouseButton(
+				g_GLFWobject()->g_Object(), GLFW_MOUSE_BUTTON_LEFT
+			) == GLFW_PRESS;
+
+			if (m_EventMouseClickLastFrameHeld == currentLMBstate) return false;
+
+			if (m_EventMouseClickLastFrameHeld && !currentLMBstate) {
+				m_EventMouseClickLastFrameHeld = false; return false;
+			}
+
+			m_EventMouseClickLastFrameHeld = currentLMBstate; 
+			return true; 
+		};
+
+		if (!propageteEvent()) return;
+
+		const utils::Vec2 mousePosition = g_GLFWobject()->g_MousePositionFixed();
+
+		/* Propagate */
+		childrenEventPropagationTopToBottom<QF::UI::Components::EventSystem::Events::MouseClickEvent>(
+			[&](std::unique_ptr<Panel>& _Panel) -> bool
+			{
+				const bool boundsAndVisibilityCheckResult = (_Panel->is_VisibleFixed() &&
+					mousePosition.is_InBounds(_Panel->g_FixedPosition(), _Panel->g_FixedSize()
+					));
+				return boundsAndVisibilityCheckResult;
+			},
+			[&](std::unique_ptr<Panel>& _Panel) -> QF::UI::Components::EventSystem::Events::MouseClickEvent
+			{
+				/* Get positions */
+				utils::Vec2 pos, fixedPos;
+
+				fixedPos = (mousePosition - _Panel->g_FixedPosition());
+				pos = mousePosition;
+				/* Override vars */
+				m_EventMouseClickedOnPanel = _Panel.get();
+				m_EventMouseClickedOnPanelPos = pos;
+				m_EventMouseClickedOnPanelPosFixed = fixedPos; 
+
+				/* Return created */
+				return QF::UI::Components::EventSystem::Events::MouseClickEvent{
+					fixedPos, pos 
+				};
+			},
+			true
+		);
+	}
+	/* MainLoop: mouse panel drag event */
+	void self::mainloopEventMousePanelDrag() {
+		auto propagateEvent = [&]() -> const bool {
+			if (!m_EventMouseClickedOnPanel) return false; 
+
+			bool currentLMBstate = glfwGetMouseButton(
+				g_GLFWobject()->g_Object(), GLFW_MOUSE_BUTTON_LEFT
+			) == GLFW_PRESS;
+
+			if (!currentLMBstate) {
+				m_EventMouseClickedOnPanel = nullptr; return false; 
+			}
+			return true; 
+		};
+
+		if (!propagateEvent()) return; 
+
+		const utils::Vec2 mousePosition = g_GLFWobject()
+			->g_MousePositionFixed();
+
+		components::Panel* panelObj = m_EventMouseClickedOnPanel;
+
+		utils::Vec2 pos, fixedPos; 
+		pos = mousePosition; 
+		fixedPos = (pos - panelObj->g_FixedPosition());
+
+		panelObj->g_EventHandler()
+			->Dispatch(
+				QF::UI::Components::EventSystem::Events::MousePanelDragEvent{
+			fixedPos, pos, m_EventMouseClickedOnPanelPosFixed, m_EventMouseClickedOnPanelPos
+		});
 	}
 
