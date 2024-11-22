@@ -221,6 +221,13 @@ namespace utils = QF::Utils;
 		return true; 
 	}
 
+	void components::Window::GLFWobject::s_VsyncState(bool _New) {
+		int interval = (_New ? 1 : 0);
+		/* Set imgui's context */
+		ImGui::SetCurrentContext(g_ImGuiContext());
+		glfwSwapInterval(interval);
+	}
+
 	const bool QF::UI::Components::Window::GLFWobject::is_GLFWIconified() const {
 		return (glfwGetWindowAttrib(m_Object, GLFW_ICONIFIED) == GLFW_TRUE);
 	}

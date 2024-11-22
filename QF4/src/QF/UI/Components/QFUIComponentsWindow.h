@@ -588,6 +588,7 @@ namespace QF
 
 					const bool s_Position(const QF::Utils::Vec2& _Pos);
 					const bool s_Size(const QF::Utils::Vec2& _Size);
+					void s_VsyncState(bool _New);
 
 					const alpha8Bit g_Alpha() const; 
 					void s_Alpha(const alpha8Bit& _New);
