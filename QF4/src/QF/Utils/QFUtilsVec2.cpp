@@ -128,8 +128,8 @@ using self = QF::Utils::Vec2;
  }
 
  self QF::Utils::Vec2::clamp(const self& _First, const self& _Last) const {
-	 float clampedX = std::clamp(x, _First.x, _Last.x);
-	 float clampedY = std::clamp(y, _First.y, _Last.y);
+	 float clampedX = (x < _First.x) ? _First.x : (x > _Last.x ? _Last.x : x);
+	 float clampedY = (y < _First.y) ? _First.y : (y > _Last.y ? _Last.y : y);
 
 	 return { clampedX, clampedY };
  }

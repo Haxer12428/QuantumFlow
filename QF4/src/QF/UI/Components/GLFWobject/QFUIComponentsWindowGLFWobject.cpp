@@ -315,6 +315,9 @@ namespace utils = QF::Utils;
 		}
 		glfwMakeContextCurrent(m_Object);
 
+		/* Initialize glew for all of windows */
+		glewInit();
+
 		/* Apply starting values -> calculated before hand
 			* cannot apply them in constructor of GLFWwindow '-'
 			* here those applied by QF api calls of current class 
@@ -682,6 +685,8 @@ namespace utils = QF::Utils;
 	}
 /* Public functions (user) */
 	void comp_window::GLFWobject::destroy() {
+		if (m_Object == nullptr || this == nullptr) return;
+
 		glfwSetWindowShouldClose(m_Object, true);
 	}
 

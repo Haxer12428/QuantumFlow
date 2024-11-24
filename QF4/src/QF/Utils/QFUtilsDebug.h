@@ -19,7 +19,8 @@ namespace QF
         Message,
         Error,
         Important,
-        Warning
+        Warning,
+        AssertionFail
       };
 
       enum class PrintType : int
@@ -28,6 +29,7 @@ namespace QF
         Error,
         Important,
         Warning,
+        AssertionFail,
         Colored,
         Last
       };
@@ -63,3 +65,4 @@ namespace QF
 #define __QF_WARNING QF::Utils::Debug::LogType::Warning
 #define __QF_IMPORTANT QF::Utils::Debug::LogType::Important
 #define __QF_MESSAGE QF::Utils::Debug::LogType::Message
+#define __QF_ASSERTIONFAIL QF::Utils::Debug::LogType::AssertionFail 

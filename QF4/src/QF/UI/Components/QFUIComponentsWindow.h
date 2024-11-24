@@ -75,6 +75,20 @@ namespace QF
 					private:
 						QF::Utils::Vec2 m_PosClickedFixed, m_PosClicked;
 					};
+
+					class CharEvent : public Event {
+					public:
+						CharEvent(const std::string& _Char, int _Key, GLFWwindow* _WinObject);
+
+						const bool is_Held(int _Key) const;
+						const std::string g_Char() const;
+						const bool has_Char() const;
+						const int g_Key() const;
+					private:
+						GLFWwindow* m_WinObject = nullptr; 
+						std::string m_Pressed = ___QF_EMPTY_STRING; 
+						int m_Key = __QF_UNDEFINED;
+					};
 				};
 
 				class EventHandler {
@@ -213,6 +227,8 @@ namespace QF
 				void putLine(const QF::Utils::Vec2& _Pos1, const QF::Utils::Vec2& _Pos2, ImU32 col, float thickness = 1.0f, DrawingFlags _Flags = DrawingFlags::m_None);
 			
 				void putCircleFilled(const QF::Utils::Vec2& _Center, float _Radius, ImU32 _Color, int _Segments = 0, DrawingFlags _Flags = DrawingFlags::m_None);
+
+				const QF::Utils::Vec2 g_TextSize(const std::string& _Text) const; 
 			private:
 				void alignInitFunctions();
 
@@ -277,6 +293,8 @@ namespace QF
 				const QF::Utils::Vec2 g_CenterPosition() const;
 				const QF::Utils::Vec2 g_Center() const;
 				const uint64_t g_Flags() const; 
+				const bool is_Focused() const;
+				void s_Focus(bool _New); 
 
 				const bool is_Visible() const; 
 				const bool is_MouseOnPanel() const; 
@@ -344,6 +362,7 @@ namespace QF
 				/* Visibility */
 				bool m_VisibleFixed = true; 
 				bool m_Visible = true; 
+				bool m_Focused = false; 
 				
 
 				/* Position & Size */
@@ -388,6 +407,8 @@ namespace QF
 						QF::Utils::Vec2 m_Size; 
 
 						GLuint m_TextureID;
+						bool m_ActAsASwitch = false; 
+						bool m_SwitchTurnedOn = false; 
 					};
 
 				public:
@@ -417,6 +438,45 @@ namespace QF
 					void Render(QF::UI::Components::EventSystem::Events::Render& _r);
 					void MouseClickEvent(QF::UI::Components::EventSystem::Events::MouseClickEvent& _r);
 				};
+			
+				class TextBox : public QF::UI::Components::Panel { 
+				public:
+					struct Hints {
+						ImColor m_BGColor;
+						ImColor m_BGColorActive; 
+						ImColor m_TextColor; 
+						ImColor m_TextColorActive; 
+						ImColor m_CursorColor = ImColor(255, 255, 255);
+						int m_CursorBlinkTimeMs = 500;
+						float m_CursorSizeExtendY = 6; 
+						float m_CursorSizeX = 2;
+						int m_CursorMoveSpeedMs = 35;
+					};
+
+				public: 
+					TextBox(QF::UI::Components::Window* _Parent, const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, QF::UI::Components::Panel::Flags _PanelFlags, const std::string& _StartingText, std::unique_ptr<QF::Utils::Font>& _Font);
+					virtual ~TextBox();
+
+					const std::string g_Value() const; 
+					void s_Value(const std::string& _Val);
+
+					Hints& g_Hints(); 
+				private:
+					void handleAnimations(QF::UI::Components::EventSystem::Events::BeforeRender&);
+					void handleCursorPosition(QF::UI::Components::EventSystem::Events::Render&);
+					void hookRender(QF::UI::Components::EventSystem::Events::Render&);
+					void handleTyping(QF::UI::Components::EventSystem::Events::CharEvent&);
+				private:
+					std::unique_ptr<QF::Utils::BasicAnim> m_BGColorAnim;
+					std::unique_ptr<QF::Utils::BasicAnim> m_TextColorAnim; 
+					std::unique_ptr<QF::Utils::BasicAnim> m_CursorColorAnim; 
+					std::unique_ptr<QF::Utils::BasicAnim> m_CursorPositionAnim; 
+					std::string m_CurrentText; 
+					Hints m_Hints; 
+					std::unique_ptr<QF::Utils::Font> m_TextFont; 
+					int m_CursorAt = 0; 
+					float m_CursorPos = 0; 
+				}; 
 			}
 		}
 	}
@@ -445,7 +505,7 @@ namespace QF
 
 				/* Destructor */
 				void destroyObject();
-				~Window();
+				virtual ~Window();
 			public:
 				/* Children handling */
 				void im_Child(std::unique_ptr<Panel> _Child);
@@ -466,11 +526,19 @@ namespace QF
 					void mainloopEventMouseMotion();
 					/* Mouse click */
 					QF::UI::Components::Panel* m_EventMouseClickedOnPanel = nullptr; 
+					QF::UI::Components::Panel* m_EventMouseClickedOnPanelNoChange = nullptr;
 					QF::Utils::Vec2 m_EventMouseClickedOnPanelPos, m_EventMouseClickedOnPanelPosFixed; 
 					bool m_EventMouseClickLastFrameHeld = false; 
 					void mainloopEventMouseClick(); 
 					/* Mouse panel drag */
 					void mainloopEventMousePanelDrag();
+					/* Char */
+					void mainloopEventChar();
+					std::array<bool, (GLFW_KEY_LAST + 1)> m_EventCharKeyHeldLastFrame{false};
+					int m_EventCharHeld = __QF_UNDEFINED;
+					std::chrono::high_resolution_clock::time_point m_EventCharHeldSince = std::chrono::high_resolution_clock::now();
+
+					void mainloopChildrenHandleFocus();
 
 				/* Event handlers */
 				template<typename __EventType>
@@ -577,7 +645,7 @@ namespace QF
 					void reinitImgui();
 
 					GLFWobject(QF::UI::Components::Window* _Parent, const std::string& _Name);
-					~GLFWobject();
+					virtual ~GLFWobject();
 
 					void createObject(); 
 					void hook_MainLoop(); 

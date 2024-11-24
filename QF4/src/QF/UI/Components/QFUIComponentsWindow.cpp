@@ -4,6 +4,9 @@ namespace utils = QF::Utils;
 namespace components = QF::UI::Components;
 using self = QF::UI::Components::Window;
 
+using ccl = std::chrono::high_resolution_clock;
+using evts = QF::UI::Components::EventSystem::Events;
+
 /* Constructor & Destructor */
 	QF::UI::Components::Window::Window(QF::UI::App* _Application,
 		const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, const std::string& _Name, bool _CustomTitleBar
@@ -12,6 +15,7 @@ using self = QF::UI::Components::Window;
 	{
 		try 
 		{
+
 			im_Window(this);
 
 			/* Create glfw object */
@@ -73,6 +77,7 @@ using self = QF::UI::Components::Window;
 	}
 
 	const bool QF::UI::Components::Window::is_Destructed() const {
+		if (this == nullptr) return true; 
 		return m_Destructed; 
 	}
 
@@ -172,10 +177,14 @@ using self = QF::UI::Components::Window;
 		/* Set flag */
 		m_InMainLoop = true; 
 
+		/* Focus handle */
+		mainloopChildrenHandleFocus();
+
 		/* Events */
 		mainloopEventMouseMotion();
 		mainloopEventMouseClick();
 		mainloopEventMousePanelDrag();
+		mainloopEventChar();
 
 		/* Prepare for render */
 		mainloopPrepareForRender();
@@ -348,6 +357,7 @@ using self = QF::UI::Components::Window;
 				m_EventMouseClickedOnPanel = _Panel.get();
 				m_EventMouseClickedOnPanelPos = pos;
 				m_EventMouseClickedOnPanelPosFixed = fixedPos; 
+				m_EventMouseClickedOnPanelNoChange = _Panel.get();
 
 				/* Return created */
 				return QF::UI::Components::EventSystem::Events::MouseClickEvent{
@@ -390,3 +400,185 @@ using self = QF::UI::Components::Window;
 		});
 	}
 
+	/* MainLoop: char event */
+	void self::mainloopEventChar() {
+		struct keyStat {
+			int m_ClickedKey = __QF_UNDEFINED;
+			std::vector<int> m_HeldKeys;
+		};
+
+		GLFWwindow* glfwObj = g_GLFWobject()->g_Object();
+
+		auto g_KeyData = [&]() -> keyStat {
+			keyStat keyData;
+
+			for (int _Key = GLFW_KEY_SPACE; _Key <= GLFW_KEY_LAST; _Key++) {
+				int keyState = glfwGetKey(glfwObj, _Key);
+				/* Check for position */
+				__QF_ASSERT(_Key < m_EventCharKeyHeldLastFrame.size(), "incorrect key assignment");
+
+				if (keyState == GLFW_PRESS && m_EventCharKeyHeldLastFrame[_Key] == false) {
+					keyData.m_ClickedKey = _Key;
+				}
+
+				if (keyState == GLFW_PRESS) {
+					keyData.m_HeldKeys.push_back(_Key);
+					m_EventCharKeyHeldLastFrame[_Key] = true;
+				}
+				else { m_EventCharKeyHeldLastFrame[_Key] = false; }
+			}
+			return keyData; 
+		};
+		
+		auto getEventKey = [&]() -> const int {
+			keyStat keyData = g_KeyData();
+
+			if (keyData.m_ClickedKey != __QF_UNDEFINED) {
+				m_EventCharHeld = keyData.m_ClickedKey;
+				m_EventCharHeldSince = ccl::now();
+				return m_EventCharHeld;
+			};
+
+			if (m_EventCharHeld == __QF_UNDEFINED) return __QF_UNDEFINED;
+
+			if (glfwGetKey(g_GLFWobject()->g_Object(), m_EventCharHeld) != GLFW_PRESS) {
+				m_EventCharHeld = __QF_UNDEFINED; return __QF_UNDEFINED;
+			};
+
+			int repeatDelay = __QF_UNDEFINED, repeatRate = __QF_UNDEFINED;
+
+			SystemParametersInfo(SPI_GETKEYBOARDDELAY, 0, &repeatDelay, 0);
+			SystemParametersInfo(SPI_GETKEYBOARDSPEED, 0, &repeatRate, 0);
+
+			__QF_ASSERT(((repeatDelay != __QF_UNDEFINED) && (repeatRate != __QF_UNDEFINED)), "couldn't extract system info");
+
+			/* fix repeat delay */
+			repeatDelay = repeatDelay * 1000;
+
+			int heldForMs = std::chrono::duration_cast<std::chrono::milliseconds>(ccl::now() - m_EventCharHeldSince).count() - repeatDelay;
+
+			/* Check for system's repeat reate */
+			if (heldForMs < repeatRate) return __QF_UNDEFINED;
+
+			/* Apply fixed for  repeat delay */
+			m_EventCharHeldSince = (ccl::now() - std::chrono::milliseconds(repeatDelay));
+
+			return m_EventCharHeld;
+		};
+		
+		/* Get key */
+		const int eventKey = getEventKey();
+
+		if (eventKey == __QF_UNDEFINED) return;
+
+		/* Get char (keyName) */
+		const char* glfwKeyName = glfwGetKeyName(eventKey, 0);
+		std::string keyName = (glfwKeyName == nullptr ? ___QF_EMPTY_STRING : glfwKeyName);
+
+		/* Fix for space */
+		if (keyName.empty() && eventKey == GLFW_KEY_SPACE) {
+			keyName = " ";
+		}
+
+		auto transfromKeyNameToSpecialChar = [&](std::string& _keyname) {
+			std::unordered_map<char, char> charTransformations = {
+				{'1', '!'},
+				{'2', '@'},
+				{'3', '#'},
+				{'4', '$'},
+				{'5', '%'},
+				{'6', '^'},
+				{'7', '&'},
+				{'8', '*'},
+				{'9', '('},
+				{'0', ')'},
+				{'-', '_'},
+				{'=', '+'},
+				{';', ':'},
+				{',', '<'},
+				{'.', '>'},
+				{'\'', '"'},
+				{'/', '?'},
+				{'[', '{'},
+				{']', '}'},
+				{'\\', '|'},
+				{'`', '~'}
+			};
+
+			std::transform(_keyname.begin(), _keyname.end(), _keyname.begin(), [&](char c) {
+				auto it = charTransformations.find(c);
+				if (it != charTransformations.end()) return it->second;
+				return c;
+				});
+		};
+
+		/* Handle upper str */
+		if (!keyName.empty()) {
+			bool capslockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+			bool shiftOn = false; 
+
+			if (glfwGetKey(glfwObj, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
+				glfwGetKey(glfwObj, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) {
+				shiftOn = true; 
+				transfromKeyNameToSpecialChar(keyName);
+			};
+			
+			if (capslockOn && !shiftOn || !capslockOn && shiftOn) {
+				std::transform(keyName.begin(), keyName.end(), keyName.begin(), [](unsigned char c) {
+					return std::toupper(c);
+					});
+			};
+		}
+
+		/* Dispatch event for focused panel: only this can be focues and only 1 pane can be focused 
+			Im to lazy to implement TODO: ->g_FocusedPanel(); <- nullptr | std::unique_ptr<Panel>&
+		*/
+		if (m_EventMouseClickedOnPanelNoChange != nullptr) {
+
+			m_EventMouseClickedOnPanelNoChange
+				->g_EventHandler()->Dispatch<evts::CharEvent>
+				(
+				evts::CharEvent{keyName, eventKey, g_GLFWobject()->g_Object()}
+				);
+		};
+ 
+#ifndef NDEBUG 
+		#if __QF_DEBUG_LEVEL == 0
+		__QF_DEBUG_LOG(__QF_MESSAGE, __FUNCTION__, "Propagated char event");
+		#endif
+#endif // !NDEBUG
+
+	}
+
+	void self::mainloopChildrenHandleFocus() {
+		const long long focusedId = (
+			m_EventMouseClickedOnPanelNoChange == nullptr ? __QF_UNDEFINED : m_EventMouseClickedOnPanelNoChange->g_ImmutableId()
+			);
+
+		auto applyFocusForChildren = [&](const long long& _Id) -> void {
+			for (auto& _Child : m_Children) {
+				const long long idOfChild = _Child->g_ImmutableId();
+				__QF_ASSERT(idOfChild != __QF_UNDEFINED, "engine internal error, kindof weird that it dind't crashed before");
+
+				if (idOfChild == focusedId) {
+					_Child->s_Focus(true);
+				} 
+				else { _Child->s_Focus(false); }
+
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL == 0 
+				__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, "Set focus for children. Check message after for more info;");
+	#endif
+#endif // !NDEBUG
+
+			}};
+		/* Apply focus */
+		applyFocusForChildren(focusedId);
+
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL == 0 
+			__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, "Finished");
+	#endif 
+#endif // NDEBUG
+
+	}

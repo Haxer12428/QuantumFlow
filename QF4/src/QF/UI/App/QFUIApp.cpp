@@ -1,5 +1,8 @@
 #include "QFUIApp.h"
 
+namespace utils = QF::Utils;
+using self = QF::UI::App;
+
 /* Constructo & Destructor */
 	QF::UI::App::App() 
 	{
@@ -7,6 +10,7 @@
 		glfwInit();
 		/* Create window handler */
 		m_WindowHandler = std::make_unique<WindowHandler>();
+		m_ImageManager = std::make_unique<utils::ImageManager>();
 	}
 
 	QF::UI::App::~App()
@@ -35,4 +39,8 @@
 
 	std::unique_ptr<QF::UI::App::WindowHandler>& QF::UI::App::g_WindowHandler() {
 		return m_WindowHandler;
+	}
+/* Image manager */
+	std::unique_ptr<utils::ImageManager>& self::g_ImageManager() {
+		return m_ImageManager;
 	}

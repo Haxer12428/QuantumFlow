@@ -16,6 +16,12 @@ using self = utils::Image;
 		loadGLTextureFromData(); 
 	}
 
+	self::Image(const std::vector<unsigned char>& _Data)
+		: m_TextureDataUnsignedChar{ _Data }, m_LoadedFromFile{ false }
+	{
+		loadGLTextureFromFile();
+	}
+
 	self::~Image() {
 		clearGLTexture();
 	}
@@ -26,7 +32,6 @@ using self = utils::Image;
 /* Private internal functions */
 	void self::clearGLTexture() {
 		/* Clearing bugged */
-
 		if (true) return; 
 		if (m_GLTextureId == 0) return; 
 		glDeleteTextures(1, &m_GLTextureId);
@@ -56,8 +61,8 @@ using self = utils::Image;
 		clearGLTexture(); 
 		/* Load from data with soil */
 		m_GLTextureId = SOIL_load_OGL_texture_from_memory(
-			reinterpret_cast<const unsigned char*>(m_TextureData.data()),
-			m_TextureData.size(),
+			(m_TextureData.size() != 0 ? reinterpret_cast<const unsigned char*>(m_TextureData.data()) : reinterpret_cast<const unsigned char*>(m_TextureDataUnsignedChar.data())),
+			m_TextureData.size() == 0 ? m_TextureDataUnsignedChar.size() : m_TextureData.size(),
 			SOIL_LOAD_AUTO,
 			SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_MIPMAPS | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT

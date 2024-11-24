@@ -6,7 +6,7 @@ std::once_flag QF::Utils::Debug::m_InitFlag;
 
 std::vector<std::string> QF::Utils::Debug::m_LogColors =
 {
-	"\033[1;36m", "\033[1;31m", "\033[1;31m", "\033[1;33m"
+	"\033[1;36m", "\033[1;31m", "\033[1;31m", "\033[1;33m", "\033[1;33m"
 };
 
 void QF::Utils::Debug::Log(QF::Utils::Debug::LogType _LogType,

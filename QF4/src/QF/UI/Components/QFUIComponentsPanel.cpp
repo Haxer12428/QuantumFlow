@@ -139,6 +139,19 @@ QF::UI::Components::Panel::~Panel() {
 		return m_Flags;
 	}
 
+	const bool self::is_Focused() const { return m_Focused; };
+
+	void self::s_Focus(bool _New) {
+		m_Focused = _New; 
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL == 0 
+		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, std::format("Changed panel[{}] focus state[{}]",
+			g_ImmutableId(), (_New ? "true" : "false")
+		));
+	#endif 
+#endif // !NDEBUG
+	}
+
 	const QF::Utils::Vec2 QF::UI::Components::Panel::g_FinalPosition() const {
 		return (m_Position + m_Size);
 	}

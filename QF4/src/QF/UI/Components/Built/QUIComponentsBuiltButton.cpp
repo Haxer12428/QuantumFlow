@@ -19,12 +19,16 @@ using self = comp_built::Button;
 		/* Animation handler */
 		utilAddPreRenderCallback([&](components::Panel* _Obj) {
 			if (!m_BGTransitionAnim->is_Finished()) return; 
-			const bool mouseInBounds = _Obj->is_MouseOnPanel();
+			bool mouseInBounds = _Obj->is_MouseOnPanel();
 			
 			ImColor wantedColor, transitionFromColor; 
 
 			if (mouseInBounds) { wantedColor = m_Hints.m_BGActiveColor; transitionFromColor = m_Hints.m_BGColor; };
 			if (!mouseInBounds) { wantedColor = m_Hints.m_BGColor; transitionFromColor = m_Hints.m_BGActiveColor; }
+
+			if (m_Hints.m_ActAsASwitch && m_Hints.m_SwitchTurnedOn) {
+				wantedColor = m_Hints.m_BGActiveColor;
+			}
 
 			if (m_BGTransitionAnim->g_Last() == std::vector<float>{
 				wantedColor.Value.x, wantedColor.Value.y, wantedColor.Value.z, wantedColor.Value.w
@@ -57,7 +61,9 @@ using self = comp_built::Button;
 	}
 
 	void self::MouseClickEvent(components::EventSystem::Events::MouseClickEvent& _evt) {
-		std::cout << this->g_ImmutableId() << " <= id\n";
+		/* Handle action if in mode: switch */
+		if (m_Hints.m_ActAsASwitch) { m_Hints.m_SwitchTurnedOn = !m_Hints.m_SwitchTurnedOn; }
+
 		for (auto &_Callback : m_OnClickCallbacks) {
 			if (this != nullptr) {
 				_Callback.m_Callback(this, _evt);

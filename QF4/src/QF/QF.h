@@ -70,6 +70,7 @@ operator~(Enum e) {
 #define ___QF_EMPTY_STRING ""
 #define __QF_DONT_CARE -1
 #define __QF_UNDEFINED -333
+#define __QF_DEBUG_LEVEL 1
 
 #define __QF_SHUTDOWN_MSG() \
     std::cout << "\033[31m" << \
@@ -107,7 +108,6 @@ namespace QF {
     class App;
   };
 };
-
 
 #include "Utils/QFUtils.h"
 #include "UI/QFUI.h"

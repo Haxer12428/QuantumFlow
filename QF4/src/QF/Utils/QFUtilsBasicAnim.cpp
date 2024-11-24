@@ -93,7 +93,7 @@ using self = utils::BasicAnim;
 		auto lerpMethod = [&](double start, double end, double t)
 			-> const float
 		{
-			return start + (end - start) * t * t;
+			return start + (end - start) * t;
 		};
 		/* Get t -> factor */
 		auto currentTime = std::chrono::high_resolution_clock::now();

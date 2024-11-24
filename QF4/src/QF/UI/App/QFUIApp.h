@@ -19,7 +19,7 @@ namespace QF
 			/* Initialization */
 			virtual const bool onInit();
 			const bool Execute();
-
+			std::unique_ptr<QF::Utils::ImageManager>& g_ImageManager();
 			/* Handling windows */
 			class WindowHandler { public:
 				/* Constructor & Destructor */
@@ -30,6 +30,7 @@ namespace QF
 				/* Children handling */
 			public:
 				void im_Child(Components::Window* _Window);
+				QF::UI::Components::Window* g_Window(const long long _ImmutableID); 
 			private:
 				const long long g_NewImmutableIdForChild();
 
@@ -81,9 +82,13 @@ namespace QF
 				__QF_DEBUG_LOG(QF::Utils::Debug::LogType::Error, __FUNCTION__,
 					"Failed to implement");
 			}
+		
+
+
 		private:
 			/* Window handler */
 			std::unique_ptr<WindowHandler> m_WindowHandler;
+			std::unique_ptr<QF::Utils::ImageManager> m_ImageManager; 
 		};
 	}
 }

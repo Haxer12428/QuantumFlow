@@ -27,3 +27,19 @@ using self = QF::UI::Components::EventSystem::Events;
 
 	const utils::Vec2 self::MousePanelDragEvent::g_PositionClicked() const { return m_PosClicked; }
 	const utils::Vec2 self::MousePanelDragEvent::g_PositionClickedFixed() const { return m_PosClickedFixed;  }
+/* Key event: Char */
+	self::CharEvent::CharEvent(const std::string& _Pressed, int _Key, GLFWwindow* _WinObject)
+		: m_Pressed{_Pressed}, m_WinObject{_WinObject}, m_Key(_Key)
+	{
+		__QF_ASSERT(_WinObject != nullptr, "Win object required");
+		__QF_ASSERT(_Key != __QF_UNDEFINED, "Key cannot be undefined");
+	}
+
+	const bool self::CharEvent::is_Held(int _Key) const {
+		return glfwGetKey(m_WinObject, _Key) == GLFW_PRESS;
+	}
+
+	const std::string self::CharEvent::g_Char() const { return m_Pressed; }
+	const bool self::CharEvent::has_Char() const { return !(m_Pressed.size() == 0); }
+	const int self::CharEvent::g_Key() const { return m_Key; }
+

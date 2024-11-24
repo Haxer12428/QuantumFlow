@@ -2,12 +2,13 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include "Examples/Paint/QFExamplePaint.h"
+#include "Examples/Tetris/QFExampleTetris.h"
 
 
 namespace utils = QF::Utils;
 namespace components = QF::UI::Components;
-
+/*
 
 float calculateAngle(float x1, float y1, float x2, float y2) {
 	// Calculate the angle in radians using atan2
@@ -69,6 +70,8 @@ bool createNextDescWindow = false;
 
 class DescriptionWindow : public components::Window {
 public:
+	virtual ~DescriptionWindow() = default;
+
 	DescriptionWindow(QF::UI::App* _App, const std::string& _Description, const std::string& _Name) : 
 		components::Window(_App, { __QF_DONT_CARE }, { 400, 400 }, _Name) {
 		g_GLFWobject()->s_GLFWobjectOperationsAnimationState(true);
@@ -236,6 +239,8 @@ private:
  
 };
 
+long long descWindowImmutableID = -1;
+
 
 class MainFrame : public components::Panel {
 public:
@@ -271,7 +276,17 @@ private:
 	void renderCallback(components::EventSystem::Events::Render& r) {
 		if (!createNextDescWindow) return;
 
-		new DescriptionWindow(g_AbsoluteParent()->g_Application(), "a", "d");
+		if (descWindow != nullptr) {
+			QF::UI::Components::Window* win = g_AbsoluteParent()->g_Application()->g_WindowHandler()->g_Window(descWindowImmutableID);
+			if (win != nullptr) {
+				win->g_GLFWobject()->destroy();
+			}
+		}
+
+		descWindow = new DescriptionWindow(g_AbsoluteParent()->g_Application(), "a", "d");
+		descWindowImmutableID = descWindow->g_ImmutableID();
+
+		descWindow->g_GLFWobject()->s_VsyncState(false);
 
 		createNextDescWindow = false;
 	}
@@ -288,7 +303,7 @@ public:
 		buttonhints.m_BGColor = ImColor(60, 60, 60, 255);
 		buttonhints.m_BGActiveColor = ImColor(255, 255, 255, 255);
 		
-
+		g_GLFWobject()->s_VsyncState(false);
 
 		components::Panel* mainFrame = new MainFrame(this);
 		
@@ -415,6 +430,10 @@ public:
 	};
 };
 
+*/
+
+#include "QF/Experimental/FileDialog/QFExperimentalFileDialog.h"
+
 
 class Application : QF::UI::App
 {
@@ -424,10 +443,21 @@ public:
 	{};
 
 	const bool onInit() override {
-		Window* win = new Window(this);
+		//Window* win = new Window(this); // api nodes 
+		/* Might come back to this someday, i dont want to code it cause its boring as fuck 
+			na i dont mean hard, the only hard part was optimizing texture loading i think but thats fixed
+			and loading the texture, thats also fixed. (QFTexture): i have no clue why soil can read visual studio's 
+			resource but cannot read the same exact thing in the exact format. Fixed it by loading it opengl 
+			Might rebuilt texture system later on to add flags and kinda 'replicate' soil but the one that works 
+			probably a skill issue but ngl 
+		*/
+		//new QFExamplePaint(this);
 
-		
+		/* i dont really want to code rest of this shit, kinda works i coded worst part now its boooring*/
+		//new QFExampleTetris(this);
 
+		QF::UI::Components::Window* win = new QF::Experimental::FileDialog(this, "C:\\");
+		win->g_GLFWobject()->s_VsyncState(false);
 
 		return this->Execute();
 	}
@@ -446,7 +476,6 @@ int main()
 	__QF_INIT();
 	QF::Utils::Debug::s_ToAllPrintHints(true);
 
-	
 
 	QF::UI::App::implementApplication<Application>();
 

@@ -17,6 +17,12 @@ components::SimpleDC::SimpleDC(Panel* _Element)
 
 	utils::Rect clientRect = _Element->g_AbsoluteParent()->g_Window()->g_GLFWobject()->g_ClientAreaRect();
 
+	/* Minimalization fix: clamp assert */
+	if (_Element->g_AbsoluteParent()->g_GLFWobject()->is_Minimalized()) {
+		m_DrawList->PushClipRect(_Element->g_FixedPosition(), _Element->g_FinalPositionFixed()); return;
+	}
+
+
 	if (_Element->g_Flags() & static_cast<std::underlying_type<Panel::Flags>::type>(Panel::Flags::m_DontCareAboutClipRectWhenRendering)) {
 		m_DrawList->PushClipRect(_Element->g_FixedPosition(), _Element->g_FinalPositionFixed()); return; 
 	}
@@ -132,4 +138,10 @@ components::SimpleDC::~SimpleDC()  {
 		utils::Rect alignedRect = g_AlignedRect(_Center, {0.0f}, _Flags);
 
 		m_DrawList->AddCircleFilled(fixVec2(alignedRect.g_Position()), _Radius, _Color, _Segments);
+	}
+
+/* Get's */
+	const utils::Vec2 self::g_TextSize(const std::string& _Text) const {
+		__QF_ASSERT(ImGui::GetCurrentContext(), "context invalid");
+		return ImGui::CalcTextSize(_Text.c_str());
 	}

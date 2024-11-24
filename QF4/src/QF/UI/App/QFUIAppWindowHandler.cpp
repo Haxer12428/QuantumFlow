@@ -1,5 +1,8 @@
 #include "QFUIApp.h"
 
+namespace ui = QF::UI;
+using self = ui::App::WindowHandler;
+
 /* Constructor & Destructor */
 	QF::UI::App::WindowHandler::WindowHandler() {
 		__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__,
@@ -142,6 +145,19 @@
 /* Children handling */
 	const long long QF::UI::App::WindowHandler::g_NewImmutableIdForChild() {
 		m_ChildrenImmutableIdsCount++; return m_ChildrenImmutableIdsCount;
+	}
+
+	/* Windows ARENT SAFE OUTSIDE OF OWN CLASS, they SHOULD NOT BE USED outside, but if u want to use it thats the way :) */
+	ui::Components::Window* self::g_Window(const long long _ImmutableID) {
+		for (auto &_Child : m_Children) {
+			if (!_Child->is_Destructed() &&
+				_Child->g_ImmutableID() == _ImmutableID
+				) {
+				return _Child.get();
+			}
+		}
+		/* Window not found */
+		return nullptr;
 	}
 
 	void QF::UI::App::WindowHandler::im_Child(Components::Window* _Window) {

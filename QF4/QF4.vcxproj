@@ -145,11 +145,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Examples\Paint\QFExamplePaint.cpp" />
+    <ClCompile Include="src\Examples\Paint\QFExamplePaint.h" />
+    <ClCompile Include="src\Examples\Paint\QFExamplePaintDrawingFrame.cpp" />
+    <ClCompile Include="src\Examples\Tetris\QFExampleTetris.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\QF\Core\QFCore.cpp" />
+    <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialog.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIAppWindowHandler.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIApp.cpp" />
     <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltButton.cpp" />
+    <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltTextBox.cpp" />
     <ClCompile Include="src\QF\UI\Components\GLFWobject\TitleBar\QFUIComponentsWindowGLFWobjectTitleBar.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsElement.cpp" />
     <ClCompile Include="src\QF\UI\Components\QFUIComponentsEventSystemEvents.cpp" />
@@ -160,16 +166,23 @@
     <ClCompile Include="src\QF\Utils\QFUtilsBasicAnim.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsCompare.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsDebug.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsFilesystem.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsFont.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsIdManager.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsImage.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsImageManager.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsMath.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsRect.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsSystem.cpp" />
+    <ClCompile Include="src\QF\Utils\QFUtilsTexture.cpp" />
     <ClCompile Include="src\QF\Utils\QFUtilsVec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Examples\Tetris\QFExampleTetris.h" />
     <ClInclude Include="src\QF\Core\QFCore.h" />
+    <ClInclude Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialog.h" />
     <ClInclude Include="src\QF\QF.h" />
+    <ClInclude Include="src\QF\QFDefines.h" />
     <ClInclude Include="src\QF\UI\Components\QFUIComponents.h" />
     <ClInclude Include="src\QF\UI\Components\QFUIComponentsWindow.h" />
     <ClInclude Include="src\QF\UI\QFUI.h" />
@@ -178,11 +191,14 @@
     <ClInclude Include="src\QF\Utils\QFUtilsBasicAnim.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsCompare.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsDebug.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsFilesystem.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsFont.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsIdManager.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsImage.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsMath.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsRect.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsSystem.h" />
+    <ClInclude Include="src\QF\Utils\QFUtilsTexture.h" />
     <ClInclude Include="src\QF\Utils\QFUtilsVec2.h" />
   </ItemGroup>
   <ItemGroup>
