@@ -26,6 +26,9 @@ namespace QF
 			static const TaskbarInfo g_TaskbarInfo();
 
 			static std::vector<char> g_PNGdataFromEmbeddedResource(const std::string& _Name);
+
+			static const std::string g_ClipboardData();
+			static const bool s_ClipboardData(const std::string& _Buffer);
 		};
 	}
 }

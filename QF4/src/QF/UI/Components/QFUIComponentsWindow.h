@@ -441,19 +441,28 @@ namespace QF
 			
 				class TextBox : public QF::UI::Components::Panel { 
 				public:
+					struct Selection {
+						int m_Start = 0;
+						int m_End = 0; 
+						bool m_Selecting = false; 
+					};
+
 					struct Hints {
 						ImColor m_BGColor;
 						ImColor m_BGColorActive; 
 						ImColor m_TextColor; 
 						ImColor m_TextColorActive; 
 						ImColor m_CursorColor = ImColor(255, 255, 255);
+						
 						int m_CursorBlinkTimeMs = 500;
 						float m_CursorSizeExtendY = 6; 
 						float m_CursorSizeX = 2;
 						int m_CursorMoveSpeedMs = 35;
 
+						ImColor m_SelectionColor = ImColor(30, 30, 30);
 						ImColor m_OutlineColor = ImColor(60, 60, 60, 255);
 						float m_Rounding = 1;
+						float m_PositionCutFromBothSidesX = 10.0f; 
 					};
 
 				public: 
@@ -463,22 +472,33 @@ namespace QF
 					const std::string g_Value() const; 
 					void s_Value(const std::string& _Val);
 
+					const bool is_AnythingSelected() const; 
+					const std::string g_SelectedText(); 
 					Hints& g_Hints(); 
 				private:
+					void handleScroll(QF::UI::Components::EventSystem::Events::Render&);
 					void handleAnimations(QF::UI::Components::EventSystem::Events::BeforeRender&);
 					void handleCursorPosition(QF::UI::Components::EventSystem::Events::Render&);
 					void hookRender(QF::UI::Components::EventSystem::Events::Render&);
 					void handleTyping(QF::UI::Components::EventSystem::Events::CharEvent&);
+					void handleSelection(QF::UI::Components::EventSystem::Events::BeforeRender&);
 				private:
 					std::unique_ptr<QF::Utils::BasicAnim> m_BGColorAnim;
 					std::unique_ptr<QF::Utils::BasicAnim> m_TextColorAnim; 
 					std::unique_ptr<QF::Utils::BasicAnim> m_CursorColorAnim; 
 					std::unique_ptr<QF::Utils::BasicAnim> m_CursorPositionAnim; 
+					std::unique_ptr<QF::Utils::BasicAnim> m_ScrollAnim;
 					std::string m_CurrentText; 
 					Hints m_Hints; 
 					std::unique_ptr<QF::Utils::Font> m_TextFont; 
 					int m_CursorAt = 0; 
 					float m_CursorPos = 0; 
+					float m_Scroll = 0; 
+
+					const Selection g_FixedSelection(Selection& _Current) const; 
+
+					Selection m_Selection;
+					std::string m_LastEnteredText;
 				}; 
 			}
 		}

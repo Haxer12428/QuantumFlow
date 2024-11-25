@@ -24,13 +24,14 @@ using self = QF::Experimental::FileDialog;
 		components::Built::TextBox::Hints& textBoxHints = textBox->g_Hints();
 		
 		textBoxHints.m_BGColor = ImColor(40, 44, 52, 255);           // Dark bluish-gray background (Atom's vibe)
-		textBoxHints.m_BGColorActive = ImColor(50, 55, 65, 255);     // Slightly lighter bluish-gray active background
-		textBoxHints.m_TextColor = ImColor(200, 200, 200, 255);      // Soft light gray text
-		textBoxHints.m_TextColorActive = ImColor(100, 200, 255, 255); // Bright blue for active text
-		textBoxHints.m_Rounding = 3.0f;
-		textBoxHints.m_OutlineColor = ImColor(20, 20, 33, 255);      // Soft, bluish-gray outline to match the bg
+		textBoxHints.m_BGColorActive = ImColor(42, 47, 57, 255);     // Slightly lighter bluish-gray active background
+		textBoxHints.m_TextColor = ImColor(150, 150, 150, 255);      // Soft light gray text
+		textBoxHints.m_TextColorActive = ImColor(255, 255, 255, 255); // Bright blue for active text
+		textBoxHints.m_Rounding = 2.0f;
+		textBoxHints.m_CursorSizeExtendY = 2.0f;
+		textBoxHints.m_OutlineColor = ImColor(20, 20, 33, 25);      // Soft, bluish-gray outline to match the bg
 		textBoxHints.m_CursorColor = ImColor(0, 153, 255, 255);      // Soft cyan cursor
-
+		textBoxHints.m_SelectionColor = ImColor(72, 78, 91, 255);
 
 	}
 

@@ -109,3 +109,100 @@ using self = utils::System;
 
     return resourceBuffer;
   }
+ /* Clipboard */
+  const std::string self::g_ClipboardData() {
+    __QF_ASSERT(OpenClipboard(nullptr), "Clipboard cannot be opened");
+
+    struct ClipboardGuard { ~ClipboardGuard() { CloseClipboard(); } } clipboardGuard;
+
+    /* Get clipboard data */
+    HANDLE handleData = GetClipboardData(CF_TEXT);
+    if (handleData == nullptr) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+        __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not get clipboard data");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+      
+      return ___QF_EMPTY_STRING;
+    }
+
+    /* Lock data & get text ptr */
+    char* pszText = static_cast<char*>(GlobalLock(handleData));
+
+    /* Cannot lock memory */
+    if (pszText == nullptr) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+      __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not lock memory");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+
+      return ___QF_EMPTY_STRING;
+    }
+    /* Copy text from clipboard & release locks */
+    const std::string clipboardText = pszText;
+    GlobalUnlock(handleData);
+
+    return clipboardText; 
+  }
+
+  const bool self::s_ClipboardData(const std::string& _Buffer) {
+    /* Open & Empty */
+    __QF_ASSERT(OpenClipboard(nullptr), "Clipboard cannot be opened");
+
+    struct ClipboardGuard { ~ClipboardGuard() { CloseClipboard(); } } clipboardGuard;
+
+    const size_t bufferSizeFixed = (_Buffer.size() + 1);
+
+    if (!EmptyClipboard()) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+        __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not empty clipboard");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+      return false; 
+    }
+
+    /* Allocate memory for buffer */
+    HGLOBAL handleGlobal = GlobalAlloc(GMEM_MOVEABLE, bufferSizeFixed);
+
+    if (handleGlobal == nullptr) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+        __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not allocate memory");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+      return false; 
+    }
+
+    char* pGlobal = static_cast<char*>(GlobalLock(handleGlobal));
+
+    if (pGlobal == nullptr) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+        __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not lock memory");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+        return false; 
+    }
+
+    /* Write data */
+    memcpy(pGlobal, _Buffer.c_str(), bufferSizeFixed); 
+    /* Unlock */
+    GlobalUnlock(handleGlobal);
+
+    /* Place the handle on the clipboard for CF_TEXT format */
+    if (SetClipboardData(CF_TEXT, handleGlobal) == nullptr) {
+#ifndef  NDEBUG
+  #if __QF_DEBUG_LEVEL <= 1
+        __QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__, "Could not place handle on clipboard");
+  #endif // __QF_DEBUG_LEVEL <= 1
+#endif // ! NDEBUG
+      GlobalFree(handleGlobal);
+      return false;
+    }
+    /* Close */
+
+    return true; 
+  }

@@ -434,6 +434,23 @@ public:
 
 #include "QF/Experimental/FileDialog/QFExperimentalFileDialog.h"
 
+std::vector<std::string> getFileLines(const std::string& filePath) {
+	std::vector<std::string> lines;
+	std::ifstream file(filePath);
+	std::string line;
+
+	if (file.is_open()) {
+		while (std::getline(file, line)) {
+			lines.push_back(line);
+		}
+		file.close();
+	}
+	else {
+		std::cerr << "Unable to open file: " << filePath << std::endl;
+	}
+
+	return lines;
+}
 
 class Application : QF::UI::App
 {
@@ -443,6 +460,25 @@ public:
 	{};
 
 	const bool onInit() override {
+		const std::filesystem::path enginedir = utils::Filesystem::g_InCurrentDirectory("src/QF");
+
+		if (std::filesystem::is_directory(enginedir)) {
+			uint64_t lineCount = 0; 
+
+			for (const std::filesystem::directory_entry& _Entry : std::filesystem::recursive_directory_iterator(
+				enginedir
+			)) {
+				if (_Entry.is_regular_file()) {
+					const std::string entryExtension = _Entry.path().extension().string();
+					if (entryExtension == ".h" || entryExtension == ".cpp" || entryExtension == ".hpp") {
+						lineCount += getFileLines(_Entry.path().string()).size();
+					}
+				}
+			}
+
+			__QF_DEBUG_LOG(__QF_WARNING, __FUNCTION__, std::format("Warning: You are a nerd with no life, engine has: {} lines.", lineCount));
+		}
+
 		//Window* win = new Window(this); // api nodes 
 		/* Might come back to this someday, i dont want to code it cause its boring as fuck 
 			na i dont mean hard, the only hard part was optimizing texture loading i think but thats fixed
