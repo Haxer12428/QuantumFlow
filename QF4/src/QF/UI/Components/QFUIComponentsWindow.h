@@ -451,6 +451,9 @@ namespace QF
 						float m_CursorSizeExtendY = 6; 
 						float m_CursorSizeX = 2;
 						int m_CursorMoveSpeedMs = 35;
+
+						ImColor m_OutlineColor = ImColor(60, 60, 60, 255);
+						float m_Rounding = 1;
 					};
 
 				public: 

@@ -94,8 +94,8 @@ using evts = components::EventSystem::Events;
 		};
 
 		/* call handlers */
-		handleAnim(m_BGColorAnim, m_Hints.m_BGColorActive, m_Hints.m_BGColor);
 		handleAnim(m_TextColorAnim, m_Hints.m_TextColorActive, m_Hints.m_TextColor);
+		handleAnim(m_BGColorAnim, m_Hints.m_BGColorActive, m_Hints.m_BGColor);
 		handleCursorColorAnim();
 		handleCursorPositionAnim();
 	}
@@ -115,29 +115,37 @@ using evts = components::EventSystem::Events;
 		const ImColor textColor = utils::BasicAnim::g_ImColor(m_TextColorAnim->g_Animated(100));
 		const ImColor cursorColor = utils::BasicAnim::g_ImColor(m_CursorColorAnim->g_Animated(m_Hints.m_CursorBlinkTimeMs));
 
-		canvas.putRectFilled(0.0f, g_Size(), bgColor);
+		canvas.putRectFilled(0.0f, g_Size(), bgColor, m_Hints.m_Rounding);
+
+		for (float v : m_TextColorAnim->g_Animated(0)) {
+			std::cout << v << ",";
+		}
+		printf("\n");
 
 		canvas.pushFont(m_TextFont->g_ImFont());
 		canvas.putText(0.0f, m_CurrentText, textColor, components::SimpleDC::DrawingFlags::m_AlignCenterY);
 		canvas.popFont();
 
-		if (!is_Focused()) return; 
+		if (is_Focused()) {
 
-		const utils::Vec2 cursorSize = { 
-			m_Hints.m_CursorSizeX, canvas.g_TextSize(m_CurrentText).y + m_Hints.m_CursorSizeExtendY 
+			const utils::Vec2 cursorSize = {
+				m_Hints.m_CursorSizeX, canvas.g_TextSize(m_CurrentText).y + m_Hints.m_CursorSizeExtendY
 			};
 
-		const utils::Vec2 cursorPos = {
-			m_CursorPositionAnim->g_Animated(m_Hints.m_CursorMoveSpeedMs)[0], 0.0f
+			const utils::Vec2 cursorPos = {
+				m_CursorPositionAnim->g_Animated(m_Hints.m_CursorMoveSpeedMs)[0], 0.0f
 			};
 
-		canvas.putRectFilled(
-			cursorPos,
-			cursorSize,
-			cursorColor, 
-			0.5f,
-			components::SimpleDC::DrawingFlags::m_AlignCenterY
-		);
+			canvas.putRectFilled(
+				cursorPos,
+				cursorSize,
+				cursorColor,
+				0.5f,
+				components::SimpleDC::DrawingFlags::m_AlignCenterY
+			);
+		};
+
+		canvas.putRect(0.0f, g_Size(), m_Hints.m_OutlineColor, m_Hints.m_Rounding);
 	}
 /* Typing handle */
 	void self::handleTyping(evts::CharEvent& _Event) {
@@ -158,11 +166,35 @@ using evts = components::EventSystem::Events;
 			if (activeChar.empty()) return false; 
 
 			m_CursorAt += activeChar.length();
-			m_CurrentText += activeChar; return true; 
+
+
+			std::string textWithChar = (m_CurrentText + activeChar); 
+			
+			if (m_CursorAt != m_CurrentText.length() + 1)
+			{
+				textWithChar = m_CurrentText.substr(0, m_CursorAt - 1) + activeChar + m_CurrentText.substr(m_CursorAt - 1);
+			}
+
+			m_CurrentText = textWithChar; return true; 
+		};
+
+		auto handleCursorMove = [&]() -> const bool {
+			int wantedCursorAt = m_CursorAt;
+
+			if (activeKey != GLFW_KEY_LEFT && activeKey != GLFW_KEY_RIGHT) return false; 
+
+			wantedCursorAt += (activeKey == GLFW_KEY_LEFT ? -1 : 1);
+			
+			m_CursorAt = std::max(0, std::min(
+				wantedCursorAt, static_cast<int>(m_CurrentText.length())
+				));
+
+			return true; 
 		};
 
 		if (handleType()) return;
 		if (handleClear()) return;
+		if (handleCursorMove()) return; 
 #ifndef NDEBUG
 	#if __QF_DEBUG_LEVEL <= 1
 		__QF_DEBUG_LOG(__QF_MESSAGE, __FUNCTION__, "Handled typing, no result.");

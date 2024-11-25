@@ -19,13 +19,18 @@ using self = QF::Experimental::FileDialog;
 			utils::Filesystem::g_InCurrentDirectory("menlofont.ttf"), 17.0f
 		);
 
-		components::Built::TextBox* textBox = new components::Built::TextBox(this, 0.0f, { g_GLFWobject()->g_Size().x, 40.0f }, components::Panel::Flags::m_None, _StartingPath.string(), textboxFont);
+		components::Built::TextBox* textBox = new components::Built::TextBox(this, 20.0f, { 400.0f, 30.0f }, components::Panel::Flags::m_None, _StartingPath.string(), textboxFont);
 		
 		components::Built::TextBox::Hints& textBoxHints = textBox->g_Hints();
-		textBoxHints.m_BGColor = ImColor(25, 25, 25, 255);
-		textBoxHints.m_BGColorActive = ImColor(30, 30, 30, 255);
-		textBoxHints.m_TextColor = ImColor(200, 200, 200, 255);
-		textBoxHints.m_TextColorActive = ImColor(0, 128, 255, 255);
+		
+		textBoxHints.m_BGColor = ImColor(40, 44, 52, 255);           // Dark bluish-gray background (Atom's vibe)
+		textBoxHints.m_BGColorActive = ImColor(50, 55, 65, 255);     // Slightly lighter bluish-gray active background
+		textBoxHints.m_TextColor = ImColor(200, 200, 200, 255);      // Soft light gray text
+		textBoxHints.m_TextColorActive = ImColor(100, 200, 255, 255); // Bright blue for active text
+		textBoxHints.m_Rounding = 3.0f;
+		textBoxHints.m_OutlineColor = ImColor(20, 20, 33, 255);      // Soft, bluish-gray outline to match the bg
+		textBoxHints.m_CursorColor = ImColor(0, 153, 255, 255);      // Soft cyan cursor
+
 
 	}
 

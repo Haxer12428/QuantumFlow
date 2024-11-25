@@ -44,11 +44,11 @@ using self = utils::BasicAnim;
 
 	/* ImColor */
 	void QF::Utils::BasicAnim::s_Wanted(ImColor _New) {
-		m_ValuesWanted = { _New.Value.x, _New.Value.y, _New.Value.y, _New.Value.w };
+		m_ValuesWanted = { _New.Value.x, _New.Value.y, _New.Value.z, _New.Value.w };
 	}
 
 	void QF::Utils::BasicAnim::s_Starting(ImColor _New) {
-		m_ValuesStarting = { _New.Value.x, _New.Value.y, _New.Value.y, _New.Value.w };
+		m_ValuesStarting = { _New.Value.x, _New.Value.y, _New.Value.z, _New.Value.w };
 	}
 
 	const std::vector<float> QF::Utils::BasicAnim::g_Wanted() const {
