@@ -441,6 +441,16 @@ namespace QF
 			
 				class TextBox : public QF::UI::Components::Panel { 
 				public:
+					class EnterPressedEvent : public QF::UI::Components::EventSystem::Event {
+					public:
+						EnterPressedEvent(const std::string& _Text) : m_Text{ _Text } {};
+						virtual ~EnterPressedEvent() = default; 
+
+						const std::string g_Text() const { return m_Text; };
+					private:
+						std::string m_Text; 
+					};
+
 					struct Selection {
 						int m_Start = 0;
 						int m_End = 0; 
@@ -466,7 +476,7 @@ namespace QF
 					};
 
 				public: 
-					TextBox(QF::UI::Components::Window* _Parent, const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, QF::UI::Components::Panel::Flags _PanelFlags, const std::string& _StartingText, std::unique_ptr<QF::Utils::Font>& _Font);
+					TextBox(QF::UI::Components::Window* _Parent, const QF::Utils::Vec2& _Pos, const QF::Utils::Vec2& _Size, QF::UI::Components::Panel::Flags _PanelFlags, const std::string& _StartingText, ImFont* _Font);
 					virtual ~TextBox();
 
 					const std::string g_Value() const; 
@@ -490,7 +500,7 @@ namespace QF
 					std::unique_ptr<QF::Utils::BasicAnim> m_ScrollAnim;
 					std::string m_CurrentText; 
 					Hints m_Hints; 
-					std::unique_ptr<QF::Utils::Font> m_TextFont; 
+					ImFont* m_TextFont; 
 					int m_CursorAt = 0; 
 					float m_CursorPos = 0; 
 					float m_Scroll = 0; 

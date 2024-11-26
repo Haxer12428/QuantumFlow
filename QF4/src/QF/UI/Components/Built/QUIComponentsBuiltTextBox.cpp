@@ -12,12 +12,12 @@ using evts = components::EventSystem::Events;
 			components::Panel::Flags _PanelFlags, 
 			const std::string& _StartingText,
 
-			std::unique_ptr<utils::Font>& _Font 
+			ImFont* _Font 
 	)
 		: components::Panel(_Parent, _Pos, _Size, _PanelFlags)
 	{
 		/* Move font */
-		m_TextFont = std::move(_Font);
+		m_TextFont = _Font;
 
 		/* Create anim instances */
 		m_BGColorAnim = std::make_unique<utils::BasicAnim>();
@@ -121,7 +121,7 @@ using evts = components::EventSystem::Events;
 		if (!is_Focused()) m_Scroll = 0; 
 		
 		components::SimpleDC canvas{this};
-		canvas.pushFont(m_TextFont->g_ImFont());
+		canvas.pushFont(m_TextFont);
 
 		const int currentTextSizeX = canvas.g_TextSize(m_CurrentText).x; 
 		const int totalSizeFixedX = (g_Size().x - m_Hints.m_PositionCutFromBothSidesX * 2);
@@ -189,7 +189,7 @@ using evts = components::EventSystem::Events;
 
 		components::SimpleDC canvas{this};
 
-		canvas.pushFont(m_TextFont->g_ImFont());
+		canvas.pushFont(m_TextFont);
 		m_CursorPos = components::SimpleDC(this).g_TextSize(m_CurrentText.substr(0, m_CursorAt)).x;
 		canvas.popFont();
 	}
@@ -212,7 +212,7 @@ using evts = components::EventSystem::Events;
 
 		Selection fixedSelection = g_FixedSelection(m_Selection);
 
-		canvas.pushFont(m_TextFont->g_ImFont());
+		canvas.pushFont(m_TextFont);
 
 		float currentTextHeigth = canvas.g_TextSize(m_CurrentText).y;
 
@@ -369,6 +369,14 @@ using evts = components::EventSystem::Events;
 		auto handleEnter = [&]() -> const bool {
 			if (activeKey != GLFW_KEY_ENTER) return false;
 			m_LastEnteredText = m_CurrentText;
+			/* Propagate event */
+			g_EventHandler()->Dispatch<self::EnterPressedEvent>(self::EnterPressedEvent{ m_CurrentText });
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL <= 1
+			__QF_DEBUG_LOG(__QF_MESSAGE, __FUNCTION__, "Dispatched enter key");
+	#endif
+#endif // !NDEBUG
+
 			return true; 
 		};
 
@@ -387,17 +395,18 @@ using evts = components::EventSystem::Events;
 	}
 /* Selection */
 	void self::handleSelection(evts::BeforeRender&) {
+		/* Need to fix this, when typing on empty path it fuck's up selection and its selecting 1 char */
 		/* Total focus loss */
-		if (!is_Focused()) {
-			m_Selection = Selection(); return; 
+		if (!is_Focused() || m_CurrentText.empty()) {
+			m_Selection = Selection(); return;
 		}
 
 		GLFWwindow* GLFWobj = g_AbsoluteParent()->g_GLFWobject()->g_Object();
 
-		if (glfwGetKey(GLFWobj, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS 
+		if (glfwGetKey(GLFWobj, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS
 			&& glfwGetKey(GLFWobj, GLFW_KEY_RIGHT_SHIFT) != GLFW_PRESS
 			) {
-			m_Selection.m_Selecting = false; return; 
+			m_Selection.m_Selecting = false; return;
 		}
 
 		if (!m_Selection.m_Selecting) {
@@ -432,4 +441,14 @@ using evts = components::EventSystem::Events;
 			Copy.m_Start = _Current.m_End;
 		} 
 		return Copy;
+	}
+/* Public: Set's */
+	void self::s_Value(const std::string& _New) {
+		m_CurrentText = _New; 
+		m_Selection = Selection(); 
+		m_CursorAt = m_CurrentText.length();
+	}
+
+	const std::string self::g_Value() const {
+		return m_CurrentText; 
 	}
