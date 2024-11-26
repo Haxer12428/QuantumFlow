@@ -267,6 +267,25 @@ using evts = components::EventSystem::Events;
 		const int activeKey = _Event.g_Key();
 		std::string activeChar = _Event.g_Char();
 
+		auto handleSelection = [&]() -> const bool {
+			GLFWwindow* GLFWobj = g_AbsoluteParent()->g_GLFWobject()->g_Object();
+
+			if (glfwGetKey(GLFWobj, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS
+				&& glfwGetKey(GLFWobj, GLFW_KEY_RIGHT_SHIFT) != GLFW_PRESS || !activeChar.empty()
+				) {
+				m_Selection.m_Selecting = false; return false;
+			}
+
+			if (!m_Selection.m_Selecting) {
+				m_Selection.m_Start = m_CursorAt;
+				m_Selection.m_End = m_CursorAt;
+			}
+			else { m_Selection.m_End = m_CursorAt; };
+
+			m_Selection.m_Selecting = true;
+			return true; 
+		};
+
 		auto selectHandler = [&]() -> const bool {
 			Selection fixedSelection = g_FixedSelection(m_Selection);
 
@@ -383,7 +402,9 @@ using evts = components::EventSystem::Events;
 		if (handleEnter()) return; 
 		if (handleType()) return;
 		if (handleClear()) return;
+
 		const bool cursorHandlerOutput = handleCursorMove();
+		handleSelection();
 		if (cursorHandlerOutput) return; 
 		
 #ifndef NDEBUG
@@ -400,22 +421,6 @@ using evts = components::EventSystem::Events;
 		if (!is_Focused() || m_CurrentText.empty()) {
 			m_Selection = Selection(); return;
 		}
-
-		GLFWwindow* GLFWobj = g_AbsoluteParent()->g_GLFWobject()->g_Object();
-
-		if (glfwGetKey(GLFWobj, GLFW_KEY_LEFT_SHIFT) != GLFW_PRESS
-			&& glfwGetKey(GLFWobj, GLFW_KEY_RIGHT_SHIFT) != GLFW_PRESS
-			) {
-			m_Selection.m_Selecting = false; return;
-		}
-
-		if (!m_Selection.m_Selecting) {
-			m_Selection.m_Start = m_CursorAt;
-			m_Selection.m_End = m_CursorAt;
-		}
-		else { m_Selection.m_End = m_CursorAt; };
-
-		m_Selection.m_Selecting = true;
 	};
 
 /* Public: Get's */
