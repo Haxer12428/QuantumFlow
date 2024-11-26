@@ -152,6 +152,8 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\QF\Core\QFCore.cpp" />
     <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialog.cpp" />
+    <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialogDirFrame.cpp" />
+    <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialogElement.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIAppWindowHandler.cpp" />
     <ClCompile Include="src\QF\UI\App\QFUIApp.cpp" />
     <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltButton.cpp" />

@@ -235,7 +235,7 @@ QF::UI::Components::Panel::~Panel() {
 
 		/* Capture from a parent if good */
 		/* Window */
-		if (m_Parent->ami_Window()) {
+		if (m_Parent->ami_Window() && m_Parent->g_Window() && !m_Parent->g_Window()->is_Destructed()) {
 			/* Capture */
 			std::array<QF::Utils::Vec2, 2> capturedFromWindow;
 
@@ -358,4 +358,12 @@ QF::UI::Components::Panel::~Panel() {
 		m_UtilCallbacks.push_back({ m_UtilCallbacksIdManager->g_New(), _Callback });
 
 		return m_UtilCallbacks.back().m_UniqueID;
+	}
+/* Public -> Destruction */
+	void self::destroy() {
+		g_AbsoluteParent()->i_WantTobeDisassigned(this);
+
+		for (auto& _Child : m_Children) {
+			_Child->destroy();
+		}
 	}

@@ -108,6 +108,12 @@
     <ClCompile Include="src\QF\Utils\QFUtilsFont.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialogDirFrame.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialogElement.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\QF\QF.h">

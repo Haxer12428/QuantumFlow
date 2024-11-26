@@ -370,7 +370,7 @@ using evts = components::EventSystem::Events;
 
 			m_CurrentText = textWithChar; return true; 
 		};
-		printf("c");
+		
 		auto handleCursorMove = [&]() -> const bool {
 			int wantedCursorAt = m_CursorAt;
 

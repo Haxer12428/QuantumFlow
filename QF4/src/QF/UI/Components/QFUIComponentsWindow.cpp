@@ -105,6 +105,12 @@ using evts = QF::UI::Components::EventSystem::Events;
 		return true; 
 	}
 /* Children handling -> Public */
+	void QF::UI::Components::Window::i_WantTobeDisassigned(Panel* _Panel) {
+		__QF_ASSERT(_Panel, "panel cannot be unassigned, its not existing");
+
+		m_ChildrenIdsDisassignmentStack.push_back(_Panel);
+	}
+	
 	void QF::UI::Components::Window::im_Child(std::unique_ptr<Panel> _Child) {
 		if (_Child == nullptr) {
 			__QF_DEBUG_LOG(__QF_ERROR, __FUNCTION__,
@@ -145,6 +151,48 @@ using evts = QF::UI::Components::EventSystem::Events;
 /* Children handling -> Private */
 	const long long QF::UI::Components::Window::g_NewImmutableIdForChild() {
 		m_ChildrenImmutableIdsCount++; return m_ChildrenImmutableIdsCount;
+	}
+
+	void QF::UI::Components::Window::disassignChildrenFromStack() {
+		//if (!m_ChildrenAssigmentStack.empty()) return; 
+		//__QF_ASSERT(!m_ChildrenAssigmentStack.empty() && !m_ChildrenIdsDisassignmentStack.empty(), "cannot dissasign when there are element to be assigned");
+
+		auto disassign = [&](Panel* _Child) -> const bool {
+			const long long childImmutableId = _Child->g_ImmutableId();
+			__QF_ASSERT(childImmutableId != static_cast<long long>(__QF_UNDEFINED), "children not assigned; engine error\n");
+			
+			size_t childrenIterator = 0; 
+			for (auto& _Obj : m_Children) {
+				if (_Obj && _Obj->g_ImmutableId() == childImmutableId) {
+					auto erasePos = (m_Children.begin() + childrenIterator);
+
+					m_Children.erase(erasePos);
+					return true; 
+				}
+				childrenIterator++;
+			}
+			return false; 
+		}; 
+
+		while (!m_ChildrenIdsDisassignmentStack.empty()) {
+			if (!disassign(m_ChildrenIdsDisassignmentStack.front())) 
+			{ /* Fail */
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL <= 1
+				__QF_DEBUG_LOG(__QF_WARNING, __FUNCTION__, "Could not disassign child.");
+	#endif 
+#endif // !NDEBUG
+
+			} /* Success */ else {
+				m_ChildrenIdsDisassignmentStack.erase(m_ChildrenIdsDisassignmentStack.begin());
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL <= 1 
+				__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, "Successfully disassigned child.");
+	#endif 
+#endif // !NDEBUG
+
+			}
+		}
 	}
 
 	void QF::UI::Components::Window::assignChildrenFromStack() {
@@ -195,6 +243,7 @@ using evts = QF::UI::Components::EventSystem::Events;
 		/* Finalize render */
 		mainloopFinalizeRender();
 
+		disassignChildrenFromStack();
 		assignChildrenFromStack();
 
 		/* Set flag */
@@ -315,7 +364,9 @@ using evts = QF::UI::Components::EventSystem::Events;
 			true
 		);
 	}
-	/* Main loop mouse click event */
+	/* Main loop mouse click event 
+		Also handles dclick, saves me code, adds complexity :) 
+	*/
 	void self::mainloopEventMouseClick() {
 		/* Event propagate check */
 		auto propageteEvent = [&]() -> bool {
@@ -335,7 +386,34 @@ using evts = QF::UI::Components::EventSystem::Events;
 
 		if (!propageteEvent()) return;
 
+		int doubleClickTimeMs = static_cast<int>(GetDoubleClickTime());
 		const utils::Vec2 mousePosition = g_GLFWobject()->g_MousePositionFixed();
+
+		/* Mouse dclick event */
+		/* TODO: move this to other func(handler)  */
+		if (std::chrono::duration_cast<std::chrono::milliseconds>(ccl::now() - m_EventMouseClickedOnPanelWhen).count() <= doubleClickTimeMs) {
+			auto propagateDClick = [&]() -> const bool {
+				if (!m_EventMouseClickedOnPanelNoChange) return false; 
+
+				if (!mousePosition.is_InBounds(
+					m_EventMouseClickedOnPanelNoChange->g_FixedPosition(), 
+					m_EventMouseClickedOnPanelNoChange->g_FinalPositionFixed()
+					)) return false; 
+
+				utils::Vec2 fixedDClickPos = (mousePosition - m_EventMouseClickedOnPanelNoChange->g_FixedPosition());
+
+				m_EventMouseClickedOnPanelNoChange->g_EventHandler()->Dispatch(evts::MouseDoubleClickEvent{fixedDClickPos, mousePosition});
+				
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL <= 1
+				__QF_DEBUG_LOG(__QF_MESSAGE, __FUNCTION__, "Dispatched mouse DClick event");
+	#endif 
+#endif // !NDEBUG
+				return true; 
+			};
+			
+			if (propagateDClick()) return; 
+		}
 
 		/* Propagate */
 		childrenEventPropagationTopToBottom<QF::UI::Components::EventSystem::Events::MouseClickEvent>(
@@ -358,6 +436,7 @@ using evts = QF::UI::Components::EventSystem::Events;
 				m_EventMouseClickedOnPanelPos = pos;
 				m_EventMouseClickedOnPanelPosFixed = fixedPos; 
 				m_EventMouseClickedOnPanelNoChange = _Panel.get();
+				m_EventMouseClickedOnPanelWhen = ccl::now();
 
 				/* Return created */
 				return QF::UI::Components::EventSystem::Events::MouseClickEvent{

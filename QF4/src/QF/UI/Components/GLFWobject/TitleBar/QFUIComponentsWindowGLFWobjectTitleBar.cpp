@@ -98,6 +98,7 @@ using evts = components::EventSystem::Events;
 		/* Button default hints */
 			comp_built::Button::Hints buttonHints;
 			buttonHints.m_BGColor = m_Hints.m_BGColor;
+			buttonHints.m_TextureColor = m_Hints.m_ButtonIconsColor;
 
 			buttonHints.m_PanelFlags = 
 				(

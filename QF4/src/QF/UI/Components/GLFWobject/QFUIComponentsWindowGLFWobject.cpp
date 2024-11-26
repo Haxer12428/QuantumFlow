@@ -279,7 +279,6 @@ namespace utils = QF::Utils;
 		SetLayeredWindowAttributes(hwnd, 0, (BYTE)(_New.g()), LWA_ALPHA);
 	}
 
-
 /* GLFW window creation */
 	void QF::UI::Components::Window::GLFWobject::createObject() {
 		/* GLFWobject creation check */
@@ -300,6 +299,7 @@ namespace utils = QF::Utils;
 		*/
 		if (isUsingCustomTitleBar) {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+			glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
 		}
 
 		/* Create object with positons not set eg: 1, 1 

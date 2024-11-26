@@ -6,7 +6,7 @@ namespace utils = QF::Utils;
 using self = comp_built::Button;
 
 /* Constructor & Destructor */
-	comp_built::Button::Button(components::Element* _Parent, Hints& _Hints) 
+	comp_built::Button::Button(components::Element* _Parent, Hints _Hints) 
 		: m_Hints{_Hints},
 		
 		components::Panel(_Parent, _Hints.m_Pos, _Hints.m_Size, _Hints.m_PanelFlags)
@@ -56,8 +56,8 @@ using self = comp_built::Button;
 		/* Render bg */
 		
 		canvas.putRectFilled({ 0.0f }, g_Size(), utils::BasicAnim::g_ImColor(m_BGTransitionAnim->g_Animated(200)));
-	
-		canvas.putTexture({ 0.0f }, g_Size(), m_Hints.m_TextureID, components::SimpleDC::DrawingFlags::m_putTextureAbortIfTextureUndefined);
+		
+		canvas.putTexture({ 0.0f }, g_Size(), m_Hints.m_TextureID, components::SimpleDC::DrawingFlags::m_putTextureAbortIfTextureUndefined, m_Hints.m_TextureColor);
 	}
 
 	void self::MouseClickEvent(components::EventSystem::Events::MouseClickEvent& _evt) {

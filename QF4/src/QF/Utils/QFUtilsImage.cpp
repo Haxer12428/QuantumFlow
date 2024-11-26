@@ -31,8 +31,7 @@ using self = utils::Image;
 	}
 /* Private internal functions */
 	void self::clearGLTexture() {
-		/* Clearing bugged */
-		if (true) return; 
+		/* Clearing bugged i think */
 		if (m_GLTextureId == 0) return; 
 		glDeleteTextures(1, &m_GLTextureId);
 	}

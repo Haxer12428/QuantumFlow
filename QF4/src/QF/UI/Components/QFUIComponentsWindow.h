@@ -66,6 +66,11 @@ namespace QF
 						MouseClickEvent(const QF::Utils::Vec2& _Fixed, const QF::Utils::Vec2& _Regular);
 					};
 
+					class MouseDoubleClickEvent : public MouseEvent {
+					public:
+						MouseDoubleClickEvent(const QF::Utils::Vec2& _Fixed, const QF::Utils::Vec2& _Regular);
+					};
+
 					class MousePanelDragEvent : public MouseMotionEvent {
 					public:
 						MousePanelDragEvent(const QF::Utils::Vec2& _Fixed, const QF::Utils::Vec2& _Regular, const QF::Utils::Vec2& _PosClickedFixed, const QF::Utils::Vec2& _PosClicked);
@@ -273,8 +278,9 @@ namespace QF
 
 				enum class AlignmentFlags : uint64_t {
 					m_None = 0,
-					m_AlignX = 1 << 0, 
-					m_AlignY = 1 << 1
+					m_AlignX = 1 << 0,
+					m_AlignY = 1 << 1,
+					m_AlignBothAxis = (1 << 1 | 1 << 0)
 				};
 			public:
 				Panel(Element* _Parent, const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size, const Flags& _Flags = Flags::m_None);
@@ -311,7 +317,8 @@ namespace QF
 					//canvas.putRectFilled({ 0, 0 }, { 40, 30 }, ImColor(0, 0, 255), 0.0f, QF::UI::Components::SimpleDC::DrawingFlags::m_AlignCenterX | QF::UI::Components::SimpleDC::DrawingFlags::m_AlignCenterY);
 				}
 
-
+				/* Destroy & Unlink: me & children */
+				void destroy();
 				void im_Child(Panel* m_Child);
 
 				std::unique_ptr<EventSystem::EventHandler>& g_EventHandler(); 
@@ -402,6 +409,7 @@ namespace QF
 					{
 						ImColor m_BGActiveColor; 
 						ImColor m_BGColor;
+						ImColor m_TextureColor = ImColor(255, 255, 255, 255);
 						Panel::Flags m_PanelFlags = Panel::Flags::m_None;
 						QF::Utils::Vec2 m_Pos;
 						QF::Utils::Vec2 m_Size; 
@@ -414,7 +422,7 @@ namespace QF
 				public:
 					Hints& g_Hints();
 
-					Button(QF::UI::Components::Element* _Element, Hints& _Hints); 
+					Button(QF::UI::Components::Element* _Element, Hints _Hints); 
 					virtual ~Button();
 
 					const uint64_t addOnClickCallback(const std::function<void(QF::UI::Components::Built::Button*, QF::UI::Components::EventSystem::Events::MouseClickEvent& _Event)> _Callback);
@@ -543,6 +551,7 @@ namespace QF
 				/* Children handling */
 				void im_Child(std::unique_ptr<Panel> _Child);
 				void i_WantToBeAssigned(Panel* _Child);
+				void i_WantTobeDisassigned(Panel* _Child);
 
 				App* g_Application(); 
 			public:
@@ -557,12 +566,13 @@ namespace QF
 					/* Mouse motion */
 					QF::Utils::Vec2 m_EventMouseMotionLastFramePosition;
 					void mainloopEventMouseMotion();
-					/* Mouse click */
+					/* Mouse click: also handles dclick */
 					QF::UI::Components::Panel* m_EventMouseClickedOnPanel = nullptr; 
 					QF::UI::Components::Panel* m_EventMouseClickedOnPanelNoChange = nullptr;
+					std::chrono::high_resolution_clock::time_point m_EventMouseClickedOnPanelWhen; 
 					QF::Utils::Vec2 m_EventMouseClickedOnPanelPos, m_EventMouseClickedOnPanelPosFixed; 
 					bool m_EventMouseClickLastFrameHeld = false; 
-					void mainloopEventMouseClick(); 
+						void mainloopEventMouseClick(); 
 					/* Mouse panel drag */
 					void mainloopEventMousePanelDrag();
 					/* Char */
@@ -649,11 +659,12 @@ namespace QF
 					public:
 						struct Hints
 						{
-							ImColor m_BGColor = ImColor(54, 54, 54);
-							ImColor m_NameColor = ImColor(255, 255, 255);
-							ImColor m_ButtonExitActiveColor = ImColor(120, 120, 120, 255);
-							ImColor m_ButtonMinimizeActiveColor = ImColor(80, 80, 80, 255);
-							ImColor m_ButtonMaximizeActiveColor = ImColor(80, 80, 80, 255);
+							ImColor m_BGColor = ImColor(29, 31, 33);
+							ImColor m_NameColor = ImColor(197, 200, 198);
+							ImColor m_ButtonExitActiveColor = ImColor(62, 68, 81, 255);
+							ImColor m_ButtonMinimizeActiveColor = ImColor(62, 68, 81, 255);
+							ImColor m_ButtonMaximizeActiveColor = ImColor(62, 68, 81, 255);
+							ImColor m_ButtonIconsColor = ImColor(185, 191, 195);
 						};
 
 					public:
@@ -801,7 +812,9 @@ private:
 				/* Children handling */
 				std::vector<std::unique_ptr<Panel>> m_Children; 
 				std::vector<std::unique_ptr<Panel>> m_ChildrenAssigmentStack; 
+				std::vector<Panel*> m_ChildrenIdsDisassignmentStack;
 
+				void disassignChildrenFromStack();
 				void assignChildrenFromStack(); 
 
 				const long long g_NewImmutableIdForChild();

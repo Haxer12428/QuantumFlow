@@ -22,13 +22,24 @@ components::SimpleDC::SimpleDC(Panel* _Element)
 		m_DrawList->PushClipRect(_Element->g_FixedPosition(), _Element->g_FinalPositionFixed()); return;
 	}
 
+	const utils::Vec2 rendererStartingPos = { 1.0f, 1.0f };
+
+	const utils::Vec2 rendererFinalPos = _Element->g_AbsoluteParent()->g_GLFWobject()->g_Size() 
+		- rendererStartingPos;
 
 	if (_Element->g_Flags() & static_cast<std::underlying_type<Panel::Flags>::type>(Panel::Flags::m_DontCareAboutClipRectWhenRendering)) {
-		m_DrawList->PushClipRect(_Element->g_FixedPosition(), _Element->g_FinalPositionFixed()); return; 
+		m_DrawList->PushClipRect(
+			_Element->g_FixedPosition().clamp(rendererStartingPos, rendererFinalPos), 
+			_Element->g_FinalPositionFixed().clamp(rendererStartingPos, rendererFinalPos)
+		);
+		
+		return; 
 	}
 
 	m_DrawList->PushClipRect(
-		_Element->g_FixedPosition().clamp(clientRect.g_Position(), clientRect.g_FinalPosition()), _Element->g_FinalPositionFixed().clamp(clientRect.g_Position(), clientRect.g_FinalPosition())
+		_Element->g_FixedPosition().clamp(clientRect.g_Position(), clientRect.g_FinalPosition()).clamp(rendererStartingPos, rendererFinalPos),
+		_Element->g_FinalPositionFixed().clamp(clientRect.g_Position(), clientRect.g_FinalPosition().clamp(rendererStartingPos, rendererFinalPos)
+		)
 		);
 }
 
