@@ -29,6 +29,7 @@ namespace QF {
 			const std::vector<float> g_Wanted() const; 
 			
 			static const ImColor g_ImColor(const std::vector<float>& _ValueList);
+			static const std::vector<float> g_VectorFloatFromImColor(const ImColor& _Clr);
 
 			const std::vector<float> g_Animated(int _MsToFinish); 
 			void startAnimation();

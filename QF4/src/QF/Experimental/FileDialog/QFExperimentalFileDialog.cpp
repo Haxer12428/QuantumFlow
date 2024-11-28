@@ -63,14 +63,15 @@ using panelalignflags = components::Panel::AlignmentFlags;
 
 		/* Hooks : binds */
 		m_PathBox->g_EventHandler()->Subscribe<components::Built::TextBox::EnterPressedEvent>(this, &self::handlePathBoxEnter);
-	
+		
 	}
 /* Path box: enter pressed event handelr */
 	void self::handlePathBoxEnter(components::Built::TextBox::EnterPressedEvent& _Event) {
-		const std::filesystem::path eventPath = _Event.g_Text();
+		const utils::Filesystem::Path eventPath = _Event.g_Text();
+
 
 		/* Path not accepted */
-		if (!std::filesystem::is_regular_file(eventPath) && !std::filesystem::is_directory(eventPath)) {
+		if (eventPath.is_SystemReservedDeviceName() || eventPath.is_Broken() || !std::filesystem::is_regular_file(eventPath) && !std::filesystem::is_directory(eventPath)) {
 #ifndef NDEBUG
 	#if __QF_DEBUG_LEVEL <= 1 
 			__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, std::format("Path[{}] is not accepted.", eventPath.string()));

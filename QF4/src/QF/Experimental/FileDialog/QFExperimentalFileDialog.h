@@ -57,6 +57,7 @@ namespace QF {
 					void hookRender(QF::UI::Components::EventSystem::Events::Render& _Render);
 					void hookDClickHandle(QF::UI::Components::EventSystem::Events::MouseDoubleClickEvent& _Dclick);
 
+				private:
 					const float m_TexturePushX = 5.0f;
 					const float m_StatsPushX = 10.0f;
 					const std::filesystem::path m_Path; 
@@ -71,16 +72,22 @@ namespace QF {
 				/* Layout is handled by parent: only reasonable thing to do i guess */
 				DirFrame(FileDialog* _Parent); 
 				virtual ~DirFrame(); 
-				
 
-				void hookRender(QF::UI::Components::EventSystem::Events::Render& _Event); 
-				void updateCurrentPath(const std::filesystem::path &_Path);
+				void updateCurrentPath(const QF::Utils::Filesystem::Path & _Path);
 				void selectedByHand(const long long _ImmutableId);
+			private:
+			
+				void createSliders();
+				void hookRender(QF::UI::Components::EventSystem::Events::Render& _Event);
+			
 			private:
 				std::vector<Element*> m_Children; 
 
+				QF::UI::Components::Built::Slider*   m_VerticalSlider; 
+				QF::UI::Components::Built::Slider* m_HorizontalSlider;
+
 				Params m_Params = Params();
-				std::filesystem::path m_CurrentPath = ___QF_EMPTY_STRING; 
+				QF::Utils::Filesystem::Path m_CurrentPath = ___QF_EMPTY_STRING;
 				std::unique_ptr<QF::Utils::Image> m_FolderImage; 
 				std::unique_ptr<QF::Utils::Image> m_FileImage; 
 
@@ -97,7 +104,7 @@ namespace QF {
 			void handlePathBoxEnter(QF::UI::Components::Built::TextBox::EnterPressedEvent&);
 		private:
 			std::unique_ptr<QF::Utils::Font> m_GlobalFont; 
-			std::filesystem::path m_CurrentPath;
+			QF::Utils::Filesystem::Path m_CurrentPath = "C:/";
 
 			QF::UI::Components::Built::TextBox* m_PathBox;
 			DirFrame* m_DirFrame;

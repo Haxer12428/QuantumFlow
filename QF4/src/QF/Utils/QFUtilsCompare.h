@@ -10,7 +10,7 @@ namespace QF
 		{
 		public:
 			template<typename __ClassVariable>
-			static bool bitFlagPoolMatchEnumClass(__ClassVariable _Pool, __ClassVariable _Var) {
+			static const bool bitFlagPoolMatchEnumClass(__ClassVariable _Pool, __ClassVariable _Var) {
 				return ((static_cast<std::underlying_type<__ClassVariable>::type>(_Pool) & static_cast<std::underlying_type<__ClassVariable>::type>(_Var)) != 0);
 			}
 		};

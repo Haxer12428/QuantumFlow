@@ -88,6 +88,13 @@ using self = utils::BasicAnim;
 		return ImColor(_ValueList[0], _ValueList[1], _ValueList[2], _ValueList[3]);
 	}
 
+	/* I coded this while drunk, for myself later: check this shit please. 
+		Why i put this inhere? didn't wanted to put effort into 'transform' class 
+		*/
+	const std::vector<float> self::g_VectorFloatFromImColor(const ImColor& _Clr) {
+		return { _Clr.Value.x, _Clr.Value.y, _Clr.Value.z, _Clr.Value.w };
+	}
+
 	const std::vector<float> QF::Utils::BasicAnim::g_Animated(int _MsToFinish) {
 		/* Animation method, todo: make this switchable  */
 		auto lerpMethod = [&](double start, double end, double t)

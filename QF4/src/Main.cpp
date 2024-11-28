@@ -452,6 +452,9 @@ std::vector<std::string> getFileLines(const std::string& filePath) {
 	return lines;
 }
 
+
+using ccl = std::chrono::high_resolution_clock;
+
 class Application : QF::UI::App
 {
 public:
@@ -494,6 +497,7 @@ public:
 
 		QF::UI::Components::Window* win = new QF::Experimental::FileDialog(this, "C:\\");
 		win->g_GLFWobject()->s_VsyncState(false);
+
 
 		return this->Execute();
 	}

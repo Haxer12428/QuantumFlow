@@ -14,6 +14,8 @@ using panelalignflags = components::Panel::AlignmentFlags;
 	self::DirFrame(FileDialog* _Parent) : components::Panel(_Parent, 0.0f, 1.0f), m_Parent{_Parent} {
 		__QF_ASSERT(_Parent, "must have parent");
 
+		createSliders();
+
 		/* Load folder image */
 		m_FolderImage = std::make_unique<utils::Image>(utils::Filesystem::g_InCurrentDirectory("folderimage.png"));
 		m_FileImage = std::make_unique<utils::Image>(utils::Filesystem::g_InCurrentDirectory("fileimage.png"));
@@ -26,51 +28,17 @@ using panelalignflags = components::Panel::AlignmentFlags;
 	
 	self::~DirFrame() = default; 
 
-	/* TODO:
-		Fix this path's and add them to filesystem 
-	*/
-	std::string PWSTRToString(PWSTR path) {
-		// Convert PWSTR to std::string
-		int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, path, -1, NULL, 0, NULL, NULL);
-		std::string result(sizeNeeded, 0);
-		WideCharToMultiByte(CP_UTF8, 0, path, -1, &result[0], sizeNeeded, NULL, NULL);
-		return result;
-	}
-
-	std::string GetKnownFolderPath(REFKNOWNFOLDERID folderID) {
-		PWSTR path = NULL;
-		if (SHGetKnownFolderPath(folderID, 0, NULL, &path) == S_OK) {
-			// Convert the path to std::string and return
-			std::string result = PWSTRToString(path);
-			CoTaskMemFree(path);  // Free the allocated memory by SHGetKnownFolderPath
-			return result;
-		}
-		return "";
-	}
-
-
-	std::filesystem::path FixPath(const std::filesystem::path& _Path) {
-		std::vector<GUID> refIds = {
-			FOLDERID_Documents,
-			FOLDERID_Desktop,
-			FOLDERID_Pictures,
-			FOLDERID_Videos,
-			FOLDERID_Music,
-			FOLDERID_ProgramFiles,
-			FOLDERID_ProgramFilesX86,
-			FOLDERID_Startup
-		};
-
-		for (auto& _id : refIds) {
-			const std::filesystem::path refPath = GetKnownFolderPath(_id);
-
-			std::cout << refPath << "\n";
-		}
-		return _Path;
-	}
-
 /* Public set's */
-	void self::updateCurrentPath(const std::filesystem::path& _New) {
+	void self::updateCurrentPath(const utils::Filesystem::Path& _New) {
+		if (_New.is_Broken() || _New.is_SystemReservedDeviceName()) {
+#ifndef NDEBUG
+	#if __QF_DEBUG_LEVEL <= 1
+			__QF_DEBUG_LOG(__QF_IMPORTANT, __FUNCTION__, std::format("Path[{}] is not accepted", _New.string()));
+	#endif	
+#endif // !NDEBUG
+			return; 
+		}
+
 		m_CurrentPath = _New;
 
 		/* Clear current objects */
@@ -82,7 +50,6 @@ using panelalignflags = components::Panel::AlignmentFlags;
 
 		/* Update parent's path */
 		m_Parent->updateCurrentPath(m_CurrentPath);
-		FixPath("");
 		
 
 		/* Create new one's */
@@ -96,6 +63,7 @@ using panelalignflags = components::Panel::AlignmentFlags;
 				m_Children.push_back(new Element(this, _Entry.path().string(), m_FolderImage->g_GLTextureID(), m_FileImage->g_GLTextureID()));
 
 				auto& filePanelHints = m_Children.back()->g_Hints();
+
 				filePanelHints.m_TextureID = 0;
 				filePanelHints.m_BGActiveColor = ImColor(40, 44, 52, 255); // Atom's dark gray
 				filePanelHints.m_BGColor = m_Params.m_BGColor;       // Atom's medium gray
@@ -134,5 +102,16 @@ using panelalignflags = components::Panel::AlignmentFlags;
 		__QF_DEBUG_LOG(__QF_MESSAGE, __FUNCTION__, "Clicked by hand,redone selection for elements.");
 	#endif
 #endif // !NDEBUG
+	}
+/* Creation */
+	void self::createSliders() {
+		m_VerticalSlider = new components::Built::Slider(this, 0.0f, { 250.0f, 200.0f }, components::Built::Slider::Flags::m_Horizontal);
+	
+		auto& sliderHints = m_VerticalSlider->g_Hints();
+		sliderHints.m_ElementActiveColor = ImColor(40, 123, 222, 255); // Vibrant Blue
+		sliderHints.m_ElementDefaultColor = ImColor(171, 178, 191, 255); // Light Gray
+		sliderHints.m_BGColor = ImColor(40, 44, 52, 255); // Dark Background
+
+
 
 	}

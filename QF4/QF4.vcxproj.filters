@@ -72,7 +72,7 @@
     <ClCompile Include="src\QF\Utils\QFUtilsCompare.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltButton.cpp">
+    <ClCompile Include="src\QF\UI\Components\Built\QFUIComponentsBuiltButton.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\Utils\QFUtilsImage.cpp">
@@ -102,7 +102,7 @@
     <ClCompile Include="src\QF\Utils\QFUtilsFilesystem.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
-    <ClCompile Include="src\QF\UI\Components\Built\QUIComponentsBuiltTextBox.cpp">
+    <ClCompile Include="src\QF\UI\Components\Built\QFUIComponentsBuiltTextBox.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\Utils\QFUtilsFont.cpp">
@@ -112,6 +112,12 @@
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
     <ClCompile Include="src\QF\Experimental\FileDialog\QFExperimentalFileDialogElement.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\Utils\QFUtilsFilesystemPath.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QF\UI\Components\Built\QFUIComponentsBuiltSlider.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
   </ItemGroup>

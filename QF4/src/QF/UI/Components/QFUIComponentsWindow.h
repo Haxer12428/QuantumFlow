@@ -402,6 +402,70 @@ namespace QF
 		{
 			namespace Built
 			{
+				class Slider : public QF::UI::Components::Panel
+				{
+				public:
+					enum class Flags : uint64_t {
+						m_None = 0, 
+						m_Vertical = 1 << 0,
+						m_Horizontal = 1 << 1
+					};
+				public:
+					struct Hints {
+						int m_CompleteAnimationMs = 0; 
+						ImColor m_ElementActiveColor = ImColor(255,255,255, 255); 
+						ImColor m_ElementDefaultColor = ImColor(255,255,255,255); 
+						ImColor m_BGColor = ImColor(0, 0, 0, 255); 
+						float m_ElementLenFactor = 0.25f; 
+						float m_ElementSidesSizeFactor = 0.75f;
+						float m_Rounding = 2.0f; 
+					};
+				public:
+					class Slider(Element* _Parent,
+						const QF::Utils::Vec2& _Position, const QF::Utils::Vec2& _Size,
+						Flags _Flags = Flags::m_None, Panel::Flags _PanelFlags = Panel::Flags::m_None
+						);
+
+					const float g_Value() const; 
+					void s_Value(const float& _New);
+					const bool is_FlagVertical(); 
+
+					Hints& g_Hints();
+				private:
+					void hookRender(QF::UI::Components::EventSystem::Events::Render&);
+					void hookPanelDrag(QF::UI::Components::EventSystem::Events::MousePanelDragEvent&);
+					void hookAnimations(QF::UI::Components::EventSystem::Events::BeforeRender&);
+					void hookDragFlagDisable(QF::UI::Components::EventSystem::Events::BeforeRender&);
+				private:
+					void setupAnimations(); 
+				private:
+					const QF::Utils::Vec2 g_ElementPosition();
+					const QF::Utils::Vec2 g_ElementRenderPosition(); 
+					const QF::Utils::Vec2 g_ElementSize(); 
+					const QF::Utils::Vec2 g_ScrollWithDirection();
+					const float g_ValueForPositionAnim();
+					const float g_MaximalScroll();
+				private:
+
+				private:
+					std::unique_ptr<QF::Utils::BasicAnim> m_ColorAnim; 
+					std::unique_ptr<QF::Utils::BasicAnim> m_PositionAnim; 
+
+					Flags m_Flags = Flags::m_None; 
+					Hints m_Hints = Hints(); 
+
+					float m_Value = 0.0f; 
+					float m_Scroll = 0.0f; 
+
+					/* Needs a fix, didnt made element a panel
+						REMINDER: next time make element a panel u dumb retarded drunk fuck
+							*/
+					QF::Utils::Vec2 m_DragPositionClicked;
+
+					bool m_DragLastFrame = false; 
+					bool m_Drag = false; 
+				};
+
 				class Button : public QF::UI::Components::Panel
 				{
 				public:
